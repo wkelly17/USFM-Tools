@@ -143,21 +143,21 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     #
 
     def renderID(self, token):      self.f.write( self.stopNarrower() + ur"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
-    def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + token.value + u'}\n')
-    def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + token.value + u'}\n')
-    def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + token.value + u'}\n')
-    def renderMS(self, token):      self.markForSmallCaps() ; self.f.write(self.stopNarrower() + u'\n\MS{' + token.value + u'}\n') ; self.doNB = True
-    def renderMS2(self, token):     self.doNB = True; self.markForSmallCaps() ; self.f.write( self.stopNarrower() + u'\n\MSS{' + token.value + '}' + self.newLine() )
+    def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + self.escapeText(token.value) + u'}\n')
+    def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + self.escapeText(token.value) + u'}\n')
+    def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + self.escapeText(token.value) + u'}\n')
+    def renderMS(self, token):      self.markForSmallCaps() ; self.f.write(self.stopNarrower() + u'\n\MS{' + self.escapeText(token.value) + u'}\n') ; self.doNB = True
+    def renderMS2(self, token):     self.doNB = True; self.markForSmallCaps() ; self.f.write( self.stopNarrower() + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
     def renderP(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + self.newLine() )
     def renderB(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\\blank \n' )
-    def renderS(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() +  u'\n\\blank[big] ' + u'\n\MSS{' + token.getValue() + '}' + self.newLine() ) ; self.doNB = True
-    def renderS2(self, token):      self.doNB = True; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\n\\blank[big] ' + u'\n\MSS{' + token.value + '}' + self.newLine() )
+    def renderS(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() +  u'\n\\blank[big] ' + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() ) ; self.doNB = True
+    def renderS2(self, token):      self.doNB = True; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\n\\blank[big] ' + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
     def renderC(self, token):
-        self.doChapterOrVerse = u'\C{' + token.value + u'}'
+        self.doChapterOrVerse = u'\C{' + self.escapeText(token.value) + u'}'
         self.f.write( u' ' )
     def renderV(self, token):
         if not token.value == u'1':
-            self.doChapterOrVerse =  u'\V{' + token.value + u'}'
+            self.doChapterOrVerse =  u'\V{' + self.escapeText(token.value) + u'}'
         self.f.write( ' ' )
     def renderWJS(self, token):     self.f.write( u" " )
     def renderWJE(self, token):     self.f.write( u" " )
@@ -198,10 +198,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def renderD(self, token):       self.f.write( self.startD() )
     def renderSP(self, token):      self.f.write( self.startD() )
     def renderPBR(self, token):     self.f.write( u' \\\\ ' )
-    def renderFR(self, token):      self.f.write( u' ' + token.getValue() + u' ' )
+    def renderFR(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
     def renderFRE(self, token):     self.f.write( u' ' )
-    def renderFK(self, token):      self.f.write( u' ' + token.getValue() + u' ' )
-    def renderFT(self, token):      self.f.write( u' ' + token.getValue() + u' ' )
+    def renderFK(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
+    def renderFT(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
     def renderPI(self, token):      self.renderQ(token)
     
     def render_is1(self, token):    self.renderS(token)
