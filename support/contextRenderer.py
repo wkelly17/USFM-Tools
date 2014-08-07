@@ -70,7 +70,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         return s
 
     def escapeText(self, s):
-        return s.replace('&', '\\&').replace('%', '\\%')
+        return ( s.replace(u'&', u'\\&').replace(u'%', u'\\%')
+                  .replace(u'#', u'\\#').replace(u'$', u'\\$')
+                  .replace(u'_', u'\\_').replace(u'{', u'\\{')
+                  .replace(u'}', u'\\}') )
  
     def markForSmallCaps(self):
         if self.smallCapSections: 
