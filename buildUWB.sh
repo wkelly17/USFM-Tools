@@ -54,7 +54,13 @@ while test -n "$1"; do
 done
 
 if [ $EXPORT -eq 1 ]; then
+    echo "Exporting USFM from DokuWiki..."
     $TOOLS/uwb/dw2usfm_assembled.sh
+    RET=$?
+    if [ $RET -ne 0 ]; then
+        echo "--> Export failed, bailing..."
+        exit 1
+    fi
 fi
 
 NAME="UWB-$LANG-v$VER-`date +%F`"
