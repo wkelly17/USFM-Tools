@@ -87,6 +87,13 @@ sce      = usfmEndToken(u"sc")
 ist     = usfmToken(u"it")
 ien     = usfmEndToken(u"it")
 
+# Bold
+bds    = usfmToken(u"bd")
+bde    = usfmEndToken(u"bd")
+bdits  = usfmToken(u"bdit")
+bdite  = usfmEndToken(u"bdit")
+
+
 li      = usfmToken(u"li")
 d       = usfmToken(u"d")
 sp      = usfmToken(u"sp")
@@ -161,6 +168,10 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  xe,
  ist,
  ien,
+ bds,
+ bde,
+ bdits,
+ bdite,
  li,
  d,
  sp,
@@ -252,8 +263,12 @@ def createToken(t):
         u'xo':   XOToken,
         u'xt':   XTToken,
         u'x*':   XEToken,
-        u'it':    ISToken,
-        u'it*':   IEToken,
+        u'it':   ISToken,
+        u'it*':  IEToken,
+        u'bd':   BDSToken,
+        u'bd*':  BDEToken,
+        u'bdit': BDITSToken,
+        u'bdit*': BDITEToken,
         u'li':   LIToken,
         u'd':    DToken,
         u'sp':   SPToken,
@@ -355,6 +370,10 @@ class UsfmToken(object):
     def isNDE(self):    return False
     def isTLS(self):    return False
     def isTLE(self):    return False
+    def isBDS(self):    return False
+    def isBDE(self):    return False
+    def isBDITS(self):  return False
+    def isBDITE(self):  return False
     def isPBR(self):    return False
     def isM(self):      return False
     def isREM(self):    return False
@@ -575,6 +594,26 @@ class IEToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderIE(self)
     def isIE(self):      return True
+
+class BDSToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderBDS(self)
+    def isBDS(self):      return True
+
+class BDEToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderBDE(self)
+    def isBDE(self):      return True
+
+class BDITSToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderBDITS(self)
+    def isBDITS(self):      return True
+
+class BDITEToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderBDITE(self)
+    def isBDITE(self):      return True
 
 class LIToken(UsfmToken):
     def renderOn(self, printer):
