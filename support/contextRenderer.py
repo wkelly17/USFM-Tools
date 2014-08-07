@@ -26,7 +26,7 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         self.narrower = False
         self.doChapterOrVerse = u''
         self.smallcaps = False
-        self.introTeXtFilename = u'IntroTeXt.tex'
+        self.introTeXtFilename = u'support/introTeXt.tex'
 
     def render(self):
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
