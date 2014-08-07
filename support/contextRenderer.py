@@ -26,17 +26,18 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         self.narrower = False
         self.doChapterOrVerse = u''
         self.smallcaps = False
+        self.introTeXtFilename = u'IntroTeXt.tex'
 
     def render(self):
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
         self.loadUSFM(self.inputDir)
+        self.introTeXt = codecs.open(self.introTeXtFilename, 'r', 'utf_8_sig').read()
         self.f.write(self.introTeXt)
         self.f.write(u"""
             \page[right] % Cover page
             \page[left]
             \par 
-            \par Built by github.com/openenglishbible/USFM-Tools
-            \par on """ + datetime.date.today().strftime("%A, %d %B %Y") + r"""
+            \par Document rendered on """ + datetime.date.today().strftime("%F") + r"""
             \par     
             \page[right]
             \par ~
@@ -205,70 +206,6 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def render_iot(self, token):    self.renderQ(token)
     def render_io1(self, token):    self.renderQ2(token)
     
-    
-    #
-    #   Introductory codes
-    #
-    
-    introTeXt = unicode(r"""
-    \definemarking[RAChapter]
-    \definemarking[RABook]
-    \definemarking[RASection]
-
-    \definepapersize [Trade][width=6in, height=9in]
-    \setuppapersize [Trade][Trade]
-    %\setuparranging [2UP, rotated, doublesided]
-    \setuppagenumbering [alternative=doublesided]
-    \setuplayout [location=middle, 
-        rightmargin=20mm,
-        width=90mm,
-        marking=on]
-
-    \usetypescript[pagella]
-    \setupbodyfont [pagella, 9pt]
-
-    %\setupalign[normal,hanging,hz,tolerant,hyphenated]
-    \setupalign[hanging]
-
-    \setupbodyfontenvironment[default][em=italic]
-
-    \setuppagenumbering[location=]
-    \setupheadertexts[{\em \getmarking[RASection]}][{\getmarking[RABook] ~\getmarking[RAChapter]}]
-    \setupfootertexts[pagenumber][]
-
-    % Hide chapters but keep in TOC
-    \setuphead[chapter][placehead=hidden]
-    \setuptexttexts[{\placerawheaddata[chapter]}]
-
-    \setupspacing[packed]   % normal word space at the end of sentences
-    \setupwhitespace[none]  % no space between paragraphs
-    \setupindenting[small, yes]
-    \setupinterlinespace[line=11.5pt] % Line spacing
-
-    \setuphead[section][number=no, textstyle=em, before=\blank, after=\blank, align={middle, nothyphenated, verytolerant}]
-
-    \setuplist[chapter][alternative=c]
-
-    \setupnote[footnote][way=bypage]
-
-    \define[1]\V{\setupinmargin[style=small,stack=yes] \inouter{#1} }
-    \define[1]\C{\setupinmargin[style=bold,stack=yes] \inouter{#1} \marking[RAChapter]{#1} }
-    \define[1]\MS{\par ~ \par \section{#1} \marking[RASection]{#1} \par }
-    \define[1]\MSS{\blank{\midaligned{\em #1}}\blank}
-    \define[1]\MT{  {\midaligned{\tfd{\WORD{#1}}}}\blank ~ } 
-    \define[1]\MTT{ {\midaligned{\tfc{\WORD{#1}}}}\blank ~ }
-    \define[1]\RAHeader{\page[right] \chapter{#1} \marking[RABook]{#1} }
-    \define[2]\Q{\startnarrower[#1*left,1*right] #2\stopnarrower }
-    
-    \emergencystretch\maxdimen
-    
-    \definestartstop
-      [exdent]
-      [before={\startnarrower[left]\setupindenting[-\leftskip,yes]},
-       after=\stopnarrower]
-
-    \starttext
-    """)
     
     closeTeXt = ur"""
     \stoptext
