@@ -86,11 +86,6 @@ def buildConTeXt(usfmDir, builtDir, buildName):
     c = contextRenderer.ConTeXtRenderer(usfmDir, builtDir + '/working/tex/bible.tex')
     c.render()
 
-    # Build PDF
-    print '     Building PDF..'
-    c = '. ./support/thirdparty/context/tex/setuptex ; cd "' + builtDir + '/working/tex-working"; rm * ; context ../tex/bible.tex; cp bible.pdf "../../' + buildName + '.pdf"'
-    runscript(c, '     ')
-
 def buildWeb(usfmDir, builtDir, buildName, oebFlag=False):
     # Convert to HTML
     print '#### Building HTML...'

@@ -67,7 +67,17 @@ fi
 NAME="UWB-$LANG-v$VER-`date +%F`"
 USFMPUBDIR="/tmp/UWB-$LANG-v$VER"
 
+# Must run before PDF build below
 python transform.py --target=context    --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+
+# Build PDF
+echo '     Building PDF..'
+. ./support/thirdparty/context/tex/setuptex
+rm $USFMPUBDIR/working/tex-working/*
+cd "$USFMPUBDIR/working/tex-working"
+context ../tex/bible.tex
+cp "$USFMPUBDIR/working/tex-working/bible.pdf" "$USFMPUBDIR/$NAME.pdf"
+
 python transform.py --target=md         --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
