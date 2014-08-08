@@ -12,7 +12,8 @@ PROGNAME="${0##*/}"
 EXPORT=0
 TOOLS=/var/www/vhosts/door43.org/tools
 USFMSRC=/tmp/UWB-USFM
-USFMSRC=/tmp/UWB-1book
+#USFMSRC=/tmp/UWB-1book
+#USFMSRC=/tmp/UWB-1
 
 help() {
     echo
@@ -67,11 +68,11 @@ NAME="UWB-$LANG-v$VER-`date +%F`"
 USFMPUBDIR="/tmp/UWB-$LANG-v$VER"
 
 python transform.py --target=context    --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=md         --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=csv        --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=ascii      --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=md         --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=csv        --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+python transform.py --target=ascii      --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 
 echo "See $USFMPUBDIR"
