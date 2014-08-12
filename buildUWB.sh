@@ -12,8 +12,6 @@ PROGNAME="${0##*/}"
 EXPORT=0
 TOOLS=/var/www/vhosts/door43.org/tools
 USFMSRC=/tmp/UWB-USFM
-#USFMSRC=/tmp/UWB-1book
-#USFMSRC=/tmp/UWB-1
 
 help() {
     echo
@@ -67,22 +65,36 @@ fi
 NAME="UWB-$LANG-v$VER-`date +%F`"
 USFMPUBDIR="/tmp/UWB-$LANG-v$VER"
 
+buildPDF () {
+    # $1 == source dir, $2 == output filename
+    echo 'Building PDF..'
+    . ./support/thirdparty/context/tex/setuptex
+    WORKING="$1/working/tex-working/"
+    [ -d "$WORKING" ] && rm -rf "$WORKING"
+    mkdir -p "$WORKING"
+    cd "$WORKING"
+    context "../tex/bible.tex"
+    cp "$WORKING/bible.pdf" "$1/$2"
+    cd
+}
+
+buildMD () {
+    # $1 == source, $2 == output filename
+    echo '     Building Markdown'
+    pandoc +RTS -K128m -RTS -s "$1/working/tex/bible.tex" -o "$USFMPUBDIR/$2"
+}
+
 # Must run before PDF build below
 python transform.py --target=context    --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+buildPDF "$USFMPUBDIR" "$NAME.pdf"
+buildMD "$USFMPUBDIR" "$NAME.md"
 
-# Build PDF
-echo '     Building PDF..'
-. ./support/thirdparty/context/tex/setuptex
-rm $USFMPUBDIR/working/tex-working/*
-cd "$USFMPUBDIR/working/tex-working"
-context ../tex/bible.tex
-cp "$USFMPUBDIR/working/tex-working/bible.pdf" "$USFMPUBDIR/$NAME.pdf"
+#python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+#python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+#python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+#python transform.py --target=csv        --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+#python transform.py --target=ascii      --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 
-python transform.py --target=md         --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-python transform.py --target=csv        --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-python transform.py --target=ascii      --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-
+# Build each book individually
+#for 
 echo "See $USFMPUBDIR"
