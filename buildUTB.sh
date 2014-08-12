@@ -11,7 +11,7 @@
 PROGNAME="${0##*/}"
 EXPORT=0
 TOOLS=/var/www/vhosts/door43.org/tools
-USFMSRC=/tmp/UWB-USFM
+USFMSRC=/tmp/UTB-USFM
 
 help() {
     echo
@@ -62,8 +62,8 @@ if [ $EXPORT -eq 1 ]; then
     fi
 fi
 
-NAME="UWB-$LANG-v$VER-`date +%F`"
-USFMPUBDIR="/tmp/UWB-$LANG-v$VER"
+NAME="UTB-$LANG-v$VER-`date +%F`"
+USFMPUBDIR="/tmp/UTB-$LANG-v$VER"
 
 buildPDF () {
     # $1 == source dir, $2 == output filename
@@ -81,11 +81,13 @@ buildPDF () {
 buildMD () {
     # $1 == source, $2 == output filename
     echo '     Building Markdown'
+    echo "     --> $1/working/tex/bible.tex > $USFMPUBDIR/$2"
     pandoc +RTS -K128m -RTS -s "$1/working/tex/bible.tex" -o "$USFMPUBDIR/$2"
 }
 
 # Must run before PDF build below
 python transform.py --target=context    --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+sed -i "s/UTBVERSUB/$VER/" "$USFMPUBDIR"/working/tex/bible.tex
 buildPDF "$USFMPUBDIR" "$NAME.pdf"
 buildMD "$USFMPUBDIR" "$NAME.md"
 
