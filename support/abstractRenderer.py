@@ -15,11 +15,13 @@ class AbstractRenderer(object):
         self.booksUsfm = books.loadBooks(usfmDir)
 
     def run(self):
+        self.unknowns = []
         for bookName in books.silNames:
             if self.booksUsfm.has_key(bookName):
                 tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                 for t in tokens: t.renderOn(self)
                 self.writeLog('     (' + bookName + ')')
+        print 'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
         
     def renderID(self, token):      pass
     def renderIDE(self, token):     pass
@@ -111,5 +113,5 @@ class AbstractRenderer(object):
     def renderSCS(self, token):     pass
     def renderSCE(self, token):     pass
 
-    # This is unknown!
-    def renderUnknown(self, token):  self.writeLog("WARNING: Unknown token '" + token.value + "'" )
+    # Add unknown tokens to list
+    def renderUnknown(self, token):  self.unknowns.append(token.value)
