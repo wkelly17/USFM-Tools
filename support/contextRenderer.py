@@ -34,10 +34,7 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         self.introTeXt = codecs.open(self.introTeXtFilename, 'r', 'utf_8_sig').read()
         self.f.write(self.introTeXt)
         self.f.write(u"""
-            \page[right] % Cover page
-            \page[left]
-            \par 
-            \par Document rendered on """ + datetime.date.today().strftime("%F") + r"""
+            Document rendered on """ + datetime.date.today().strftime("%F") + r"""
             \par     
             \page[right]
             \par ~
