@@ -109,6 +109,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def stopLI(self):
         if self.printerState[u'li'] == False:
             return u''
+        #elif self.printerState[u'li2'] == False:
+            #return u''
+        #elif self.printerState[u'li3'] == False:
+            #return u''
         else:
             self.printerState[u'li'] = False
             #return u'\stopitemize'
@@ -179,8 +183,9 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         if self.justDidLORD:
             if s[0].isalpha():
                 s = u' ' + s
-            self.justDidLORD = False    
-        self.f.write( s )
+            self.justDidLORD = False
+        self.f.write(s)
+        self.f.write(u' ')
     def renderQ(self, token):       self.renderQ1(token)
     def renderQ1(self, token):      self.f.write( self.stopD() + self.stopLI() + self.startNarrower(1) )
     def renderQ2(self, token):      self.f.write( self.stopD() + self.stopLI() + self.startNarrower(2) )
