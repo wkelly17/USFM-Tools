@@ -70,7 +70,7 @@ USFMPUBDIR="/tmp/UDB-$LANG-v$VER"
 buildPDF () {
     # $1 == source dir, $2 source filename, $3 == output filename
     echo 'Building PDF..'
-    . ./support/thirdparty/context/tex/setuptex
+    . /opt/context/tex/setuptex
     WORKING="$1/working/tex-working/"
     [ -d "$WORKING" ] && rm -rf "$WORKING"
     mkdir -p "$WORKING"
