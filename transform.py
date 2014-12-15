@@ -88,14 +88,14 @@ def buildConTeXt(usfmDir, builtDir, buildName):
 
 def buildWeb(usfmDir, builtDir, buildName, oebFlag=False):
     # Convert to HTML
-    print '#### Building HTML...'
+    print '#### Building Web HTML...'
     ensureOutputDir(builtDir + '/' + buildName + '_html')
     c = htmlRenderer.HTMLRenderer(usfmDir, builtDir + '/' + buildName + '_html', oebFlag)
     c.render()
 
 def buildSingleHtml(usfmDir, builtDir, buildName):
     # Convert to HTML
-    print '#### Building HTML...'
+    print '#### Building Single Page HTML...'
     ensureOutputDir(builtDir)
     c = singlehtmlRenderer.SingleHTMLRenderer(usfmDir, builtDir + '/' + buildName + '.html')
     c.render()
