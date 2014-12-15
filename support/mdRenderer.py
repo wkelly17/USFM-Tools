@@ -55,6 +55,11 @@ class MarkdownRenderer(abstractRenderer.AbstractRenderer):
     def renderLI(self, token):      self.f.write(u'* ')
     def renderPBR(self, token):     self.f.write(u'\n')
     
+    def renderBDS(self, token):     self.f.write( u'**')
+    def renderBDE(self, token):     self.f.write( u'**')
+    def renderBDITS(self, token):   pass
+    def renderBDITE(self, token):   pass
+
     def renderFS(self,token):       self.f.write(u'^[')
     def renderFE(self,token):       self.f.write(u']')
     def renderFR(self, token):      self.f.write(self.escape(token.value))    

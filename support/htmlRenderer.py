@@ -142,6 +142,10 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderB(self, token):       self.write(u'<br />')
     def renderIS(self, token):      self.write(u'<i>')
     def renderIE(self, token):      self.write(u'</i>')
+    def renderBDS(self, token):     self.f.write(u'<b>')
+    def renderBDE(self, token):     self.f.write(u'</b>')
+    def renderBDITS(self, token):   self.f.write(u'<b><i>')
+    def renderBDITE(self, token):   self.f.write(u'</b></i>')
     def renderPBR(self, token):     self.write(u'<br />')
     
     def renderD(self, token):       self.writeChapterMarker()

@@ -113,5 +113,10 @@ class AbstractRenderer(object):
     def renderSCS(self, token):     pass
     def renderSCE(self, token):     pass
 
+    def renderBDS(self, token):     pass
+    def renderBDE(self, token):     pass
+    def renderBDITS(self, token):   pass
+    def renderBDITE(self, token):   pass
+
     # Add unknown tokens to list
     def renderUnknown(self, token):  self.unknowns.append(token.value)
