@@ -353,7 +353,7 @@ def loadBooks(path):
           f = open(path + '/' + fname,'U') # U handles line endings
           usfm = f.read().decode('utf-8-sig')
           if usfm[:4] == ur'\id ' and usfm[4:7] in silNames:
-              print '     Loaded ' + fname + ' as ' + usfm[4:7]
+              #print '     Loaded ' + fname + ' as ' + usfm[4:7]
               books[bookID(usfm)] = usfm
               f.close()
           else:

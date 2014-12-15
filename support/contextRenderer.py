@@ -26,13 +26,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         self.narrower = False
         self.doChapterOrVerse = u''
         self.smallcaps = False
-        self.introTeXtFilename = u'support/introTeXt.tex'
 
     def render(self):
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
         self.loadUSFM(self.inputDir)
-        self.introTeXt = codecs.open(self.introTeXtFilename, 'r', 'utf_8_sig').read()
-        self.f.write(self.introTeXt)
         self.f.write(u"""
             Document rendered on """ + datetime.date.today().strftime("%F") + r"""
             \par     
@@ -145,8 +142,8 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
 
     def renderID(self, token):      self.f.write( self.stopNarrower() + ur"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
     def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + self.escapeText(token.value) + u'}\n')
-    def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + self.escapeText(token.value) + u'}\n')
-    def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + self.escapeText(token.value) + u'}\n')
+    def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + token.value + u'}\n')
+    def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + token.value + u'}\n')
     def renderMS(self, token):      self.markForSmallCaps() ; self.f.write(self.stopNarrower() + u'\n\MS{' + self.escapeText(token.value) + u'}\n') ; self.doNB = True
     def renderMS2(self, token):     self.doNB = True; self.markForSmallCaps() ; self.f.write( self.stopNarrower() + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
     def renderP(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + self.newLine() )

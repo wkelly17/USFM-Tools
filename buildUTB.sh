@@ -12,6 +12,8 @@ PROGNAME="${0##*/}"
 EXPORT=0
 TOOLS=/var/www/vhosts/door43.org/tools
 USFMSRC=/tmp/UTB-USFM
+TEX2UP=bible-2up.tex
+TEXPDF=bible-pdf.tex
 
 help() {
     echo
@@ -62,40 +64,50 @@ if [ $EXPORT -eq 1 ]; then
     fi
 fi
 
-NAME="UTB-$LANG-v$VER-`date +%F`"
-USFMPUBDIR="/tmp/UTB-$LANG-v$VER"
+NAME="UDB-$LANG-v$VER-`date +%F`"
+USFMPUBDIR="/tmp/UDB-$LANG-v$VER"
 
 buildPDF () {
-    # $1 == source dir, $2 == output filename
+    # $1 == source dir, $2 source filename, $3 == output filename
     echo 'Building PDF..'
     . ./support/thirdparty/context/tex/setuptex
     WORKING="$1/working/tex-working/"
     [ -d "$WORKING" ] && rm -rf "$WORKING"
     mkdir -p "$WORKING"
     cd "$WORKING"
-    context "../tex/bible.tex"
-    cp "$WORKING/bible.pdf" "$1/$2"
-    cd
+    context "../tex/$2"
+    cp "$WORKING/${2%%.tex}.pdf" "$1/$3"
+    cd -
 }
 
 buildMD () {
-    # $1 == source, $2 == output filename
-    echo '     Building Markdown'
-    echo "     --> $1/working/tex/bible.tex > $USFMPUBDIR/$2"
-    pandoc +RTS -K128m -RTS -s "$1/working/tex/bible.tex" -o "$USFMPUBDIR/$2"
+    # $1 == source dir, $2 source filename, $3 == output filename
+    echo "     Building Markdown from $2"
+    pandoc +RTS -K128m -RTS -s "$1/$2" -o "$USFMPUBDIR/$3"
 }
 
 # Must run before PDF build below
 python transform.py --target=context    --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-sed -i "s/UTBVERSUB/$VER/" "$USFMPUBDIR"/working/tex/bible.tex
-buildPDF "$USFMPUBDIR" "$NAME.pdf"
-buildMD "$USFMPUBDIR" "$NAME.md"
+cp -f support/introTeXt-2up.tex "$USFMPUBDIR/working/tex/$TEX2UP"
+cp -f support/introTeXt-pdf.tex "$USFMPUBDIR/working/tex/$TEXPDF"
+cat  "$USFMPUBDIR/working/tex/bible.tex" >> "$USFMPUBDIR/working/tex/$TEX2UP"
+cat  "$USFMPUBDIR/working/tex/bible.tex" >> "$USFMPUBDIR/working/tex/$TEXPDF"
+sed -i "s/UTBVERSUB/$VER/" "$USFMPUBDIR/working/tex/$TEX2UP"
+sed -i "s/UTBVERSUB/$VER/" "$USFMPUBDIR/working/tex/$TEXPDF"
 
+buildPDF "$USFMPUBDIR" "$TEX2UP" "$NAME-2up.pdf"
+#buildPDF "$USFMPUBDIR" "$TEXPDF" "$NAME.pdf"
+
+#buildMD "$USFMPUBDIR" "$TEXPDF" "$NAME.md"
+#python transform.py --target=md         --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+
+# maybe pandoc for these formats too?
 #python transform.py --target=html       --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 #python transform.py --target=singlehtml --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
-#python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 #python transform.py --target=csv        --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 #python transform.py --target=ascii      --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
+
+###python transform.py --target=reader     --usfmDir=$USFMSRC --builtDir=$USFMPUBDIR --name=$NAME
 
 # Build each book individually
 #for 
