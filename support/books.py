@@ -244,10 +244,10 @@ def readerName(num):
 
 def fullName(num):
     return bookNames[int(num)-1]
-    
+
 def nextChapter(bookNumber, chapterNumber):
     return (1,1)
-    
+
 def previousChapter(bookNumber, chapterNumber):
     if chapterNumber > 1:
         return (bookNumber, chapterNumber - 1)
@@ -324,12 +324,12 @@ bookNames = ['Genesis',
             'Jude',
             'Revelation']
 
-books = bookNames 
+books = bookNames
 
 def bookKeyForIdValue(id):
     e = id.find(' ')
     i = id if e == -1 else id[:e]
-    return bookKeys[i] 
+    return bookKeys[i]
 
 def bookID(usfm):
     s = usfm.find(u'\id ') + 4
@@ -337,13 +337,13 @@ def bookID(usfm):
     e2 = usfm.find(u'\n', s)
     e = e if e < e2 else e2
     return usfm[s:e].strip()
-    
+
 def bookName(usfm):
     id = bookID(usfm)
     index = silNames.index(id)
     return bookNames[index]
 
-    
+
 def loadBooks(path):
     books = {}
     dirList=os.listdir(path)
@@ -351,7 +351,7 @@ def loadBooks(path):
     for fname in dirList:
       try:
           f = open(path + '/' + fname,'U') # U handles line endings
-          usfm = f.read().decode('utf-8-sig')
+          usfm = f.read().decode('utf-8-sig').lstrip()
           if usfm[:4] == ur'\id ' and usfm[4:7] in silNames:
               #print '     Loaded ' + fname + ' as ' + usfm[4:7]
               books[bookID(usfm)] = usfm
@@ -367,7 +367,7 @@ def orderFor(booksDict):
     order = silNames
     if booksDict.has_key("PSA") and not booksDict.has_key("GEN") and booksDict.has_key("MAT"):
         # This is a big hack. When doing Psalms + NT, put Psalms last
-        order = silNamesNTPsalms       
+        order = silNamesNTPsalms
     a = []
     for bookName in order:
         if booksDict.has_key(bookName):
