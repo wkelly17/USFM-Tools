@@ -7,25 +7,33 @@ import parseUsfm
 class AbstractRenderer(object):
 
     booksUsfm = None
-    
+
     def writeLog(self, s):
         pass
-        
+
     def loadUSFM(self, usfmDir):
         self.booksUsfm = books.loadBooks(usfmDir)
 
     def run(self):
         self.unknowns = []
-        for bookName in books.silNames:
+        try:
+            bookName = self.renderBook
             if self.booksUsfm.has_key(bookName):
+                self.writeLog('     (' + bookName + ')')
                 tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                 for t in tokens: t.renderOn(self)
-                self.writeLog('     (' + bookName + ')')
-        print 'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
-        
+        except:
+            for bookName in books.silNames:
+                if self.booksUsfm.has_key(bookName):
+                    self.writeLog('     (' + bookName + ')')
+                    tokens = parseUsfm.parseString(self.booksUsfm[bookName])
+                    for t in tokens: t.renderOn(self)
+        if len(self.unknowns):
+            print 'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
+
     def renderID(self, token):      pass
     def renderIDE(self, token):     pass
-    def renderH(self, token):       pass 
+    def renderH(self, token):       pass
 
     def renderM(self, token):       pass
     def renderMT(self, token):      pass
@@ -64,11 +72,11 @@ class AbstractRenderer(object):
 
     def renderFS(self, token):      pass
     def renderFE(self, token):      pass
-    def renderFR(self, token):      pass    
-    def renderFRE(self, token):     pass    
-    def renderFK(self, token):      pass    
-    def renderFT(self, token):      pass    
-    def renderFQ(self, token):      pass    
+    def renderFR(self, token):      pass
+    def renderFRE(self, token):     pass
+    def renderFK(self, token):      pass
+    def renderFT(self, token):      pass
+    def renderFQ(self, token):      pass
 
     def renderIS(self, token):      pass
     def renderIE(self, token):      pass
@@ -77,8 +85,8 @@ class AbstractRenderer(object):
     def renderNDE(self, token):     pass
 
     def renderPBR(self, token):     pass
-    def renderD(self, token):       pass 
-    def renderREM(self, token):     pass 
+    def renderD(self, token):       pass
+    def renderREM(self, token):     pass
     def renderPI(self, token):      pass
     def renderLI(self, token):      pass
 
@@ -94,7 +102,7 @@ class AbstractRenderer(object):
 
     def renderADDS(self, token):    pass
     def renderADDE(self, token):    pass
-    
+
     def render_toc1(self, token):   pass
     def render_toc2(self, token):   pass
     def render_toc3(self, token):   pass
@@ -106,7 +114,7 @@ class AbstractRenderer(object):
     def render_io2(self, token):    pass
     def render_ior_s(self, token):  pass
     def render_ior_e(self, token):  pass
-    
+
     def render_bk_s(self, token):   pass
     def render_bk_e(self, token):   pass
 

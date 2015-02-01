@@ -129,11 +129,11 @@ def buildASCII(usfmDir, builtDir, buildName):
     c = asciiRenderer.ASCIIRenderer(usfmDir, builtDir + '/' + buildName + '.txt')
     c.render()
 
-def buildUSX(usfmDir, builtDir, buildName):
+def buildUSX(usfmDir, builtDir, buildName, byBookFlag):
     # Convert to USX
     print '#### Building for USX...'
     ensureOutputDir(builtDir)
-    c = usxRenderer.USXRenderer(usfmDir, builtDir + '/' + buildName + '.usx')
+    c = usxRenderer.USXRenderer(usfmDir, builtDir + '/', buildName, byBookFlag)
     c.render()
 
 def buildMediawiki(usfmDir, builtDir, buildName):
@@ -154,9 +154,10 @@ def restoreCWD(): os.chdir(savedCWD)
 def main(argv):
     saveCWD()
     oebFlag = False
+    byBookFlag = False
     print '#### Starting Build.'
     try:
-        opts, args = getopt.getopt(argv, "sht:u:b:n:o", ["setup", "help", "target=", "usfmDir=", "builtDir=", "name=","oeb"])
+        opts, args = getopt.getopt(argv, "sht:u:b:n:o", ["setup", "help", "target=", "usfmDir=", "builtDir=", "name=", "oeb", "fileByBook"])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -175,6 +176,8 @@ def main(argv):
             buildName = arg
         elif opt in ("-o", "--oeb"):
             oebFlag = True
+        elif opt in ("-f", "--fileByBook"):
+            byBookFlag = True
         else:
             usage()
 
@@ -199,7 +202,9 @@ def main(argv):
     elif targets == 'csv':
         buildCSV(usfmDir, buildDir, buildName)
     elif targets == 'usx':
-        buildUSX(usfmDir, buildDir, buildName)
+        if byBookFlag:
+            buildName = u''
+        buildUSX(usfmDir, buildDir, buildName, byBookFlag)
     else:
         usage()
 
