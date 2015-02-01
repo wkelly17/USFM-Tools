@@ -10,12 +10,15 @@ import codecs
 
 class USXRenderer(abstractRenderer.AbstractRenderer):
 
-    def __init__(self, inputDir, outputFilename):
+    def __init__(self, inputDir, outputPath, outputName, byBookFlag):
         # Unset
         self.f = None  # output file stream
         # IO
-        self.outputFilename = outputFilename
+        self.outputFilePath = outputPath
+        self.outputFileName = outputName
+        self.outputFileExt = u'.usx'
         self.inputDir = inputDir
+        self.byBook = byBookFlag
         # Position
         self.currentC = 1
         self.currentV = 1
@@ -24,11 +27,22 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
         self.printerState = {u'p': False, u'q': False, u'li': False}
 
     def render(self):
-        self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
         self.loadUSFM(self.inputDir)
-        self.run()
-        self.f.write( self.stopP() + self.stopQ() + self.stopLI() )
-        self.f.close()
+        if self.byBook:
+            print u'#### Creating One File Per Book\n'
+            for bookName in self.booksUsfm:
+                self.f = codecs.open(self.outputFilePath + bookName + self.outputFileExt, 'w', 'utf_8_sig')
+                self.renderBook = bookName
+                self.run()
+                self.f.write( self.stopP() + self.stopQ() + self.stopLI() )
+                self.f.close()
+        else:
+            print u'#### Concatenating Books into ' + self.outputFileName + self.outputFileExt + u'\n'
+            self.f = codecs.open(self.outputFilePath + self.outputFileName + self.outputFileExt, 'w', 'utf_8_sig')
+            self.run()
+            self.f.write( self.stopP() + self.stopQ() + self.stopLI() )
+            self.f.close()
+        print u''
 
     def writeLog(self, s):
         print s
