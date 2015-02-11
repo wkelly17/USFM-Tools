@@ -25,6 +25,8 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
         self.book = u''
         # Flags
         self.printerState = {u'p': False, u'q': False, u'li': False}
+        # Errors
+        self.error = u''
 
     def render(self):
         self.loadUSFM(self.inputDir)
@@ -79,10 +81,10 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
             self.printerState[u'q'] = False
             return u'</para>'
 
-    def startLI(self, n):
+    def startLI(self):
         if self.printerState[u'li'] == False:
             self.printerState[u'li'] = True
-        return u'\n<para style="li' + str(n) + u'">'
+        return u'\n<para style="li">'
 
     def stopLI(self):
         if self.printerState[u'li'] == False:
@@ -96,7 +98,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
 
     def renderTEXT(self, token):    self.f.write( self.escape(token.value) )
 
-    def renderH(self, token):       self.book = token.getValue()
+    def renderH(self, token):       self.book = token.getValue();
     def renderMT(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<para style="mt">' + token.value.upper() + u'</para>' )
     def renderMT1(self, token):     self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<para style="mt1">' + token.value.upper() + u'</para>' )
     def renderMT2(self, token):     self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<para style="mt2">' + token.value.upper() + u'</para>' )
@@ -117,7 +119,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def renderS3(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s3">' + token.value + u'</para>' )
     def renderS4(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s4">' + token.value + u'</para>' )
     def renderS5(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s5">' + token.value + u'</para>' )
-    def renderC(self, token):       self.currentC = token.value; self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<chapter number="' + self.currentC + u'" style="c" />' )
+    def renderC(self, token):       self.currentC = token.value; self.currentV = u'0'; self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<chapter number="' + self.currentC + u'" style="c" />' )
     def renderV(self, token):       self.currentV = token.value; self.f.write( u'\n' + self.indent() + u'<verse number="' + token.value + u'" style="v" />' )
     def renderQ(self, token):       self.renderQ1(token)
     def renderQ1(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + self.startQ(1) )
@@ -145,10 +147,14 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def renderFR(self, token):      self.f.write( u'\n  <char style="fr">' + self.escape(token.value) + u'</char>' )
     def renderFT(self, token):      self.f.write( u'\n  <char style="ft">' + self.escape(token.value) + u'</char>' )
     def renderFQ(self, token):      self.f.write( u'\n  <char style="fq">' + self.escape(token.value) + u'</char>' )
+    def renderFQA(self, token):     self.f.write( u'\n  <char style="fqa">' + self.escape(token.value) + u'</char>' )
 
     def renderXS(self, token):      self.f.write( u'\n<note caller="-" style="x">' )
     def renderXE(self, token):      self.f.write( u'\n</note>' )
     def renderXO(self, token):      self.f.write( u'\n  <char style="xo">' + self.escape(token.value) + u'</char>' )
     def renderXT(self, token):      self.f.write( u'\n  <char style="xt">' + self.escape(token.value) + u'</char>' )
 
-    def renderUnknown(self, token): print u'     Error: After ' + self.book + u' ' + self.currentC + u':' + self.currentV + u' - Unknown Token: \\' + self.escape(token.value)
+    def renderUnknown(self, token):
+        if token.value == 'v' :
+            self.currentV = str(int(self.currentV)+1)
+        print u'     Error: ' + self.book + u' ' + self.currentC + u':' + self.currentV + u' - Unknown Token: \\' + self.escape(token.value)
