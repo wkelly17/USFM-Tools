@@ -119,7 +119,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def renderS3(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s3">' + token.value + u'</para>' )
     def renderS4(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s4">' + token.value + u'</para>' )
     def renderS5(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n\n<para style="s5">' + token.value + u'</para>' )
-    def renderC(self, token):       self.currentC = token.value; self.currentV = u'1'; self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<chapter number="' + self.currentC + u'" style="c" />' )
+    def renderC(self, token):       self.currentC = token.value; self.currentV = u'0'; self.f.write( self.stopP() + self.stopQ() + self.stopLI() + u'\n<chapter number="' + self.currentC + u'" style="c" />' )
     def renderV(self, token):       self.currentV = token.value; self.f.write( u'\n' + self.indent() + u'<verse number="' + token.value + u'" style="v" />' )
     def renderQ(self, token):       self.renderQ1(token)
     def renderQ1(self, token):      self.f.write( self.stopP() + self.stopQ() + self.stopLI() + self.startQ(1) )
@@ -154,4 +154,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def renderXO(self, token):      self.f.write( u'\n  <char style="xo">' + self.escape(token.value) + u'</char>' )
     def renderXT(self, token):      self.f.write( u'\n  <char style="xt">' + self.escape(token.value) + u'</char>' )
 
-    def renderUnknown(self, token): print u'     Error: ' + self.book + u' ' + self.currentC + u':' + self.currentV + u' - Unknown Token: \\' + self.escape(token.value)
+    def renderUnknown(self, token):
+        if token.value == 'v' :
+            self.currentV = str(int(self.currentV)+1)
+        print u'     Error: ' + self.book + u' ' + self.currentC + u':' + self.currentV + u' - Unknown Token: \\' + self.escape(token.value)
