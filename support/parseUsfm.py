@@ -48,6 +48,9 @@ p       = usfmToken(u"p")
 pi      = usfmToken(u"pi")
 b       = usfmToken(u"b")
 c       = usfmTokenNumber(u"c")
+cas     = usfmToken(u"ca")
+cae     = usfmEndToken(u"ca")
+cl      = usfmToken(u"cl", phrase)
 v       = usfmTokenNumber(u"v")
 wjs     = usfmToken(u"wj")
 wje     = usfmEndToken(u"wj")
@@ -55,6 +58,16 @@ q       = usfmToken(u"q")
 q1      = usfmToken(u"q1")
 q2      = usfmToken(u"q2")
 q3      = usfmToken(u"q3")
+q4      = usfmToken(u"q4")
+qa      = usfmToken(u"qa")
+qac     = usfmToken(u"qac")
+qc      = usfmToken(u"qc")
+qm      = usfmToken(u"qm")
+qm1     = usfmToken(u"qm1")
+qm2     = usfmToken(u"qm2")
+qm3     = usfmToken(u"qm3")
+qr      = usfmToken(u"qr")
+qs      = usfmToken(u"qs")
 qts     = usfmToken(u"qt")
 qte     = usfmEndToken(u"qt")
 nb      = usfmToken(u"nb")
@@ -98,6 +111,10 @@ bdite  = usfmEndToken(u"bdit")
 
 
 li      = usfmToken(u"li")
+li1     = usfmToken(u"li1")
+li2     = usfmToken(u"li2")
+li3     = usfmToken(u"li3")
+li4     = usfmToken(u"li4")
 d       = usfmToken(u"d")
 sp      = usfmToken(u"sp")
 adds    = usfmToken(u"add")
@@ -109,6 +126,33 @@ mi      = usfmToken(u"mi")
 
 # Comments
 rem     = usfmTokenValue( u"rem", phrase )
+
+# Tables
+tr      = usfmToken(u"tr")
+th1     = usfmToken(u"th1")
+th2     = usfmToken(u"th2")
+th3     = usfmToken(u"th3")
+th4     = usfmToken(u"th4")
+th5     = usfmToken(u"th5")
+th6     = usfmToken(u"th6")
+thr1    = usfmToken(u"thr1")
+thr2    = usfmToken(u"thr2")
+thr3    = usfmToken(u"thr3")
+thr4    = usfmToken(u"thr4")
+thr5    = usfmToken(u"thr5")
+thr6    = usfmToken(u"thr6")
+tc1     = usfmToken(u"tc1")
+tc2     = usfmToken(u"tc2")
+tc3     = usfmToken(u"tc3")
+tc4     = usfmToken(u"tc4")
+tc5     = usfmToken(u"tc5")
+tc6     = usfmToken(u"tc6")
+tcr1    = usfmToken(u"tcr1")
+tcr2    = usfmToken(u"tcr2")
+tcr3    = usfmToken(u"tcr3")
+tcr4    = usfmToken(u"tcr4")
+tcr5    = usfmToken(u"tcr5")
+tcr6    = usfmToken(u"tcr6")
 
 # Table of Contents
 toc1    =  usfmTokenValue( u"toc1", phrase )
@@ -145,6 +189,9 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  mi,
  b,
  c,
+ cas,
+ cae,
+ cl,
  v,
  wjs,
  wje,
@@ -154,6 +201,16 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  q1,
  q2,
  q3,
+ q4,
+ qa,
+ qac,
+ qc,
+ qm,
+ qm1,
+ qm2,
+ qm3,
+ qr,
+ qs,
  qts,
  qte,
  nb,
@@ -179,6 +236,10 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  bdits,
  bdite,
  li,
+ li1,
+ li2,
+ li3,
+ li4,
  d,
  sp,
  adds,
@@ -201,6 +262,31 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  sce,
  pbr,
  rem,
+ tr,
+ th1,
+ th2,
+ th3,
+ th4,
+ th5,
+ th6,
+ thr1,
+ thr2,
+ thr3,
+ thr4,
+ thr5,
+ thr6,
+ tc1,
+ tc2,
+ tc3,
+ tc4,
+ tc5,
+ tc6,
+ tcr1,
+ tcr2,
+ tcr3,
+ tcr4,
+ tcr5,
+ tcr6,
  textBlock,
  unknown])
 
@@ -248,6 +334,9 @@ def createToken(t):
         u'mi':   MIToken,
         u'r':    RToken,
         u'c':    CToken,
+        u'ca':   CASToken,
+        u'ca*':  CAEToken,
+        u'cl':   CLToken,
         u'v':    VToken,
         u'wj':   WJSToken,
         u'wj*':  WJEToken,
@@ -255,9 +344,19 @@ def createToken(t):
         u'q1':   Q1Token,
         u'q2':   Q2Token,
         u'q3':   Q3Token,
-        u'nb':   NBToken,
+        u'q4':   Q4Token,
+        u'qa':   QAToken,
+        u'qac':  QACToken,
+        u'qc':   QCToken,
+        u'qm':   QMToken,
+        u'qm1':  QM1Token,
+        u'qm2':  QM2Token,
+        u'qm3':  QM3Token,
+        u'qr':   QRToken,
+        u'qs':   QSToken,
         u'qt':   QTSToken,
         u'qt*':  QTEToken,
+        u'nb':   NBToken,
         u'f':    FSToken,
         u'fr':   FRToken,
         u'fr*':  FREToken,
@@ -277,12 +376,15 @@ def createToken(t):
         u'bd':   BDSToken,
         u'bd*':  BDEToken,
         u'bdit': BDITSToken,
-        u'bdit*': BDITEToken,
+        u'bdit*':BDITEToken,
         u'li':   LIToken,
+        u'li1':  LI1Token,
+        u'li2':  LI2Token,
+        u'li3':  LI3Token,
+        u'li4':  LI4Token,
         u'd':    DToken,
         u'sp':   SPToken,
         u'i*':   IEToken,
-        u'li':   LIToken,
         u'add':  ADDSToken,
         u'add*': ADDEToken,
         u'nd':   NDSToken,
@@ -294,6 +396,31 @@ def createToken(t):
         u'tl*':  TLEToken,
         u'\\\\': PBRToken,
         u'rem':  REMToken,
+        u'tr':   TRToken,
+        u'th1':  TH1Token,
+        u'th2':  TH2Token,
+        u'th3':  TH3Token,
+        u'th4':  TH4Token,
+        u'th5':  TH5Token,
+        u'th6':  TH6Token,
+        u'thr1': THR1Token,
+        u'thr2': THR2Token,
+        u'thr3': THR3Token,
+        u'thr4': THR4Token,
+        u'thr5': THR5Token,
+        u'thr6': THR6Token,
+        u'tc1':  TC1Token,
+        u'tc2':  TC2Token,
+        u'tc3':  TC3Token,
+        u'tc4':  TC4Token,
+        u'tc5':  TC5Token,
+        u'tc6':  TC6Token,
+        u'tcr1': TCR1Token,
+        u'tcr2': TCR2Token,
+        u'tcr3': TCR3Token,
+        u'tcr4': TCR4Token,
+        u'tcr5': TCR5Token,
+        u'tcr6': TCR6Token,
         u'toc1': TOC1Token,
         u'toc2': TOC2Token,
         u'toc3': TOC3Token,
@@ -344,6 +471,9 @@ class UsfmToken(object):
     def isS5(self):     return False
     def isMI(self):     return False
     def isC(self):      return False
+    def isCAS(self):    return False
+    def isCAE(self):    return False
+    def isCL(self):     return False
     def isV(self):      return False
     def isWJS(self):    return False
     def isWJE(self):    return False
@@ -352,6 +482,16 @@ class UsfmToken(object):
     def isQ1(self):     return False
     def isQ2(self):     return False
     def isQ3(self):     return False
+    def isQ4(self):     return False
+    def isQA(self):     return False
+    def isQAC(self):    return False
+    def isQC(self):     return False
+    def isQM(self):     return False
+    def isQM1(self):    return False
+    def isQM2(self):    return False
+    def isQM3(self):    return False
+    def isQR(self):     return False
+    def isQS(self):     return False
     def isQTS(self):    return False
     def isQTE(self):    return False
     def isNB(self):     return False
@@ -374,6 +514,10 @@ class UsfmToken(object):
     def isSCS(self):    return False
     def isSCE(self):    return False
     def isLI(self):     return False
+    def isLI1(self):    return False
+    def isLI2(self):    return False
+    def isLI3(self):    return False
+    def isLI4(self):    return False
     def isD(self):      return False
     def isSP(self):     return False
     def isADDS(self):   return False
@@ -389,6 +533,31 @@ class UsfmToken(object):
     def isPBR(self):    return False
     def isM(self):      return False
     def isREM(self):    return False
+    def isTR(self):     return False
+    def isTH1(self):    return False
+    def isTH2(self):    return False
+    def isTH3(self):    return False
+    def isTH4(self):    return False
+    def isTH5(self):    return False
+    def isTH6(self):    return False
+    def isTHR1(self):   return False
+    def isTHR2(self):   return False
+    def isTHR3(self):   return False
+    def isTHR4(self):   return False
+    def isTHR5(self):   return False
+    def isTHR6(self):   return False
+    def isTC1(self):    return False
+    def isTC2(self):    return False
+    def isTC3(self):    return False
+    def isTC4(self):    return False
+    def isTC5(self):    return False
+    def isTC6(self):    return False
+    def isTCR1(self):   return False
+    def isTCR2(self):   return False
+    def isTCR3(self):   return False
+    def isTCR4(self):   return False
+    def isTCR5(self):   return False
+    def isTCR6(self):   return False
     def is_toc1(self):  return False
     def is_toc2(self):  return False
     def is_toc3(self):  return False
@@ -492,6 +661,21 @@ class CToken(UsfmToken):
         return printer.renderC(self)
     def isC(self):      return True
 
+class CASToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderCAS(self)
+    def isCAS(self):    return True
+
+class CAEToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderCAE(self)
+    def isCAE(self):    return True
+
+class CLToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderCL(self)
+    def isCL(self):     return True
+
 class VToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderV(self)
@@ -557,10 +741,55 @@ class Q3Token(UsfmToken):
         return printer.renderQ3(self)
     def isQ3(self):      return True
 
-class NBToken(UsfmToken):
+class Q4Token(UsfmToken):
     def renderOn(self, printer):
-        return printer.renderNB(self)
-    def isNB(self):      return True
+        return printer.renderQ4(self)
+    def isQ4(self):      return True
+
+class QAToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQA(self)
+    def isQA(self):      return True
+
+class QACToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQAC(self)
+    def isQAC(self):     return True
+
+class QCToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQC(self)
+    def isQC(self):      return True
+
+class QMToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQM(self)
+    def isQM(self):      return True
+
+class QM1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQM1(self)
+    def isQM1(self):     return True
+
+class QM2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQM2(self)
+    def isQM2(self):     return True
+
+class QM3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQM3(self)
+    def isQM3(self):     return True
+
+class QRToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQR(self)
+    def isQR(self):      return True
+
+class QSToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQS(self)
+    def isQS(self):      return True
 
 class QTSToken(UsfmToken):
     def renderOn(self, printer):
@@ -571,6 +800,11 @@ class QTEToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderQTE(self)
     def isQTE(self):      return True
+
+class NBToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderNB(self)
+    def isNB(self):      return True
 
 class FSToken(UsfmToken):
     def renderOn(self, printer):
@@ -646,6 +880,26 @@ class LIToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderLI(self)
     def isLI(self):      return True
+
+class LI1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderLI1(self)
+    def isLI1(self):     return True
+
+class LI2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderLI2(self)
+    def isLI1(self):     return True
+
+class LI3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderLI3(self)
+    def isLI1(self):     return True
+
+class LI4Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderLI4(self)
+    def isLI1(self):     return True
 
 class DToken(UsfmToken):
     def renderOn(self, printer):
@@ -751,6 +1005,132 @@ class SCEToken(UsfmToken):
 class REMToken(UsfmToken):
     def renderOn(self, printer):  return printer.renderREM(self)
     def isREM(self):              return True
+
+# Tables
+class TRToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTR(self)
+    def isTR(self):     return True
+
+class TH1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH1(self)
+    def isTH1(self):    return True
+
+class TH2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH2(self)
+    def isTH2(self):    return True
+
+class TH3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH3(self)
+    def isTH3(self):    return True
+
+class TH4Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH4(self)
+    def isTH4(self):    return True
+
+class TH5Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH5(self)
+    def isTH5(self):    return True
+
+class TH6Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTH6(self)
+    def isTH6(self):    return True
+
+class THR1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR1(self)
+    def isTHR1(self):   return True
+
+class THR2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR2(self)
+    def isTHR2(self):   return True
+
+class THR3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR3(self)
+    def isTHR3(self):   return True
+
+class THR4Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR4(self)
+    def isTHR4(self):   return True
+
+class THR5Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR5(self)
+    def isTHR5(self):   return True
+
+class THR6Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTHR6(self)
+    def isTHR6(self):   return True
+
+class TC1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC1(self)
+    def isTC1(self):    return True
+
+class TC2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC2(self)
+    def isTC2(self):    return True
+
+class TC3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC3(self)
+    def isTC3(self):    return True
+
+class TC4Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC4(self)
+    def isTC4(self):    return True
+
+class TC5Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC5(self)
+    def isTC5(self):    return True
+
+class TC6Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTC6(self)
+    def isTC6(self):    return True
+
+class TCR1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR1(self)
+    def isTCR1(self):   return True
+
+class TCR2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR2(self)
+    def isTCR2(self):   return True
+
+class TCR3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR3(self)
+    def isTCR3(self):   return True
+
+class TCR4Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR4(self)
+    def isTCR4(self):   return True
+
+class TCR5Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR5(self)
+    def isTCR5(self):   return True
+
+class TCR6Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTCR6(self)
+    def isTCR6(self):   return True
 
 # Introductions
 class IS1_Token(UsfmToken):
