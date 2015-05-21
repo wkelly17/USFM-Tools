@@ -67,7 +67,8 @@ qm1     = usfmToken(u"qm1")
 qm2     = usfmToken(u"qm2")
 qm3     = usfmToken(u"qm3")
 qr      = usfmToken(u"qr")
-qs      = usfmToken(u"qs")
+qss     = usfmToken(u"qs")
+qse     = usfmEndToken(u"qs")
 qts     = usfmToken(u"qt")
 qte     = usfmEndToken(u"qt")
 nb      = usfmToken(u"nb")
@@ -210,7 +211,8 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  qm2,
  qm3,
  qr,
- qs,
+ qss,
+ qse,
  qts,
  qte,
  nb,
@@ -353,7 +355,8 @@ def createToken(t):
         u'qm2':  QM2Token,
         u'qm3':  QM3Token,
         u'qr':   QRToken,
-        u'qs':   QSToken,
+        u'qs':   QSSToken,
+        u'qs*':  QSEToken,
         u'qt':   QTSToken,
         u'qt*':  QTEToken,
         u'nb':   NBToken,
@@ -491,7 +494,8 @@ class UsfmToken(object):
     def isQM2(self):    return False
     def isQM3(self):    return False
     def isQR(self):     return False
-    def isQS(self):     return False
+    def isQSS(self):    return False
+    def isQSE(self):    return False
     def isQTS(self):    return False
     def isQTE(self):    return False
     def isNB(self):     return False
@@ -786,20 +790,25 @@ class QRToken(UsfmToken):
         return printer.renderQR(self)
     def isQR(self):      return True
 
-class QSToken(UsfmToken):
+class QSSToken(UsfmToken):
     def renderOn(self, printer):
-        return printer.renderQS(self)
-    def isQS(self):      return True
+        return printer.renderQSS(self)
+    def isQSS(self):     return True
+
+class QSEToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderQSE(self)
+    def isQSE(self):     return True
 
 class QTSToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderQTS(self)
-    def isQTS(self):      return True
+    def isQTS(self):     return True
 
 class QTEToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderQTE(self)
-    def isQTE(self):      return True
+    def isQTE(self):     return True
 
 class NBToken(UsfmToken):
     def renderOn(self, printer):
