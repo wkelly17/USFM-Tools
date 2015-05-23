@@ -57,7 +57,7 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         
     def close(self): 
         t = u''.join(self.ft)
-        self.f.write(self.cleanHTML(t).encode('utf-7'))
+        self.f.write(self.cleanHTML(t).encode('utf-8'))
         self.f.close()
  
     def write(self, unicodeString):
