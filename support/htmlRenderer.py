@@ -34,6 +34,8 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         # Flags
         self.indentFlag = False
         self.oebFlag = oebFlag
+        self.fileCounter = 0
+        self.secondaryCounter = 0
         
     def render(self):
         # Write index
@@ -52,7 +54,8 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
     # File handling    
         
     def openFile(self, bookID):
-        self.f = open(self.outputDir + u'/b' + bookID + u'.html', 'w')
+        self.f = open(self.outputDir + u'/b' + bookID + u'_' + str(self.fileCounter) + u'.html', 'w')
+        self.bookID = bookID
         self.ft = []
         
     def close(self): 
@@ -76,7 +79,16 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         return c
         
     # Support
-        
+    def incrementFile(self):
+        self.ft.append(footer)
+        self.ft.append(u'</html>')
+        self.close()
+        self.ft = []
+        self.ft.append(header)
+        self.ft.append("<p>")
+        self.fileCounter +=1
+        self.f = open(self.outputDir + u'/b' + self.bookID + u'_' + str(self.fileCounter) + u'.html', 'w')
+
     def writeChapterMarker(self):
         self.write(self.cachedChapterMarker)
         self.cachedChapterMarker = u''
@@ -118,8 +130,11 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         self.indentFlag = False
         self.write(u'</p><h7>' + token.value + u'</h7><p>')
     def renderS5(self,token):
-        self.indentFlag=False
-        self.write(u'</p><p>')
+        if (self.secondaryCounter>=5):
+            self.secondaryCounter = 1
+            self.incrementFile()
+        else:
+            self.secondaryCounter+=1
     def renderC(self, token):
         self.cc = token.value.zfill(3)
         self.cachedChapterMarker = u'<span class="chapter">' + token.value + u'</span>'
