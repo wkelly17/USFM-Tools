@@ -38,10 +38,6 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         self.secondaryCounter = 0
         
     def render(self):
-        # Write index
-        self.f = open(self.outputDir + u'/index.html', 'w')
-        self.write(indexPage)
-        self.close()
         self.f = DummyFile()
         # Write pages
         self.loadUSFM(self.inputDir)
