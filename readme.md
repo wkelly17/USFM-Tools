@@ -18,6 +18,18 @@ This fork of USFM-Tools includes basic support for conversion to USX.
  
 (This downloads ConTeXt and may take a while.)
  
+# Font Setup
+
+After getting the Noto fonts installed on the system, the following can be run to get the Noto fonts into ConTeXt:
+
+    . /opt/context/tex/setuptex
+    export OSFONTDIR="/usr/local/share/fonts;$HOME/.fonts"
+    mtxrun --script fonts --reload
+    context --generate
+    
+Running `mtxrun --script fonts --list --all --pattern=*oto*` should now list a bunch of the Noto fonts.  More information at http://wiki.contextgarden.net/Fonts_in_LuaTeX.
+
+
 # Run
 
 When running the conversion, you may split the results by book (currently only supported for USX):
