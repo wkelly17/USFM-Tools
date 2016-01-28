@@ -85,8 +85,9 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderS2(self, token):
         self.indentFlag = False
         self.write(u'\n\n<p align="center">----</p>')
-    def renderS5(self, token):
+    def renderS5(self):
         self.indentFlag = False
+        self.write(u'\n<span class="chunk-break"/>')
     def renderC(self, token):
         self.cc = token.value.zfill(3)
         self.write(u'\n\n<p class="c-num">' + token.value + u'</p>')
