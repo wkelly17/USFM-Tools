@@ -64,9 +64,9 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.indentFlag = False
     def renderH(self, token):
         self.bookname = token.value
-    def renderTOC1(self, token)
+    def renderTOC1(self, token):
         return;
-    def renderTOC2(self, token)
+    def renderTOC2(self, token):
         self.write(u'\n\n<h1>' + token.value + u'</h1>')
     def renderMT(self, token):
         return; # self.write(u'\n\n<h1>' + token.value + u'</h1>') # removed to use TOC2
