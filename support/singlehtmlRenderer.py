@@ -62,11 +62,20 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderID(self, token): 
         self.cb = books.bookKeyForIdValue(token.value)
         self.indentFlag = False
-    def renderH(self, token):       self.bookname = token.value 
-    def renderMT(self, token):      self.write(u'\n\n<h1>' + token.value + u'</h1>')
-    def renderMT2(self, token):     self.write(u'\n\n<h2>' + token.value + u'</h2>')
-    def renderMS(self, token):      self.write(u'\n\n<h3>' + token.value + u'</h3>')
-    def renderMS2(self, token):     self.write(u'\n\n<h4>' + token.value + u'</h4>')
+    def renderH(self, token):
+        self.bookname = token.value
+    def renderTOC1(self, token)
+        return;
+    def renderTOC2(self, token)
+        self.write(u'\n\n<h1>' + token.value + u'</h1>')
+    def renderMT(self, token):
+        return; # self.write(u'\n\n<h1>' + token.value + u'</h1>') # removed to use TOC2
+    def renderMT2(self, token):
+        self.write(u'\n\n<h2>' + token.value + u'</h2>')
+    def renderMS(self, token):
+        self.write(u'\n\n<h3>' + token.value + u'</h3>')
+    def renderMS2(self, token):
+        self.write(u'\n\n<h4>' + token.value + u'</h4>')
     def renderP(self, token):
         self.indentFlag = False
         self.write(u'\n\n<p>')
