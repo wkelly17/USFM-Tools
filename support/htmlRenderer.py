@@ -108,6 +108,7 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         self.openFile(self.cb)
         self.write(header)
         self.indentFlag = False
+    def renderTOC2(self, token):      self.write(u'</p><h2>' + token.value + u'</h2><p>')
     def renderMT(self, token):      self.write(u'</p><h1>' + token.value + u'</h1><p>')
     def renderMT2(self, token):      self.write(u'</p><h2>' + token.value + u'</h2><p>')
     def renderMS(self, token):      self.write(u'</p><h4>' + token.value + u'</h4><p>')

@@ -3,8 +3,6 @@
 
 import books
 import parseUsfm
-import sys
-import codecs
 
 class AbstractRenderer(object):
 
@@ -17,7 +15,6 @@ class AbstractRenderer(object):
         self.booksUsfm = books.loadBooks(usfmDir)
 
     def run(self):
-        sys.stdout = codecs.getwriter('utf8')(sys.stdout);
         self.unknowns = []
         try:
             bookName = self.renderBook
@@ -32,13 +29,16 @@ class AbstractRenderer(object):
                     tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                     for t in tokens: t.renderOn(self)
         if len(self.unknowns):
-            print u'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
+            print 'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
 
     def renderID(self, token):      pass
     def renderIDE(self, token):     pass
     def renderH(self, token):       pass
 
     def renderM(self, token):       pass
+    def renderTOC1(self, token):      pass
+    def renderTOC2(self, token):      pass
+    def renderTOC3(self, token):      pass
     def renderMT(self, token):      pass
     def renderMT2(self, token):     pass
     def renderMT3(self, token):     pass
@@ -105,10 +105,6 @@ class AbstractRenderer(object):
 
     def renderADDS(self, token):    pass
     def renderADDE(self, token):    pass
-
-    def render_toc1(self, token):   pass
-    def render_toc2(self, token):   pass
-    def render_toc3(self, token):   pass
 
     def render_is1(self, token):    pass
     def render_ip(self, token):     pass

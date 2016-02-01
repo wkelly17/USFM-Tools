@@ -64,12 +64,10 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.indentFlag = False
     def renderH(self, token):
         self.bookname = token.value
-    def renderTOC1(self, token):
-        return;
     def renderTOC2(self, token):
         self.write(u'\n\n<h1>' + token.value + u'</h1>')
     def renderMT(self, token):
-        return; # self.write(u'\n\n<h1>' + token.value + u'</h1>') # removed to use TOC2
+        return; #self.write(u'\n\n<h1>' + token.value + u'</h1>') # removed to use TOC2
     def renderMT2(self, token):
         self.write(u'\n\n<h2>' + token.value + u'</h2>')
     def renderMS(self, token):
@@ -87,13 +85,13 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'\n\n<p align="center">----</p>')
     def renderS5(self, token):
         self.indentFlag = False
-        self.write(u'\n<span class="chunk-break"/>')
+        self.write(u'\n<span class="chunk-break"/>\n')
     def renderC(self, token):
         self.cc = token.value.zfill(3)
-        self.write(u'\n\n<p class="c-num">' + token.value + u'</p>')
+        self.write(u'\n\n<h2 class="c-num">Chapter ' + token.value + u'</h2>')
     def renderV(self, token):
         self.cv = token.value.zfill(3)
-        self.write(u' <span class="v-num">' + token.value + u'</span> ')
+        self.write(u' <span class="v-num"><super>' + token.value + u'</super></span>')
     def renderWJS(self, token):     self.write(u'<span class="woc">')
     def renderWJE(self, token):     self.write(u'</span>')
     def renderTEXT(self, token):    self.write(u" " + token.value + u" ")

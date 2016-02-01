@@ -29,6 +29,10 @@ unknown     = Group(Optional(NoMatch(), u"unknown") + Suppress(backslash) + Char
 id      = usfmTokenValue( u"id", phrase )
 ide     = usfmTokenValue( u"ide", phrase )
 h       = usfmTokenValue( u"h", phrase )
+toc     = usfmTokenValue( u"toc", phrase )
+toc1    = usfmTokenValue( u"toc1", phrase )
+toc2    = usfmTokenValue( u"toc2", phrase )
+toc3    = usfmTokenValue( u"toc3", phrase )
 mt      = usfmTokenValue( u"mt", phrase )
 mt1     = usfmTokenValue( u"mt1", phrase )
 mt2     = usfmTokenValue( u"mt2", phrase )
@@ -173,7 +177,7 @@ ior_e   =  usfmEndToken( u"ior")
 bk_s    =  usfmToken( u"bk")
 bk_e    =  usfmEndToken( u"bk")
 
-element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
+element =  MatchFirst([ide, id, h, toc, toc1, toc2, toc3, mt, mt1, mt2, mt3,
  ms,
  ms1,
  ms2,
@@ -248,9 +252,6 @@ element =  MatchFirst([ide, id, h, mt, mt1, mt2, mt3,
  adde,
  tls,
  tle,
- toc1,
- toc2,
- toc3,
  is1,
  ip,
  iot,
@@ -316,6 +317,9 @@ def createToken(t):
         u'id':   IDToken,
         u'ide':  IDEToken,
         u'h':    HToken,
+        u'toc1': TOC1Token,
+        u'toc2': TOC2Token,
+        u'toc3': TOC3Token,
         u'mt':   MTToken,
         u'mt1':  MTToken,
         u'mt2':  MT2Token,
@@ -457,6 +461,9 @@ class UsfmToken(object):
     def isID(self):     return False
     def isIDE(self):    return False
     def isH(self):      return False
+    def isTOC1(self):   return False
+    def isTOC2(self):   return False
+    def isTOC3(self):   return False
     def isMT(self):     return False
     def isMT2(self):    return False
     def isMT3(self):    return False
@@ -590,25 +597,25 @@ class IDEToken(UsfmToken):
         return printer.renderIDE(self)
     def isIDE(self):    return True
 
-class TOC1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_toc1(self)
-    def is_toc1(self):    return True
-
-class TOC2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_toc2(self)
-    def is_toc2(self):    return True
-
-class TOC3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_toc3(self)
-    def is_toc3(self):    return True
-
 class HToken(UsfmToken):
     def renderOn(self, printer):
         return printer.renderH(self)
     def isH(self):      return True
+
+class TOC1Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTOC1(self)
+    def isTOC1(self):     return True
+
+class TOC2Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTOC2(self)
+    def isTOC2(self):     return True
+
+class TOC3Token(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderTOC3(self)
+    def isTOC3(self):     return True
 
 class MTToken(UsfmToken):
     def renderOn(self, printer):

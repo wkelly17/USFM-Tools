@@ -30,7 +30,8 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def render(self):
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
         self.loadUSFM(self.inputDir)
-        self.f.write(r"""
+        self.f.write(u"""
+            Document rendered on """ + datetime.date.today().strftime("%F") + r"""
             \par
             \page[right]
             \par ~
@@ -141,6 +142,9 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
 
     def renderID(self, token):      self.f.write( self.stopNarrower() + ur"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
     def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + self.escapeText(token.value) + u'}\n')
+    def renderTOC1(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC1{' + token.value + u'}\n')
+    def renderTOC2(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC2{' + token.value + u'}\n')
+    def renderTOC3(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC3{' + token.value + u'}\n')
     def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + token.value + u'}\n')
     def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + token.value + u'}\n')
     def renderMS(self, token):      self.markForSmallCaps() ; self.f.write(self.stopNarrower() + u'\n\MS{' + self.escapeText(token.value) + u'}\n') ; self.doNB = True
@@ -187,7 +191,6 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def renderNB(self, token):      self.doNB = True ; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\\blank[medium] ' + self.newLine() )
     def renderFS(self, token):      self.f.write( u'\\footnote{' )
     def renderFE(self, token):      self.f.write( u'} ' )
-    def renderFQA(self, token):     return
     def renderIS(self, token):      self.f.write( u'{\em ' )
     def renderIE(self, token):      self.f.write( u'} ' )
     def renderBDS(self, token):     self.f.write( u'{\\bf ')
