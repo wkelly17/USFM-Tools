@@ -36,7 +36,6 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         </head>
         <body>
         """.encode('utf-8'))
-        self.f.write('<p>Draft built ' + datetime.date.today().strftime("%A, %d %B %Y") + '</p>\n\n')
         self.loadUSFM(self.inputDir)
         self.run()
         self.f.write('</body></html>')
