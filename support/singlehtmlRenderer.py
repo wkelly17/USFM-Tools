@@ -36,7 +36,6 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         </head>
         <body>
         """.encode('utf-8'))
-        self.f.write('<p>Draft built ' + datetime.date.today().strftime("%A, %d %B %Y") + '</p>\n\n')
         self.loadUSFM(self.inputDir)
         self.run()
         self.f.write('</body></html>')
@@ -91,7 +90,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'\n\n<h2 class="c-num">Chapter ' + token.value + u'</h2>')
     def renderV(self, token):
         self.cv = token.value.zfill(3)
-        self.write(u' <span class="v-num"><super>' + token.value + u'</super></span>')
+        self.write(u' <span class="v-num"><sup><b>' + token.value + u'</b></sup></span>')
     def renderWJS(self, token):     self.write(u'<span class="woc">')
     def renderWJE(self, token):     self.write(u'</span>')
     def renderTEXT(self, token):    self.write(u" " + token.value + u" ")
@@ -112,3 +111,4 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderPBR(self, token):     self.write(u'<br />')
     def renderSCS(self, token):     self.write(u'<b>')
     def renderSCE(self, token):     self.write(u'</b>')
+    def renderFQA(self, token):     return
