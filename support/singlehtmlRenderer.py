@@ -112,3 +112,88 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderPBR(self, token):     self.write(u'<br />')
     def renderSCS(self, token):     self.write(u'<b>')
     def renderSCE(self, token):     self.write(u'</b>')
+
+
+
+    def renderID(self, token):      self.f.write( self.stopNarrower() + ur"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
+    def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + self.escapeText(token.value) + u'}\n')
+    def renderTOC1(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC1{' + token.value + u'}\n')
+    def renderTOC2(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC2{' + token.value + u'}\n')
+    def renderTOC3(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC3{' + token.value + u'}\n')
+    def renderMT(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MT{' + token.value + u'}\n')
+    def renderMT2(self, token):     self.f.write( self.stopLI() + self.stopNarrower() + u'\n\MTT{' + token.value + u'}\n')
+    def renderMS(self, token):      self.markForSmallCaps() ; self.f.write(self.stopNarrower() + u'\n\MS{' + self.escapeText(token.value) + u'}\n') ; self.doNB = True
+    def renderMS2(self, token):     self.doNB = True; self.markForSmallCaps() ; self.f.write( self.stopNarrower() + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
+    def renderP(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + self.newLine() )
+    def renderB(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\\blank \n' )
+    def renderS(self, token):       self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() +  u'\n\\blank[big] ' + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() ) ; self.doNB = True
+    def renderS2(self, token):      self.doNB = True; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\n\\blank[big] ' + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
+    def renderS5(self, token):      self.doNB = True; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\n\\blank[big] ' + u'\n\MSS{' + self.escapeText(token.value) + '}' + self.newLine() )
+    def renderC(self, token):
+        self.doChapterOrVerse = u'\C{' + self.escapeText(token.value) + u'}'
+        self.f.write( u' ' )
+    def renderV(self, token):
+        if not token.value == u'1':
+            self.doChapterOrVerse =  u'\V{' + self.escapeText(token.value) + u'}'
+        self.f.write( ' ' )
+    def renderWJS(self, token):     self.f.write( u" " )
+    def renderWJE(self, token):     self.f.write( u" " )
+    def renderTEXT(self, token):
+        s = self.escapeText(token.value)
+        if self.smallcaps and not self.doChapterOrVerse == u'':
+            s = self.renderSmallCaps(s)
+            s = self.doChapterOrVerse + s
+            self.doChapterOrVerse = u''
+        elif not self.doChapterOrVerse == u'':
+            i = s.find(u' ')
+            if i == -1:
+                # No space found - try end
+                i = len(s)
+            s = s[:i] + self.doChapterOrVerse + s[i+1:]
+            self.doChapterOrVerse = u''
+        elif self.smallcaps:
+            s = self.renderSmallCaps(s)
+        if self.justDidLORD:
+            if s[0].isalpha():
+                s = u' ' + s
+            self.justDidLORD = False
+        self.f.write(s)
+        self.f.write(u' ')
+    def renderQ(self, token):       self.renderQ1(token)
+    def renderQ1(self, token):      self.f.write( self.stopD() + self.stopLI() + self.startNarrower(1) )
+    def renderQ2(self, token):      self.f.write( self.stopD() + self.stopLI() + self.startNarrower(2) )
+    def renderQ3(self, token):      self.f.write( self.stopD() + self.stopLI() + self.startNarrower(3) )
+    def renderNB(self, token):      self.doNB = True ; self.f.write( self.stopD() + self.stopLI() + self.stopNarrower() + u'\\blank[medium] ' + self.newLine() )
+    def renderFS(self, token):      self.f.write( u'\\footnote{' )
+    def renderFE(self, token):      self.f.write( u'} ' )
+    def renderIS(self, token):      self.f.write( u'{\em ' )
+    def renderIE(self, token):      self.f.write( u'} ' )
+    def renderBDS(self, token):     self.f.write( u'{\\bf ')
+    def renderBDE(self, token):     self.f.write( u'} ')
+    def renderBDITS(self, token):   self.f.write( u'{\\bs ')
+    def renderBDITE(self, token):   self.f.write( u'} ')
+    def renderADDS(self, token):    self.f.write( u'{\em ' )
+    def renderADDE(self, token):    self.f.write( u'} ' )
+    def renderNDS(self, token):     self.f.write( u'{\sc ' )
+    def renderNDE(self, token):     self.justDidLORD = True; self.f.write( u'}' )
+    def renderLI(self, token):      self.f.write( self.startLI() )
+    def renderLI1(self, token):      self.f.write( self.startLI() )
+    def renderLI2(self, token):      self.f.write( self.startLI() )
+    def renderLI3(self, token):      self.f.write( self.startLI() )
+    def renderD(self, token):       self.f.write( self.startD() )
+    def renderSP(self, token):      self.f.write( self.startD() )
+    def renderPBR(self, token):     self.f.write( u' \\\\ ' )
+    def renderFR(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
+    def renderFRE(self, token):     self.f.write( u' ' )
+    def renderFK(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
+    def renderFT(self, token):      self.f.write( u' ' + self.escapeText(token.value) + u' ' )
+    def renderPI(self, token):      self.renderQ(token)
+
+    def renderQSS(self, token):      return
+    def renderQSE(self, token):      return
+
+    def render_is1(self, token):    self.renderS(token)
+    def render_ip(self, token):     self.renderP(token)
+    def render_iot(self, token):    self.renderQ(token)
+    def render_io1(self, token):    self.renderQ2(token)
+    def render_io1(self, token):    self.renderQ2(token)
