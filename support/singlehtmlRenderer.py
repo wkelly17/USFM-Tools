@@ -112,3 +112,5 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderSCS(self, token):     self.write(u'<b>')
     def renderSCE(self, token):     self.write(u'</b>')
     def renderFQA(self, token):     return
+    def renderCL(self, token):      self.write(u'<b>' + token.value + u'</b>')
+
