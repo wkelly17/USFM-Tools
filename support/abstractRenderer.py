@@ -8,6 +8,8 @@ class AbstractRenderer(object):
 
     booksUsfm = None
 
+    chapterLabel = u'Chapter'
+
     def writeLog(self, s):
         pass
 

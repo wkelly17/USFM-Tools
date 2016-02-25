@@ -87,7 +87,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'\n<span class="chunk-break"/>\n')
     def renderC(self, token):
         self.cc = token.value.zfill(3)
-        self.write(u'\n\n<h2 class="c-num">Chapter ' + token.value + u'</h2>')
+        self.write(u'\n\n<h2 class="c-num">'+self.chapterLabel+' ' + token.value + u'</h2>')
     def renderV(self, token):
         self.cv = token.value.zfill(3)
         self.write(u' <span class="v-num"><sup><b>' + token.value + u'</b></sup></span>')
@@ -112,5 +112,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderSCS(self, token):     self.write(u'<b>')
     def renderSCE(self, token):     self.write(u'</b>')
     def renderFQA(self, token):     return
-    def renderCL(self, token):      self.write(u'<b>' + token.value + u'</b>')
+    def renderCL(self, token):      self.chapterLabel = token.value
+    def renderQSS(self, token):     return
+    def renderQSE(self, token):     return
 
