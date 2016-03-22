@@ -181,7 +181,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def renderS2(self, token):      self.f.write( self.stopAll() + u'\n\n<para style="s2">' + token.value + u'</para>' )
     def renderS3(self, token):      self.f.write( self.stopAll() + u'\n\n<para style="s3">' + token.value + u'</para>' )
     def renderS4(self, token):      self.f.write( self.stopAll() + u'\n\n<para style="s4">' + token.value + u'</para>' )
-    def renderS5(self, token):      self.f.write( self.stopAll() + u'\n\n<para style="s5">' + token.value + u'</para>' )
+    def renderS5(self, token):      self.f.write( self.stopC() + u'\n<note caller="u" style="s5"></note>' )
     def renderC(self, token):       self.currentC = token.value; self.currentV = u'0'; self.f.write( self.stopAll() + self.startC() )
     def renderCAS(self, token):     self.f.write( u' altnumber="' )
     def renderCAE(self, token):     self.f.write( u'"' )
