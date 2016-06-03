@@ -12,14 +12,14 @@ def read(f_name):
 
 setup(
     name="usfm_tools",
-    version="0.0.1",
+    version="0.0.2",
     author="unfoldingWord",
     author_email="unfoldingword.org",
     description="A framework for transforming .usfm files into specified targets",
     license="MIT",
     keywords="unfoldingWord usfm tools",
     url="https://github.com/unfoldingWord-dev/USFM-Tools",
-    packages=['usfm_tools'],
+    packages=['usfm_tools', 'usfm_tools/support'],
     long_description=read('README.md'),
     classifiers=[],
     requires=['pyparsing', ]
