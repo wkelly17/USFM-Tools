@@ -4,8 +4,6 @@
 from __future__ import print_function, unicode_literals
 import os
 
-# import codecs
-
 bookKeys = {
     'GEN': '001',
     'EXO': '002',
@@ -368,12 +366,16 @@ def loadBooks(path):
     print('\n     LOADING ALL USFM FILES FROM ' + path)
     for fname in dirList:
 
+        full_file_name = os.path.join(path, fname)
+        if not os.path.isfile(full_file_name):
+            continue
+
         if fname[-4:].lower() in ['.pdf', '.sig']:
             continue
 
         # noinspection PyBroadException
         try:
-            f = open(path + '/' + fname, 'U')  # U handles line endings
+            f = open(full_file_name, 'U')  # U handles line endings
             usfm = f.read().decode('utf-8-sig').lstrip()
             if usfm[:4] == r'\id ' and usfm[4:7] in silNames:
                 # print '     Loaded ' + fname + ' as ' + usfm[4:7]
@@ -390,11 +392,11 @@ def loadBooks(path):
 # noinspection PyPep8Naming
 def orderFor(booksDict):
     order = silNames
-    if booksDict.has_key("PSA") and not booksDict.has_key("GEN") and booksDict.has_key("MAT"):
+    if 'PSA' in booksDict and 'GEN' not in booksDict and 'MAT' in booksDict:
         # This is a big hack. When doing Psalms + NT, put Psalms last
         order = silNamesNTPsalms
     a = []
     for book_name in order:
-        if booksDict.has_key(book_name):
+        if book_name in booksDict:
             a.append(booksDict[book_name])
     return a

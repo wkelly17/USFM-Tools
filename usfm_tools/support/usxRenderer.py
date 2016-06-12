@@ -28,7 +28,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
         self.book = ''        # book id
         self.renderBook = ''  # book name
         # Flags
-        self.printerState = {'c': False, 'p': False, 'q': False, 'li': False, 'row': False,
+        self.printerState = {'c': False, 'p': False, 'pi': False, 'pi2': False, 'q': False, 'li': False, 'row': False,
                              'cell': False, 'table': False}
         # Errors
         self.error = ''
@@ -47,7 +47,7 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
             print('#### Concatenating Books into ' + self.outputFileName + self.outputFileExt + '\n')
             self.f = codecs.open(self.outputFilePath + self.outputFileName + self.outputFileExt, 'w', 'utf_8_sig')
             self.run()
-            self.f.write(self.stop_p() + self.stop_q() + self.stop_li())
+            self.f.write(self.stop_p() + self.stop_pi() + self.stop_pi2() + self.stop_q() + self.stop_li())
             self.f.close()
         print('')
 
@@ -82,6 +82,30 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
     def stop_p(self):
         if self.printerState['p']:
             self.printerState['p'] = False
+            return '</para>'
+        else:
+            return ''
+
+    def start_pi(self):
+        if not self.printerState['pi']:
+            self.printerState['pi'] = True
+        return '\n<para style="pi">'
+
+    def stop_pi(self):
+        if self.printerState['pi']:
+            self.printerState['pi'] = False
+            return '</para>'
+        else:
+            return ''
+
+    def start_pi2(self):
+        if not self.printerState['pi2']:
+            self.printerState['pi2'] = True
+        return '\n<para style="pi2">'
+
+    def stop_pi2(self):
+        if self.printerState['pi2']:
+            self.printerState['pi2'] = False
             return '</para>'
         else:
             return ''
@@ -156,11 +180,12 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
             return ''
 
     def stop_all(self):
-        return self.stop_c() + self.stop_p() + self.stop_q() + self.stop_li() + self.stop_cell() + \
-               self.stop_row() + self.stop_table()
+        return self.stop_c() + self.stop_p() + self.stop_pi() + self.stop_pi2() + self.stop_q() + self.stop_li() + \
+               self.stop_cell() + self.stop_row() + self.stop_table()
 
     def stop_all_to_cell(self):
-        return self.stop_c() + self.stop_p() + self.stop_q() + self.stop_li() + self.stop_cell()
+        return self.stop_c() + self.stop_p() + self.stop_pi() + self.stop_pi2() + self.stop_q() + self.stop_li() + \
+               self.stop_cell()
 
     # noinspection PyMethodMayBeStatic
     def escape(self, s):
@@ -210,6 +235,12 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
 
     def renderP(self, token):
         self.f.write(self.stop_all() + self.start_p())
+
+    def renderPI(self, token):
+        self.f.write(self.stop_all() + self.start_pi())
+
+    def renderPI2(self, token):
+        self.f.write(self.stop_all() + self.start_pi2())
 
     def renderB(self, token):
         self.f.write(self.stop_all() + '\n<para style="b" />')

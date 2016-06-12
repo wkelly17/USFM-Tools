@@ -93,6 +93,7 @@ class AbstractRenderer(object):
     def renderD(self, token):       pass
     def renderREM(self, token):     pass
     def renderPI(self, token):      pass
+    def renderPI2(self, token):     pass
     def renderLI(self, token):      pass
 
     def renderXS(self, token):      pass
