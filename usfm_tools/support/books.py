@@ -1,375 +1,400 @@
 # Setup list of patches and books to use
 #
 
+from __future__ import print_function, unicode_literals
 import os
-import codecs
+
+# import codecs
 
 bookKeys = {
-u'GEN': u'001',
-u'EXO': u'002',
-u'LEV': u'003',
-u'NUM': u'004',
-u'DEU': u'005',
-u'JOS': u'006',
-u'JDG': u'007',
-u'RUT': u'008',
-u'1SA': u'009',
-u'2SA': u'010',
-u'1KI': u'011',
-u'2KI': u'012',
-u'1CH': u'013',
-u'2CH': u'014',
-u'EZR': u'015',
-u'NEH': u'016',
-u'EST': u'017',
-u'JOB': u'018',
-u'PSA': u'019',
-u'PRO': u'020',
-u'ECC': u'021',
-u'SNG': u'022',
-u'ISA': u'023',
-u'JER': u'024',
-u'LAM': u'025',
-u'EZK': u'026',
-u'DAN': u'027',
-u'HOS': u'028',
-u'JOL': u'029',
-u'AMO': u'030',
-u'OBA': u'031',
-u'JON': u'032',
-u'MIC': u'033',
-u'NAM': u'034',
-u'HAB': u'035',
-u'ZEP': u'036',
-u'HAG': u'037',
-u'ZEC': u'038',
-u'MAL': u'039',
-u'MAT': u'040',
-u'MRK': u'041',
-u'LUK': u'042',
-u'JHN': u'043',
-u'ACT': u'044',
-u'ROM': u'045',
-u'1CO': u'046',
-u'2CO': u'047',
-u'GAL': u'048',
-u'EPH': u'049',
-u'PHP': u'050',
-u'COL': u'051',
-u'1TH': u'052',
-u'2TH': u'053',
-u'1TI': u'054',
-u'2TI': u'055',
-u'TIT': u'056',
-u'PHM': u'057',
-u'HEB': u'058',
-u'JAS': u'059',
-u'1PE': u'060',
-u'2PE': u'061',
-u'1JN': u'062',
-u'2JN': u'063',
-u'3JN': u'064',
-u'JUD': u'065',
-u'REV': u'066'
+    'GEN': '001',
+    'EXO': '002',
+    'LEV': '003',
+    'NUM': '004',
+    'DEU': '005',
+    'JOS': '006',
+    'JDG': '007',
+    'RUT': '008',
+    '1SA': '009',
+    '2SA': '010',
+    '1KI': '011',
+    '2KI': '012',
+    '1CH': '013',
+    '2CH': '014',
+    'EZR': '015',
+    'NEH': '016',
+    'EST': '017',
+    'JOB': '018',
+    'PSA': '019',
+    'PRO': '020',
+    'ECC': '021',
+    'SNG': '022',
+    'ISA': '023',
+    'JER': '024',
+    'LAM': '025',
+    'EZK': '026',
+    'DAN': '027',
+    'HOS': '028',
+    'JOL': '029',
+    'AMO': '030',
+    'OBA': '031',
+    'JON': '032',
+    'MIC': '033',
+    'NAM': '034',
+    'HAB': '035',
+    'ZEP': '036',
+    'HAG': '037',
+    'ZEC': '038',
+    'MAL': '039',
+    'MAT': '040',
+    'MRK': '041',
+    'LUK': '042',
+    'JHN': '043',
+    'ACT': '044',
+    'ROM': '045',
+    '1CO': '046',
+    '2CO': '047',
+    'GAL': '048',
+    'EPH': '049',
+    'PHP': '050',
+    'COL': '051',
+    '1TH': '052',
+    '2TH': '053',
+    '1TI': '054',
+    '2TI': '055',
+    'TIT': '056',
+    'PHM': '057',
+    'HEB': '058',
+    'JAS': '059',
+    '1PE': '060',
+    '2PE': '061',
+    '1JN': '062',
+    '2JN': '063',
+    '3JN': '064',
+    'JUD': '065',
+    'REV': '066'
 }
 
 silNames = [
-u'GEN',
-u'EXO',
-u'LEV',
-u'NUM',
-u'DEU',
-u'JOS',
-u'JDG',
-u'RUT',
-u'1SA',
-u'2SA',
-u'1KI',
-u'2KI',
-u'1CH',
-u'2CH',
-u'EZR',
-u'NEH',
-u'EST',
-u'JOB',
-u'PSA',
-u'PRO',
-u'ECC',
-u'SNG',
-u'ISA',
-u'JER',
-u'LAM',
-u'EZK',
-u'DAN',
-u'HOS',
-u'JOL',
-u'AMO',
-u'OBA',
-u'JON',
-u'MIC',
-u'NAM',
-u'HAB',
-u'ZEP',
-u'HAG',
-u'ZEC',
-u'MAL',
-u'MAT',
-u'MRK',
-u'LUK',
-u'JHN',
-u'ACT',
-u'ROM',
-u'1CO',
-u'2CO',
-u'GAL',
-u'EPH',
-u'PHP',
-u'COL',
-u'1TH',
-u'2TH',
-u'1TI',
-u'2TI',
-u'TIT',
-u'PHM',
-u'HEB',
-u'JAS',
-u'1PE',
-u'2PE',
-u'1JN',
-u'2JN',
-u'3JN',
-u'JUD',
-u'REV' ]
+    'GEN',
+    'EXO',
+    'LEV',
+    'NUM',
+    'DEU',
+    'JOS',
+    'JDG',
+    'RUT',
+    '1SA',
+    '2SA',
+    '1KI',
+    '2KI',
+    '1CH',
+    '2CH',
+    'EZR',
+    'NEH',
+    'EST',
+    'JOB',
+    'PSA',
+    'PRO',
+    'ECC',
+    'SNG',
+    'ISA',
+    'JER',
+    'LAM',
+    'EZK',
+    'DAN',
+    'HOS',
+    'JOL',
+    'AMO',
+    'OBA',
+    'JON',
+    'MIC',
+    'NAM',
+    'HAB',
+    'ZEP',
+    'HAG',
+    'ZEC',
+    'MAL',
+    'MAT',
+    'MRK',
+    'LUK',
+    'JHN',
+    'ACT',
+    'ROM',
+    '1CO',
+    '2CO',
+    'GAL',
+    'EPH',
+    'PHP',
+    'COL',
+    '1TH',
+    '2TH',
+    '1TI',
+    '2TI',
+    'TIT',
+    'PHM',
+    'HEB',
+    'JAS',
+    '1PE',
+    '2PE',
+    '1JN',
+    '2JN',
+    '3JN',
+    'JUD',
+    'REV']
 
 silNamesNTPsalms = [
-u'MAT',
-u'MRK',
-u'LUK',
-u'JHN',
-u'ACT',
-u'ROM',
-u'1CO',
-u'2CO',
-u'GAL',
-u'EPH',
-u'PHP',
-u'COL',
-u'1TH',
-u'2TH',
-u'1TI',
-u'2TI',
-u'TIT',
-u'PHM',
-u'HEB',
-u'JAS',
-u'1PE',
-u'2PE',
-u'1JN',
-u'2JN',
-u'3JN',
-u'JUD',
-u'REV',
-u'PSA' ]
+    'MAT',
+    'MRK',
+    'LUK',
+    'JHN',
+    'ACT',
+    'ROM',
+    '1CO',
+    '2CO',
+    'GAL',
+    'EPH',
+    'PHP',
+    'COL',
+    '1TH',
+    '2TH',
+    '1TI',
+    '2TI',
+    'TIT',
+    'PHM',
+    'HEB',
+    'JAS',
+    '1PE',
+    '2PE',
+    '1JN',
+    '2JN',
+    '3JN',
+    'JUD',
+    'REV',
+    'PSA']
 
 readerNames = [
-u'Gen',
-u'Exod',
-u'Lev',
-u'Num',
-u'Deut',
-u'Josh',
-u'Judg',
-u'Ruth',
-u'1Sam',
-u'2Sam',
-u'1Kgs',
-u'2Kgs',
-u'1Chr',
-u'2Chr',
-u'Ezra',
-u'Nehm',
-u'Esth',
-u'Job',
-u'Ps',
-u'Prov',
-u'Eccl',
-u'Song',
-u'Isa',
-u'Jer',
-u'Lam',
-u'Ezek',
-u'Dan',
-u'Hos',
-u'Joel',
-u'Amos',
-u'Obad',
-u'Jonah',
-u'Mic',
-u'Nah',
-u'Hab',
-u'Zeph',
-u'Hag',
-u'Zech',
-u'Mal',
-u'Matt',
-u'Mark',
-u'Luke',
-u'John',
-u'Acts',
-u'Rom',
-u'1Cor',
-u'2Cor',
-u'Gal',
-u'Eph',
-u'Phil',
-u'Col',
-u'1Thess',
-u'2Thess',
-u'1Tim',
-u'2Tim',
-u'Titus',
-u'Phlm',
-u'Heb',
-u'Jas',
-u'1Pet',
-u'2Pet',
-u'1John',
-u'2John',
-u'3John',
-u'Jude',
-u'Rev' ]
+    'Gen',
+    'Exod',
+    'Lev',
+    'Num',
+    'Deut',
+    'Josh',
+    'Judg',
+    'Ruth',
+    '1Sam',
+    '2Sam',
+    '1Kgs',
+    '2Kgs',
+    '1Chr',
+    '2Chr',
+    'Ezra',
+    'Nehm',
+    'Esth',
+    'Job',
+    'Ps',
+    'Prov',
+    'Eccl',
+    'Song',
+    'Isa',
+    'Jer',
+    'Lam',
+    'Ezek',
+    'Dan',
+    'Hos',
+    'Joel',
+    'Amos',
+    'Obad',
+    'Jonah',
+    'Mic',
+    'Nah',
+    'Hab',
+    'Zeph',
+    'Hag',
+    'Zech',
+    'Mal',
+    'Matt',
+    'Mark',
+    'Luke',
+    'John',
+    'Acts',
+    'Rom',
+    '1Cor',
+    '2Cor',
+    'Gal',
+    'Eph',
+    'Phil',
+    'Col',
+    '1Thess',
+    '2Thess',
+    '1Tim',
+    '2Tim',
+    'Titus',
+    'Phlm',
+    'Heb',
+    'Jas',
+    '1Pet',
+    '2Pet',
+    '1John',
+    '2John',
+    '3John',
+    'Jude',
+    'Rev']
 
-def readerName(num):
-    return readerNames[int(num)-1]
-
-def fullName(num):
-    return bookNames[int(num)-1]
-
-def nextChapter(bookNumber, chapterNumber):
-    return (1,1)
-
-def previousChapter(bookNumber, chapterNumber):
-    if chapterNumber > 1:
-        return (bookNumber, chapterNumber - 1)
-    else:
-        if bookNumber > 1:
-            return (bookNumber - 1, 50) #bookSize[bookNumber -1])
-        else:
-            return (1,1)
-
-bookNames = ['Genesis',
-            'Exodus',
-            'Leviticus',
-            'Numbers',
-            'Deuteronomy',
-            'Joshua',
-            'Judges',
-            'Ruth',
-            '1 Samuel',
-            '2 Samuel',
-            '1 Kings',
-            '2 Kings',
-            '1 Chronicles',
-            '2 Chronicles',
-            'Ezra',
-            'Nehemiah',
-            'Esther',
-            'Job',
-            'Psalms',
-            'Proverbs',
-            'Ecclesiastes',
-            'Song of Solomon',
-            'Isaiah',
-            'Jeremiah',
-            'Lamentations',
-            'Ezekiel',
-            'Daniel',
-            'Hosea',
-            'Joel',
-            'Amos',
-            'Obadiah',
-            'Jonah',
-            'Micah',
-            'Nahum',
-            'Habakkuk',
-            'Zephaniah',
-            'Haggai',
-            'Zechariah',
-            'Malachi',
-            'Matthew',
-            'Mark',
-            'Luke',
-            'John',
-            'Acts',
-            'Romans',
-            '1 Corinthians',
-            '2 Corinthians',
-            'Galatians',
-            'Ephesians',
-            'Philippians',
-            'Colossians',
-            '1 Thessalonians',
-            '2 Thessalonians',
-            '1 Timothy',
-            '2 Timothy',
-            'Titus',
-            'Philemon',
-            'Hebrews',
-            'James',
-            '1 Peter',
-            '2 Peter',
-            '1 John',
-            '2 John',
-            '3 John',
-            'Jude',
-            'Revelation']
+bookNames = [
+    'Genesis',
+    'Exodus',
+    'Leviticus',
+    'Numbers',
+    'Deuteronomy',
+    'Joshua',
+    'Judges',
+    'Ruth',
+    '1 Samuel',
+    '2 Samuel',
+    '1 Kings',
+    '2 Kings',
+    '1 Chronicles',
+    '2 Chronicles',
+    'Ezra',
+    'Nehemiah',
+    'Esther',
+    'Job',
+    'Psalms',
+    'Proverbs',
+    'Ecclesiastes',
+    'Song of Solomon',
+    'Isaiah',
+    'Jeremiah',
+    'Lamentations',
+    'Ezekiel',
+    'Daniel',
+    'Hosea',
+    'Joel',
+    'Amos',
+    'Obadiah',
+    'Jonah',
+    'Micah',
+    'Nahum',
+    'Habakkuk',
+    'Zephaniah',
+    'Haggai',
+    'Zechariah',
+    'Malachi',
+    'Matthew',
+    'Mark',
+    'Luke',
+    'John',
+    'Acts',
+    'Romans',
+    '1 Corinthians',
+    '2 Corinthians',
+    'Galatians',
+    'Ephesians',
+    'Philippians',
+    'Colossians',
+    '1 Thessalonians',
+    '2 Thessalonians',
+    '1 Timothy',
+    '2 Timothy',
+    'Titus',
+    'Philemon',
+    'Hebrews',
+    'James',
+    '1 Peter',
+    '2 Peter',
+    '1 John',
+    '2 John',
+    '3 John',
+    'Jude',
+    'Revelation']
 
 books = bookNames
 
-def bookKeyForIdValue(id):
-    e = id.find(' ')
-    i = id if e == -1 else id[:e]
+
+# noinspection PyPep8Naming
+def readerName(num):
+    return readerNames[int(num) - 1]
+
+
+# noinspection PyPep8Naming
+def fullName(num):
+    return bookNames[int(num) - 1]
+
+
+# noinspection PyPep8Naming,PyUnusedLocal
+def nextChapter(bookNumber, chapterNumber):
+    return 1, 1
+
+
+# noinspection PyPep8Naming
+def previousChapter(bookNumber, chapterNumber):
+    if chapterNumber > 1:
+        return bookNumber, chapterNumber - 1
+    else:
+        if bookNumber > 1:
+            return bookNumber - 1, 50  # bookSize[bookNumber -1])
+        else:
+            return 1, 1
+
+
+# noinspection PyPep8Naming
+def bookKeyForIdValue(book_id):
+    e = book_id.find(' ')
+    i = book_id if e == -1 else book_id[:e]
     return bookKeys[i]
 
+
+# noinspection PyPep8Naming
 def bookID(usfm):
-    s = usfm.find(u'\id ') + 4
-    e = usfm.find(u' ', s)
-    e2 = usfm.find(u'\n', s)
+    s = usfm.find('\id ') + 4
+    e = usfm.find(' ', s)
+    e2 = usfm.find('\n', s)
     e = e if e < e2 else e2
     return usfm[s:e].strip()
 
+
+# noinspection PyPep8Naming
 def bookName(usfm):
-    id = bookID(usfm)
-    index = silNames.index(id)
+    book_id = bookID(usfm)
+    index = silNames.index(book_id)
     return bookNames[index]
 
 
+# noinspection PyPep8Naming
 def loadBooks(path):
-    books = {}
-    dirList=os.listdir(path)
-    print '\n     LOADING ALL USFM FILES FROM ' + path
+    loaded_books = {}
+    dirList = os.listdir(path)
+    print('\n     LOADING ALL USFM FILES FROM ' + path)
     for fname in dirList:
-      try:
-          f = open(path + '/' + fname,'U') # U handles line endings
-          usfm = f.read().decode('utf-8-sig').lstrip()
-          if usfm[:4] == ur'\id ' and usfm[4:7] in silNames:
-              #print '     Loaded ' + fname + ' as ' + usfm[4:7]
-              books[bookID(usfm)] = usfm
-              f.close()
-          else:
-              print '     Ignored ' + fname
-      except:
-          print '     Couldn\'t open ' + fname
-    print '     FINISHED LOADING\n'
-    return books
 
+        if fname[-4:].lower() in ['.pdf', '.sig']:
+            continue
+
+        # noinspection PyBroadException
+        try:
+            f = open(path + '/' + fname, 'U')  # U handles line endings
+            usfm = f.read().decode('utf-8-sig').lstrip()
+            if usfm[:4] == r'\id ' and usfm[4:7] in silNames:
+                # print '     Loaded ' + fname + ' as ' + usfm[4:7]
+                loaded_books[bookID(usfm)] = usfm
+                f.close()
+            else:
+                print('     Ignored ' + fname)
+        except:
+            print("     Couldn't open " + fname)
+    print('     FINISHED LOADING\n')
+    return loaded_books
+
+
+# noinspection PyPep8Naming
 def orderFor(booksDict):
     order = silNames
     if booksDict.has_key("PSA") and not booksDict.has_key("GEN") and booksDict.has_key("MAT"):
         # This is a big hack. When doing Psalms + NT, put Psalms last
         order = silNamesNTPsalms
     a = []
-    for bookName in order:
-        if booksDict.has_key(bookName):
-            a.append(booksDict[bookName])
+    for book_name in order:
+        if booksDict.has_key(book_name):
+            a.append(booksDict[book_name])
     return a
