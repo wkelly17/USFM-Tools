@@ -174,9 +174,6 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderLI3(self, token):      self.f.write( self.startLI() )
 
     def renderS5(self, token):
-       self.write(u'')
-    def renderS5(self, token):
-        self.indentFlag = False
         self.write(u'\n<span class="chunk-break"/>\n')
     def renderCL(self, token):       self.chapterLabel = token.value
     def renderQR(self, token):       self.write(u'')
