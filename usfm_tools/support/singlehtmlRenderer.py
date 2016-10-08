@@ -244,6 +244,9 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderFE(self, token):
         self.closeFootnote()
 
+    def renderFP(self, token):
+        self.write(u'<br />')
+
     def renderQSS(self, token):
         self.write(u'<i>')
 
@@ -280,6 +283,15 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def renderS5(self, token):
         self.write(u'\n<span class="chunk-break"/>\n')
+
+    def render_imt1(self, token):
+        self.write(u'\n\n<h2>' + token.value + u'</h2>')
+
+    def render_imt2(self, token):
+        self.write(u'\n\n<h3>' + token.value + u'</h3>')
+
+    def render_imt3(self, token):
+        self.write(u'\n\n<h4>' + token.value + u'</h4>')
 
     def renderCL(self, token):
         self.chapterLabel = token.value
@@ -321,8 +333,8 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
             self.write(u'<p class="footnotes">')
             for fkey in sorted(fkeys):
                 footnote = self.footnotes[fkey]
-                self.write(u'<div id="{0}" class="footnote"><i>{1}:{2} <sup><a href="#ref-{0}">{5}</a></sup></a><i><span class="text">{6}</div>'.
-                           format(fkey, footnote['chapter'].lstrip('0'), footnote['verse'].lstrip('0'), footnote['chapter'], footnote['verse'],\
+                self.write(u'<div id="{0}" class="footnote"><i>{1}:{2} <sup><a href="#ref-{0}">{3}</a></sup></a><i><span class="text">{4}</div>'.
+                           format(fkey, footnote['chapter'].lstrip('0'), footnote['verse'].lstrip('0'),
                                   footnote['letter'], footnote['text']))
             self.write(u'</p>')
         self.footnotes = {}
