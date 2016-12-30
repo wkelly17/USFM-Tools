@@ -517,6 +517,6 @@ class USXRenderer(abstractRenderer.AbstractRenderer):
 
     def renderUnknown(self, token):
         if token.value == 'v':
-            self.currentV = str(int(self.currentV) + 1)
-        print('     Error: ' + self.book + ' ' + str(self.currentC) + ':' + self.currentV +
+            self.currentV = int(self.currentV) + 1
+        print('     Error: ' + self.renderBook + ' ' + str(self.currentC) + ':' + str(self.currentV) +
               ' - Unknown Token: \\' + self.escape(token.value))

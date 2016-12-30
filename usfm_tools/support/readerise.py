@@ -169,6 +169,7 @@ class ReaderPrinter(object):
         self.indentFlag = False
 
     def renderIDE(self, token):     pass
+    def renderSTS(self, token):     pass
     def renderH(self, token):       self.write(u'\n<h1 class="book-name">' + token.value + u'</h1>')
     def renderMT(self, token):      self.write(u'\n<h3>' + token.value + u'</h3>')
     def renderMT2(self, token):      self.write(u'\n<h3>' + token.value + u'</h3>')

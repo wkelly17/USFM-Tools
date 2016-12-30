@@ -203,6 +203,8 @@ class LoutRenderer(abstractRenderer.AbstractRenderer):
         self.closeChapter()
     def renderIDE(self, token):
         pass
+    def renderSTS(self, token):
+        pass
     def renderH(self, token):
         self.close()
         self.bookname = token.value

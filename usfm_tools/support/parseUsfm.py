@@ -38,6 +38,7 @@ unknown = Group(Optional(NoMatch(), "unknown") + Suppress(backslash) + CharsNotI
 
 id_token = usfmTokenValue("id", phrase)
 ide = usfmTokenValue("ide", phrase)
+sts = usfmTokenValue("sts", phrase)
 h = usfmTokenValue("h", phrase)
 
 mt = usfmTokenValue("mt", phrase)
@@ -192,7 +193,7 @@ imt3 = usfmTokenValue("imt3", phrase)
 bk_s = usfmToken("bk")
 bk_e = usfmEndToken("bk")
 
-element = MatchFirst([ide, id_token, h, toc, toc1, toc2, toc3, mt, mt1, mt2, mt3,
+element = MatchFirst([ide, id_token, sts, h, toc, toc1, toc2, toc3, mt, mt1, mt2, mt3,
                       ms,
                       ms1,
                       ms2,
@@ -342,6 +343,7 @@ def createToken(t):
     options = {
         'id': IDToken,
         'ide': IDEToken,
+        'sts': STSToken,
         'h': HToken,
         'mt': MTToken,
         'mt1': MTToken,
@@ -497,6 +499,8 @@ class UsfmToken(object):
     def isID(self): return False
 
     def isIDE(self): return False
+
+    def isSTS(self): return False
 
     def isH(self): return False
 
@@ -772,6 +776,13 @@ class IDEToken(UsfmToken):
         return printer.renderIDE(self)
 
     def isIDE(self): return True
+
+
+class STSToken(UsfmToken):
+    def renderOn(self, printer):
+        return printer.renderSTS(self)
+
+    def isSTS(self): return True
 
 
 class HToken(UsfmToken):
