@@ -33,6 +33,7 @@ class MediaWikiPrinter(object):
         self.write(u'\n<!-- \\id ' + self.cb + u' -->')
         self.indentFlag = False
     def renderIDE(self, token):     pass
+    def renderSTS(self, token):     pass
     def renderTOC2(self, token):    self.write(u' Bible:' + token.value + u'_# ')
     def renderH(self, token):       self.write(u'\n<!-- \\h ' + token.value + u' -->')
     def renderMT(self, token):      self.write(u'\n<!-- \\mt1 ' + token.value + u' -->')

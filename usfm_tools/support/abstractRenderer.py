@@ -35,6 +35,7 @@ class AbstractRenderer(object):
 
     def renderID(self, token):      pass
     def renderIDE(self, token):     pass
+    def renderSTS(self, token):     pass
     def renderH(self, token):       pass
 
     def renderM(self, token):       pass
