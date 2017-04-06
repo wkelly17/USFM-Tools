@@ -1,3 +1,11 @@
+master:
+[![Build Status](https://travis-ci.org/unfoldingWord-dev/USFM-Tools.svg?branch=master)](https://travis-ci.org/unfoldingWord-dev/USFM-Tools) 
+[![Coverage Status](https://coveralls.io/repos/github/unfoldingWord-dev/USFM-Tools/badge.svg?branch=master)](https://coveralls.io/github/unfoldingWord-dev/USFM-Tools?branch=master)
+
+develop:
+[![Build Status](https://travis-ci.org/unfoldingWord-dev/USFM-Tools.svg?branch=develop)](https://travis-ci.org/unfoldingWord-dev/USFM-Tools) 
+[![Coverage Status](https://coveralls.io/repos/github/unfoldingWord-dev/USFM-Tools/badge.svg?branch=develop)](https://coveralls.io/github/unfoldingWord-dev/USFM-Tools?branch=develop)
+
 This project comprises a framework for transforming .usfm files into specified targets.
 
 It is primarily used for the Open English Bible, and may need adjustment if used for other purposes.
