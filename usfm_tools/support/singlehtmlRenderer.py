@@ -111,20 +111,23 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.f.write(unicodeString.replace(u'~', u' '))
 
     def writeIndent(self, level):
-        self.write(u'\n\n')
-        if level == 0:
-            self.indentFlag = False
-            self.write(u'<p class="indent-0">')
-            return
-        if not self.indentFlag:
+        if self.indentFlag:
+            self.write(self.stopIndent())  # always close the last indent before starting a new one
+        if level > 0:
             self.indentFlag = True
-            self.write(u'<p>')
-        self.write(u'<p class="indent-' + str(level) + u'">')
-        self.write(u'&nbsp;' * (level*4))
+            self.write(u'\n<p class="indent-' + str(level) + u'">\n')
+            self.write(u'&nbsp;' * (level * 4))  # spaces for PDF since we can't style margin with css
+
+    def stopIndent(self):
+        if self.indentFlag:
+            self.indentFlag = False
+            return u'\n</p>\n'
+        else:
+            return u''
 
     def renderID(self, token):
         self.cb = books.bookKeyForIdValue(token.value)
-        self.indentFlag = False
+        self.write(self.stopIndent())
         #self.write(u'\n\n<span id="' + self.cb + u'"></span>\n')
 
     def renderH(self, token):
@@ -152,26 +155,28 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'\n\n<h4>' + token.value + u'</h4>')
 
     def renderP(self, token):
-        self.indentFlag = False
+        self.write(self.stopIndent())
         self.write(self.stopLI() + u'\n\n<p>')
 
     def renderPI(self, token):
-        self.indentFlag = False
-        self.write(self.stopLI() + u'\n\n<p class"indent-2">')
+        self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.writeIndent(2)
 
     def renderM(self, token):
-        self.indentFlag = False
+        self.write(self.stopIndent())
         self.write(u'\n\n<p>')
 
     def renderS1(self, token):
-        self.indentFlag = False
+        self.write(self.stopIndent())
         self.write(u'\n\n<h5>' + token.getValue() + u'</h5>')
 
     def renderS2(self, token):
-        self.indentFlag = False
+        self.write(self.stopIndent())
         self.write(u'\n\n<p align="center">----</p>')
 
     def renderC(self, token):
+        self.write(self.stopIndent())
         self.closeFootnote()
         self.writeFootnotes()
         self.footnote_letter = 'a'
@@ -205,7 +210,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.writeIndent(3)
 
     def renderNB(self, token):
-        self.writeIndent(0)
+        self.write(self.stopIndent())
 
     def renderB(self, token):
         self.write(self.stopLI() + u'\n\n<p class="indent-0">&nbsp;</p>')
@@ -260,7 +265,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'</i>')
 
     def renderE(self, token):
-        self.indentFlag = False
+        self.write(self.stopIndent())
         self.write(u'\n\n<p>' + token.value + '</p>')
 
     def renderPB(self, token):
