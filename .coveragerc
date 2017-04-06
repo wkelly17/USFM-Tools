@@ -1,0 +1,8 @@
+[run]
+source=
+    usfm_tools
+
+omit =
+    */__init__.py
+    usfm_tools/support/test
+    usfm_tools/support/thirdparty
