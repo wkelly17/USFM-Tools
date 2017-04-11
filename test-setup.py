@@ -15,7 +15,10 @@ setup(
                      'This fork of USFM-Tools includes basic support for conversion to USX.',
     classifiers=[],
     install_requires=[
-       'future==0.16.0',
+        'bs4==0.0.1',
+        'coveralls==1.1',
+        'future==0.16.0',
         'pyparsing==2.1.10'
-    ]
+    ],
+    test_suite='tests'
 )

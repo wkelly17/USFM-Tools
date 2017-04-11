@@ -1,3 +1,24 @@
+master:
+
+.. image:: https://travis-ci.org/unfoldingWord-dev/USFM-Tools.svg?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/unfoldingWord-dev/USFM-Tools
+
+.. image:: https://coveralls.io/repos/github/unfoldingWord-dev/USFM-Tools/badge.svg?branch=master
+    :alt: Coveralls
+    :target: https://coveralls.io/github/unfoldingWord-dev/USFM-Tools?branch=master
+
+develop:
+
+.. image:: https://travis-ci.org/unfoldingWord-dev/USFM-Tools.svg?branch=develop
+    :alt: Build Status
+    :target: https://travis-ci.org/unfoldingWord-dev/USFM-Tools
+
+.. image:: https://coveralls.io/repos/github/unfoldingWord-dev/USFM-Tools/badge.svg?branch=develop
+    :alt: Coveralls
+    :target: https://coveralls.io/github/unfoldingWord-dev/USFM-Tools?branch=develop
+    
+
 USFM Tools
 ==========
 
