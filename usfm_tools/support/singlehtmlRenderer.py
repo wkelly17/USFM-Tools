@@ -262,7 +262,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'<br />')
 
     def renderQSS(self, token):
-        self.write(u'<i>')
+        self.write(u'<i style="float:right;">')
 
     def renderQSE(self, token):
         self.write(u'</i>')
@@ -349,4 +349,13 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
                                   footnote['footnote'], footnote['text']))
             self.write(u'</div>')
         self.footnotes = {}
+
+    def renderQA(self, token):
+        self.write('<p class="acrostic-heading" style="text-align:center; text-style:italic;">'+token.value+'</p>')
+
+    def renderQAC(self, token):
+        self.write('<i>')
+
+    def renderQACE(self,token):
+        self.write('</i>')
 
