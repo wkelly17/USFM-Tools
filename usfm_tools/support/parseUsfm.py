@@ -99,7 +99,7 @@ fk = usfmTokenValue("fk", phrase)
 ft = usfmTokenValue("ft", phrase)
 fq = usfmTokenValue("fq", phrase)
 fqa = usfmTokenValue("fqa", phrase)
-fqae = usfmTokenValue("fqa", phrase)
+fqae = usfmTokenValue("fqa*", phrase)
 fqb = usfmTokenValue("fqb", phrase)
 fe = usfmEndToken("f")
 fp = usfmToken("fp")
@@ -417,6 +417,7 @@ def createToken(t):
         'ft': FTToken,
         'fq': FQToken,
         'fqa': FQAToken,
+        'fqae': FQAEToken,
         'fqa*': FQAEToken,
         'fqb': FQAEToken,
         'f*': FEToken,
