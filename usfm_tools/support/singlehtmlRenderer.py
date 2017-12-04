@@ -26,7 +26,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.indentFlag = False
         self.bookName = u''
         self.chapterLabel = u'Chapter'
-        self.lineIndent = 0
+        self.listItemLevel = 0
         self.footnoteFlag = False
         self.fqaFlag = False
         self.footnotes = {}
@@ -97,16 +97,22 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 """
         self.f.write(h.encode('utf-8'))
 
-    def startLI(self):
-        self.lineIndent += 1
-        return ur'<ul> '
-
-    def stopLI(self):
-        if self.lineIndent < 1:
-            return u''
+    def startLI(self, level=1):
+        if(self.listItemLevel < level):
+            ret = u''
+            for(i=self.listItemLevel; i < level; i++):
+                ret += u'<ul>'
+            self.listItemLevel = level
+            return ret
         else:
-            self.lineIndent -= 1
-            return ur'</ul>'
+            return self.stopLI(level)
+
+    def stopLI(self, level=0):
+        ret = u''
+        for(i=self.listItemLevel; i > level; i--):
+            ret += ur'</ul>'
+        self.listItemLevel = level
+        return ret
 
     def escape(self, s):
         return s.replace(u'~',u'&nbsp;')
@@ -162,7 +168,8 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def renderP(self, token):
         self.write(self.stopIndent())
-        self.write(self.stopLI() + u'\n\n<p>')
+        self.write(self.stopLI())
+        self.write(u'\n\n<p>')
 
     def renderPI(self, token):
         self.write(self.stopIndent())
@@ -171,15 +178,23 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def renderM(self, token):
         self.write(self.stopIndent())
+        self.write(self.stopLI())
         self.write(u'\n\n<p>')
 
     def renderS1(self, token):
         self.write(self.stopIndent())
-        self.write(u'\n\n<h5>' + token.getValue() + u'</h5>')
+        self.write(self.stopLI())
+        self.write(u'\n\n<h3 style="text-align:center">' + token.getValue() + u'</h3>')
 
     def renderS2(self, token):
         self.write(self.stopIndent())
-        self.write(u'\n\n<p align="center">----</p>')
+        self.write(self.stopLI())
+        self.write(u'\n\n<h4 style="text-align:center">' + token.getValue() + u'</h4>')
+
+    def renderS3(self, token):
+        self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.write(u'\n\n<h5 style="text-align:center">' + token.getValue() + u'</h5>')
 
     def renderC(self, token):
         self.write(self.stopIndent())
@@ -187,12 +202,14 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.writeFootnotes()
         self.footnote_num = 1
         self.cc = token.value.zfill(3)
-        self.write(self.stopLI() + u'\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'
+        self.write(self.stopLI())
+        self.write(u'\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'
                    .format(self.cb, self.cc, self.chapterLabel, token.value))
 
     def renderV(self, token):
         self.closeFootnote()
         self.cv = token.value.zfill(3)
+        self.write(self.stopLI())
         self.write(u' <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'.
                    format(self.cb, self.cc, self.cv, token.value))
 
@@ -221,7 +238,8 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(self.stopIndent())
 
     def renderB(self, token):
-        self.write(self.stopLI() + u'\n\n<p class="indent-0">&nbsp;</p>')
+        self.write(self.stopLI())
+        self.write(u'\n\n<p class="indent-0">&nbsp;</p>')
 
     def renderIS(self, token):
         self.write(u'<i>')
@@ -288,16 +306,16 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         pass
 
     def renderLI(self, token):
-        self.f.write( self.startLI() )
+        self.renderLI1(token)
 
     def renderLI1(self, token):
-        self.f.write( self.startLI() )
+        self.f.write( self.startLI(1) )
 
     def renderLI2(self, token):
-        self.f.write( self.startLI() )
+        self.f.write( self.startLI(2) )
 
     def renderLI3(self, token):
-        self.f.write( self.startLI() )
+        self.f.write( self.startLI(3) )
 
     def renderS5(self, token):
         self.write(u'\n<span class="chunk-break"></span>\n')
