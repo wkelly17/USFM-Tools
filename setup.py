@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="usfm_tools",
-    version="0.0.20",
+    version="0.0.21",
     author="unfoldingWord",
     author_email="info@unfoldingWord.org",
     description="A framework for transforming .usfm files into specified targets",
@@ -15,7 +15,7 @@ setup(
                      'This fork of USFM-Tools includes basic support for conversion to USX.',
     classifiers=[],
     install_requires=[
-       'future==0.16.0',
+        'future==0.16.0',
         'pyparsing==2.1.10'
     ]
 )
