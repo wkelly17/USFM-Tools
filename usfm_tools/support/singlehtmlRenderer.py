@@ -100,18 +100,18 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def startLI(self, level=1):
         if(self.listItemLevel < level):
             ret = u''
-            for(i=self.listItemLevel; i < level; i++):
+            while self.listItemLevel < level:
                 ret += u'<ul>'
-            self.listItemLevel = level
+                self.listItemLevel += 1 
             return ret
         else:
             return self.stopLI(level)
 
     def stopLI(self, level=0):
         ret = u''
-        for(i=self.listItemLevel; i > level; i--):
+        while self.listItemLevel > level:
             ret += ur'</ul>'
-        self.listItemLevel = level
+            self.listItemLevel -= 1
         return ret
 
     def escape(self, s):
@@ -184,17 +184,17 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderS1(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
-        self.write(u'\n\n<h3 style="text-align:center">' + token.getValue() + u'</h3>')
+        self.write(u'\n\n<h4 style="text-align:center">' + token.getValue() + u'</h4>')
 
     def renderS2(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
-        self.write(u'\n\n<h4 style="text-align:center">' + token.getValue() + u'</h4>')
+        self.write(u'\n\n<h5 style="text-align:center">' + token.getValue() + u'</h5>')
 
     def renderS3(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
-        self.write(u'\n\n<h5 style="text-align:center">' + token.getValue() + u'</h5>')
+        self.write(u'\n\n<h5">' + token.getValue() + u'</h5>')
 
     def renderC(self, token):
         self.write(self.stopIndent())
