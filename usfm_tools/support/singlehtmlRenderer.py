@@ -98,19 +98,19 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.f.write(h.encode('utf-8'))
 
     def startLI(self, level=1):
-        if(self.listItemLevel < level):
-            ret = u''
-            while self.listItemLevel < level:
-                ret += u'<ul>'
-                self.listItemLevel += 1 
-            return ret
-        else:
-            return self.stopLI(level)
-
-    def stopLI(self, level=0):
+        if self.listItemLevel:
+            self.stopLI()
         ret = u''
-        while self.listItemLevel > level:
-            ret += ur'</ul>'
+        self.listItemLevel = 0
+        while self.listItemLevel < level:
+            ret += u'<ul>'
+            self.listItemLevel += 1 
+        return ret
+
+    def stopLI(self):
+        ret = u''
+        while self.listItemLevel > 0:
+            ret += u'</ul>'
             self.listItemLevel -= 1
         return ret
 
@@ -309,13 +309,13 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.renderLI1(token)
 
     def renderLI1(self, token):
-        self.f.write( self.startLI(1) )
+        self.f.write(self.startLI(1))
 
     def renderLI2(self, token):
-        self.f.write( self.startLI(2) )
+        self.f.write(self.startLI(2))
 
     def renderLI3(self, token):
-        self.f.write( self.startLI(3) )
+        self.f.write(self.startLI(3))
 
     def renderS5(self, token):
         self.write(u'\n<span class="chunk-break"></span>\n')
@@ -373,11 +373,11 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.footnotes = {}
 
     def renderQA(self, token):
-        self.write('<p class="quote acrostic heading" style="text-align:center;text-style:italic;">'+token.value+'</p>')
+        self.write(u'<p class="quote acrostic heading" style="text-align:center;text-style:italic;">'+token.value+u'</p>')
 
     def renderQAC(self, token):
-        self.write('<i class="quote acrostic character">')
+        self.write(u'<i class="quote acrostic character">')
 
     def renderQACE(self,token):
-        self.write('</i>')
+        self.write(u'</i>')
 
