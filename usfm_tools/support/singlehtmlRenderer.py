@@ -33,6 +33,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.footnote_id = u''
         self.footnote_num = 1
         self.footnote_text = u''
+        self.paragraphOpen = False
 
     def render(self):
         self.loadUSFM(self.inputDir)
@@ -114,6 +115,12 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
             self.listItemLevel -= 1
         return ret
 
+    def stopP(self):
+        if self.paragraphOpen:
+            return u'\n</p>\n'
+            self.paragraphOpen = False
+        return u''
+
     def escape(self, s):
         return s.replace(u'~',u'&nbsp;')
 
@@ -125,6 +132,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
             self.write(self.stopIndent())  # always close the last indent before starting a new one
         if level > 0:
             self.indentFlag = True
+            self.write(self.stopP())
             self.write(u'\n<p class="indent-' + str(level) + u'">\n')
             self.write(u'&nbsp;' * (level * 4))  # spaces for PDF since we can't style margin with css
 
@@ -169,11 +177,14 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderP(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
-        self.write(u'\n\n<p>')
+        self.write(self.stopP())
+        self.write(u'\n\n<p>\n')
+        self.paragraphOpen = True
 
     def renderPI(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
+        self.write(self.stopP())
         self.writeIndent(2)
 
     def renderM(self, token):
@@ -203,6 +214,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.footnote_num = 1
         self.cc = token.value.zfill(3)
         self.write(self.stopLI())
+        self.write(self.stopP())
         self.write(u'\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'
                    .format(self.cb, self.cc, self.chapterLabel, token.value))
 
@@ -297,6 +309,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def renderE(self, token):
         self.write(self.stopIndent())
+        self.write(self.stopP())
         self.write(u'\n\n<p>' + token.value + '</p>')
 
     def renderPB(self, token):
