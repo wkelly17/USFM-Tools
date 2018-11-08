@@ -39,12 +39,15 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.loadUSFM(self.inputDir)
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
         self.run()
+        self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.write(self.stopP())
         self.writeFootnotes()
         h = """
     </body>
 </html>
 """
-        self.f.write(h)
+        self.write(h)
         self.f.close()
 
     def writeHeader(self):
@@ -96,7 +99,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 <body>
 <h1>""" + self.bookName + u"""</h1>
 """
-        self.f.write(h.encode('utf-8'))
+        self.write(h.encode('utf-8'))
 
     def startLI(self, level=1):
         if self.listItemLevel:
@@ -117,8 +120,8 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def stopP(self):
         if self.paragraphOpen:
-            return u'\n</p>\n'
             self.paragraphOpen = False
+            return u'\n</p>\n\n'
         return u''
 
     def escape(self, s):
@@ -144,10 +147,12 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
             return u''
 
     def renderID(self, token):
+        self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.write(self.stopP())
         self.writeFootnotes()
         self.cb = books.bookKeyForIdValue(token.value)
         self.chapterLabel = u'Chapter'
-        self.write(self.stopIndent())
         #self.write(u'\n\n<span id="' + self.cb + u'"></span>\n')
 
     def renderH(self, token):
@@ -190,7 +195,9 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderM(self, token):
         self.write(self.stopIndent())
         self.write(self.stopLI())
-        self.write(u'\n\n<p>')
+        self.write(self.stopP())
+        self.write(u'\n\n<p>\n')
+        self.paragraphOpen = True
 
     def renderS1(self, token):
         self.write(self.stopIndent())
@@ -209,12 +216,12 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 
     def renderC(self, token):
         self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.write(self.stopP())
         self.closeFootnote()
         self.writeFootnotes()
         self.footnote_num = 1
         self.cc = token.value.zfill(3)
-        self.write(self.stopLI())
-        self.write(self.stopP())
         self.write(u'\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'
                    .format(self.cb, self.cc, self.chapterLabel, token.value))
 
@@ -322,13 +329,13 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.renderLI1(token)
 
     def renderLI1(self, token):
-        self.f.write(self.startLI(1))
+        self.write(self.startLI(1))
 
     def renderLI2(self, token):
-        self.f.write(self.startLI(2))
+        self.write(self.startLI(2))
 
     def renderLI3(self, token):
-        self.f.write(self.startLI(3))
+        self.write(self.startLI(3))
 
     def renderS5(self, token):
         self.write(u'\n<span class="chunk-break"></span>\n')

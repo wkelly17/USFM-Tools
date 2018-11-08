@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="usfm_tools",
-    version="0.0.23",
+    version="0.0.26",
     author="unfoldingWord",
     author_email="info@unfoldingWord.org",
     description="A framework for transforming .usfm files into specified targets",
