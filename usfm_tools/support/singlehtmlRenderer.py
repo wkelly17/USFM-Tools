@@ -215,10 +215,10 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(u'\n\n<h5">' + token.getValue() + u'</h5>')
 
     def renderC(self, token):
+        self.closeFootnote()
         self.write(self.stopIndent())
         self.write(self.stopLI())
         self.write(self.stopP())
-        self.closeFootnote()
         self.writeFootnotes()
         self.footnote_num = 1
         self.cc = token.value.zfill(3)
