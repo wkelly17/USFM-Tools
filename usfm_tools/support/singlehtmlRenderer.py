@@ -20,7 +20,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.outputFilename = outputFilename
         self.inputDir = inputDir
         # Position
-        self.cb = u''    # Current Book
+        self.cb = u''       # Current Book
         self.cc = u'001'    # Current Chapter
         self.cv = u'001'    # Current Verse
         self.indentFlag = False
@@ -38,16 +38,13 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
     def render(self):
         self.loadUSFM(self.inputDir)
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
+        self.writeHeader()
         self.run()
         self.write(self.stopIndent())
         self.write(self.stopLI())
         self.write(self.stopP())
         self.writeFootnotes()
-        h = """
-    </body>
-</html>
-"""
-        self.write(h)
+        self.writeClosing()
         self.f.close()
 
     def writeHeader(self):
@@ -56,50 +53,56 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
-    <title>""" + self.bookName + u"""</title>
+    <title>Bible</title>
     <style media="all" type="text/css">
-    .indent-0 {
-        margin-left:0em;
-        margin-bottom:0em;
-        margin-top:0em;
-    }
-    .indent-1 {
-        margin-left:0em;
-        margin-bottom:0em;
-        margin-top:0em;
-    }
-    .indent-2 {
-        margin-left:1em;
-        margin-bottom:0em;
-        margin-top:0em;
-    }
-    .indent-3 {
-        margin-left:2em;
-        margin-bottom:0em;
-        margin-top:0em;
-    }
-    .c-num {
-        color:gray;
-    }
-    .v-num {
-        color:gray;
-    }
-    .tetragrammaton {
-        font-variant: small-caps;
-    }
-    .footnotes {
-        font-size: 0.8em;
-    }
-    .footnotes-hr {
-        width: 90%;
-    }
+        .indent-0 {
+            margin-left:0em;
+            margin-bottom:0em;
+            margin-top:0em;
+        }
+        .indent-1 {
+            margin-left:0em;
+            margin-bottom:0em;
+            margin-top:0em;
+        }
+        .indent-2 {
+            margin-left:1em;
+            margin-bottom:0em;
+            margin-top:0em;
+        }
+        .indent-3 {
+            margin-left:2em;
+            margin-bottom:0em;
+            margin-top:0em;
+        }
+        .c-num {
+            color:gray;
+        }
+        .v-num {
+            color:gray;
+        }
+        .tetragrammaton {
+            font-variant: small-caps;
+        }
+        .footnotes {
+            font-size: 0.8em;
+        }
+        .footnotes-hr {
+            width: 90%;
+        }
     </style>
-
 </head>
 <body>
-<h1>""" + self.bookName + u"""</h1>
 """
         self.write(h.encode('utf-8'))
+
+    def writeClosing(self):
+        h = """
+        </div>
+    </body>
+</html>
+"""
+        self.write(h)
 
     def startLI(self, level=1):
         if self.listItemLevel:
@@ -151,33 +154,35 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.write(self.stopLI())
         self.write(self.stopP())
         self.writeFootnotes()
+        if self.cb:
+            self.write('</div>\n\n');
+        self.bookName = None
         self.cb = books.bookKeyForIdValue(token.value)
         self.chapterLabel = u'Chapter'
-        #self.write(u'\n\n<span id="' + self.cb + u'"></span>\n')
+        self.write('<div id="bible-book-'+self.cb+'" class="bible-book-text">\n')
 
     def renderH(self, token):
         self.bookName = token.value
-        self.writeHeader()
+        self.write('<h1>' + self.bookName + u'</h1>\n')
 
     def renderTOC2(self, token):
         if not self.bookName:
-            self.bookName = token.value
-            self.writeHeader()
+            self.renderH(token)
 
     def renderMT(self, token):
         return  #self.write(u'\n\n<h1>' + token.value + u'</h1>') # removed to use TOC2
 
     def renderMT2(self, token):
-        self.write(u'\n\n<h2>' + token.value + u'</h2>')
+        self.write(u'\n\n<h2>' + token.value + u'</h2>\n')
 
     def renderMT3(self, token):
-        self.write(u'\n\n<h2>' + token.value + u'</h2>')
+        self.write(u'\n\n<h2>' + token.value + u'</h2>\n')
 
     def renderMS1(self, token):
-        self.write(u'\n\n<h3>' + token.value + u'</h3>')
+        self.write(u'\n\n<h3>' + token.value + u'</h3>\n')
 
     def renderMS2(self, token):
-        self.write(u'\n\n<h4>' + token.value + u'</h4>')
+        self.write(u'\n\n<h4>' + token.value + u'</h4>\n')
 
     def renderP(self, token):
         self.write(self.stopIndent())
@@ -223,14 +228,14 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         self.footnote_num = 1
         self.cc = token.value.zfill(3)
         self.write(u'\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'
-                   .format(self.cb, self.cc, self.chapterLabel, token.value))
+            .format(self.cb, self.cc, self.chapterLabel, token.value))
 
     def renderV(self, token):
         self.closeFootnote()
         self.cv = token.value.zfill(3)
         self.write(self.stopLI())
-        self.write(u' <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'.
-                   format(self.cb, self.cc, self.cv, token.value))
+        self.write(u' <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'
+            .format(self.cb, self.cc, self.cv, token.value))
 
     def renderWJS(self, token):
         self.write(u'<span class="woc">')
@@ -386,9 +391,8 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
             self.write(u'<hr class="footnotes-hr"/>')
             for fkey in sorted(fkeys):
                 footnote = self.footnotes[fkey]
-                self.write(u'<div id="{0}" class="footnote">{1}:{2} <sup><i>[<a href="#ref-{0}">{5}</a>]</i></sup><span class="text">{6}</span></div>'.
-                           format(fkey, footnote['chapter'].lstrip('0'), footnote['verse'].lstrip('0'), footnote['chapter'], footnote['verse'],\
-                                  footnote['footnote'], footnote['text']))
+                self.write(u'<div id="{0}" class="footnote">{1}:{2} <sup><i>[<a href="#ref-{0}">{5}</a>]</i></sup><span class="text">{6}</span></div>'
+                    .format(fkey, footnote['chapter'].lstrip('0'), footnote['verse'].lstrip('0'), footnote['chapter'], footnote['verse'], footnote['footnote'], footnote['text']))
             self.write(u'</div>')
         self.footnotes = {}
 
