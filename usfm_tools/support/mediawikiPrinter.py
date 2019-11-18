@@ -2,8 +2,8 @@
 #
 
 import os
-import parseUsfm
-import books
+from .parseUsfm import parseString
+from .books import bookKeyForIdValue, loadBooks, silNames
 
 class DummyFile(object):
     def close(self):
@@ -28,7 +28,7 @@ class MediaWikiPrinter(object):
     def renderID(self, token):
         self.write(u'</p>')
         self.f.close()
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
         self.f = open(self.outputDir + u'/c' + self.cb + u'001.html', 'w')
         self.write(u'\n<!-- \\id ' + self.cb + u' -->')
         self.indentFlag = False
@@ -123,15 +123,15 @@ class Transform(object):
             return unicodeString
 
     def translateBook(self, usfm):
-         tokens = parseUsfm.parseString(usfm)
+         tokens = parseString(usfm)
          tp = MediaWikiPrinter(self.outputDir)
          for t in tokens: t.renderOn(tp)
 
     def setupAndRun(self, patchedDir, outputDir):
         self.outputDir = outputDir
-        self.booksUsfm = books.loadBooks(patchedDir)
+        self.booksUsfm = loadBooks(patchedDir)
 
-        for bookName in books.silNames:
+        for bookName in silNames:
             if self.booksUsfm.has_key(bookName):
-                print '     ' + bookName
+                print('     ' + bookName)
                 self.translateBook(self.booksUsfm[bookName])

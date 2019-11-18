@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 
 #
 #   Simplest renderer. Ignores everything except ascii text.
 #
 
-class MarkdownRenderer(abstractRenderer.AbstractRenderer):
+class MarkdownRenderer(AbstractRenderer):
 
     def __init__(self, inputDir, outputFilename):
         # Unset
@@ -27,12 +27,12 @@ class MarkdownRenderer(abstractRenderer.AbstractRenderer):
         self.f.close()
 
     def writeLog(self, s):
-        print s
+        print(s)
 
     # Support
 
     def escape(self, s):
-        return s
+        return(s)
 
     def renderTEXT(self, token):    self.f.write(self.escape(token.value))
 

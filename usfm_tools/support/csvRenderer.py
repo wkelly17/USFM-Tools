@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
-import books
+from .books import bookKeyForIdValue
 
 #
 #   UTF-8 CVS file
 #
 
-class CSVRenderer(abstractRenderer.AbstractRenderer):
+class CSVRenderer(AbstractRenderer):
     
     def __init__(self, inputDir, outputFilename):
         # Unset
@@ -30,17 +30,17 @@ class CSVRenderer(abstractRenderer.AbstractRenderer):
         self.f.close()
         
     def writeLog(self, s):
-        print s
+        print(s)
                 
     #   SUPPORT
 
     def escape(self, s):
-        return u'' if self.infootnote else s
+        return '' if self.infootnote else s
             
     #   TOKENS
 
     def renderID(self, token): 
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
     def renderC(self, token):
         self.cc = token.value.zfill(3)
     def renderV(self, token):

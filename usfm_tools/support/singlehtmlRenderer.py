@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 import datetime
-import books
+from .books import bookKeyForIdValue
 
-from parseUsfm import UsfmToken
+from .parseUsfm import UsfmToken
 
 #
 #   Simplest renderer. Ignores everything except ascii text.
 #
 
-class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
+class SingleHTMLRenderer(AbstractRenderer):
     def __init__(self, inputDir, outputFilename):
         # Unset
         self.f = None  # output file stream
@@ -94,7 +94,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
 </head>
 <body>
 """
-        self.write(h.encode('utf-8'))
+        self.write(h)
 
     def writeClosing(self):
         h = """
@@ -157,7 +157,7 @@ class SingleHTMLRenderer(abstractRenderer.AbstractRenderer):
         if self.cb:
             self.write('</div>\n\n');
         self.bookName = None
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
         self.chapterLabel = u'Chapter'
         self.write('<div id="bible-book-'+self.cb+'" class="bible-book-text">\n')
 

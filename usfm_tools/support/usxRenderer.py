@@ -2,7 +2,7 @@
 #
 
 from __future__ import print_function, unicode_literals
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 import logging
 
@@ -12,7 +12,7 @@ import logging
 
 
 # noinspection PyPep8Naming,PyUnusedLocal
-class USXRenderer(abstractRenderer.AbstractRenderer):
+class USXRenderer(AbstractRenderer):
     def __init__(self, input_dir, output_path, output_name, by_book_flag):
         # Unset
         self.f = None  # output file stream

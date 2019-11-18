@@ -2,8 +2,8 @@
 #
 
 import os
-import parseUsfm
-import books
+from .parseUsfm import parseString
+from .books import fullName, readerName, bookKeyForIdValue
 
 class DummyFile(object):
     def close(self):
@@ -64,12 +64,12 @@ class ReaderPrinter(object):
         self.f.close() # Close final file
 
     def writeHeader(self, v=u''):
-        self.write(u'<!--\nname: Open English Bible\ncontent: %(book)s %(chapter)s (OEB)\nauthor: Russell Allen\ndate:   4/6/2012 3:34:43 PM\n-->' % {"book": books.fullName(self.cb), "chapter": str(int(self.cc))})
+        self.write(u'<!--\nname: Open English Bible\ncontent: %(book)s %(chapter)s (OEB)\nauthor: Russell Allen\ndate:   4/6/2012 3:34:43 PM\n-->' % {"book": fullName(self.cb), "chapter": str(int(self.cc))})
         self.write(u'\n<!DOCTYPE html>')
         self.write(u'\n<html lang="en" dir="ltr">')
         self.write(u'\n<head>')
         self.write(u'\n\t<meta charset="utf-8" /> ')
-        self.write(u'\n\t<title>%(book)s %(chapter)s (OEB)</title>' % {"book": books.fullName(self.cb), "chapter": str(int(self.cc))})
+        self.write(u'\n\t<title>%(book)s %(chapter)s (OEB)</title>' % {"book": fullName(self.cb), "chapter": str(int(self.cc))})
         self.write(u'\n\t<meta name="viewport" content="width=device-width, initial-scale=1" />')
         self.write(u'\n\t<script src="../../../js/mobile.js"></script>')
         self.write(u'\n\t<link href="../../../css/mobile.css" rel="stylesheet" />')
@@ -77,12 +77,12 @@ class ReaderPrinter(object):
         self.write(u'\n<body>')
         self.write(u'\n<div data-role="page">')
         self.write(u'\n\t<div data-role="header">')
-        self.write(u'\n\t\t<a href="%(book)s.%(chapter)s.html" data-icon="arrow-l">%(fullbook)s %(chapter)s</a>' % {"fullbook": books.fullName(self.previousChapter()[0]), "book": books.readerName(self.previousChapter()[0]), "chapter": str(self.previousChapter()[1])})
-        self.write(u'\n\t\t<h1>%(book)s %(chapter)s (OEB)</h1>' % {"book": books.fullName(self.cb), "chapter": str(int(self.cc))})
-        self.write(u'\n\t\t<a href="%(book)s.%(chapter)s.html" data-icon="arrow-r">%(fullbook)s %(chapter)s</a>' % {"fullbook": books.fullName(self.nextChapter()[0]), "book": books.readerName(self.nextChapter()[0]), "chapter": str(self.nextChapter()[1])})
+        self.write(u'\n\t\t<a href="%(book)s.%(chapter)s.html" data-icon="arrow-l">%(fullbook)s %(chapter)s</a>' % {"fullbook": fullName(self.previousChapter()[0]), "book": readerName(self.previousChapter()[0]), "chapter": str(self.previousChapter()[1])})
+        self.write(u'\n\t\t<h1>%(book)s %(chapter)s (OEB)</h1>' % {"book": fullName(self.cb), "chapter": str(int(self.cc))})
+        self.write(u'\n\t\t<a href="%(book)s.%(chapter)s.html" data-icon="arrow-r">%(fullbook)s %(chapter)s</a>' % {"fullbook": fullName(self.nextChapter()[0]), "book": readerName(self.nextChapter()[0]), "chapter": str(self.nextChapter()[1])})
         self.write(u'\n\t</div>')
         self.write(u'\n\t<div data-role="content">')
-        self.write(u'\n<div class="chapter OEB nt %(book)s_%(chapter)s" data-osis="%(book)s.%(chapter)s" lang="en" dir="ltr">' % {"book": books.readerName(self.cb), "chapter": str(int(self.cc))})
+        self.write(u'\n<div class="chapter OEB nt %(book)s_%(chapter)s" data-osis="%(book)s.%(chapter)s" lang="en" dir="ltr">' % {"book": readerName(self.cb), "chapter": str(int(self.cc))})
         self.write(u'\n<h2 class="chapter-num">' + v + u'</h2>\n<p>')
 
     def writeFooter(self):
@@ -92,9 +92,9 @@ class ReaderPrinter(object):
         self.write(u'\n\t<div data-role="footer">	')
         self.write(u'\n\t\t<div data-role="navbar">')
         self.write(u'\n\t\t\t<ul>')
-        self.write(u'\n\t\t\t\t<li><a href="%(book)s.%(chapter)s.html" data-icon="arrow-l">%(fullbook)s %(chapter)s</a></li>' % {"fullbook": books.fullName(self.previousChapter()[0]), "book": books.readerName(self.previousChapter()[0]), "chapter": str(self.previousChapter()[1])})
+        self.write(u'\n\t\t\t\t<li><a href="%(book)s.%(chapter)s.html" data-icon="arrow-l">%(fullbook)s %(chapter)s</a></li>' % {"fullbook": fullName(self.previousChapter()[0]), "book": readerName(self.previousChapter()[0]), "chapter": str(self.previousChapter()[1])})
         self.write(u'\n\t\t\t\t<li><a href="index.html" data-icon="home">Books</a></li>')
-        self.write(u'\n\t\t\t\t<li><a href="%(book)s.%(chapter)s.html" data-icon="arrow-r">%(fullbook)s %(chapter)s</a></li>' % {"fullbook": books.fullName(self.nextChapter()[0]), "book": books.readerName(self.nextChapter()[0]), "chapter": str(self.nextChapter()[1])})
+        self.write(u'\n\t\t\t\t<li><a href="%(book)s.%(chapter)s.html" data-icon="arrow-r">%(fullbook)s %(chapter)s</a></li>' % {"fullbook": fullName(self.nextChapter()[0]), "book": readerName(self.nextChapter()[0]), "chapter": str(self.nextChapter()[1])})
         self.write(u'\n\t\t\t</ul>')
         self.write(u'\n\t\t</div>')
         self.write(u'\n\t</div>')
@@ -131,7 +131,7 @@ class ReaderPrinter(object):
         return (b,c)
 
     def openNextFile(self):
-        self.f = open(self.outputDir + u'/' + books.readerName(self.cb) + u'.' + str(int(self.cc)) + u'.html', 'w')
+        self.f = open(self.outputDir + u'/' + readerName(self.cb) + u'.' + str(int(self.cc)) + u'.html', 'w')
 
     def incrementChapter(self, chapter):
         self.cc = chapter
@@ -162,7 +162,7 @@ class ReaderPrinter(object):
         self.writeFooter()
         self.f.close()
         self.tokenStream.next(2) # Go forward again to start of this chapter.
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
         self.incrementChapter(1)
         self.openNextFile()
         self.writeHeader()
@@ -226,13 +226,13 @@ class ReaderPrinter(object):
                     self.inSpanFlag = False
                     self.write(u'</span>')
             self.inSpanFlag = True
-            self.write(u'\n<span class="verse ' + books.readerName(self.cb) + u"_" + str(int(self.cc)) + u"_" + str(int(self.cv)) + u'" data-osis="' + books.readerName(self.cb) + u'.' + str(int(self.cc)) + u"." + str(int(self.cv)) + u'"><span class="verse-num v-1">' + token.value + u'&nbsp;</span>')
+            self.write(u'\n<span class="verse ' + readerName(self.cb) + u"_" + str(int(self.cc)) + u"_" + str(int(self.cv)) + u'" data-osis="' + readerName(self.cb) + u'.' + str(int(self.cc)) + u"." + str(int(self.cv)) + u'"><span class="verse-num v-1">' + token.value + u'&nbsp;</span>')
         else:
             if self.inSpanFlag:
                     self.inSpanFlag = False
                     self.write(u'</span>')
             self.inSpanFlag = True
-            self.write(u'\n<span class="verse ' + books.readerName(self.cb) + u"_" + str(int(self.cc)) + u"_" + str(int(self.cv)) + u'" data-osis="' + books.readerName(self.cb) + u'.' + str(int(self.cc)) + u"." + str(int(self.cv)) + u'"><span class="verse-num v-' + str(int(self.cv)) + u'">' + token.value + u'&nbsp;</span>')
+            self.write(u'\n<span class="verse ' + readerName(self.cb) + u"_" + str(int(self.cc)) + u"_" + str(int(self.cv)) + u'" data-osis="' + readerName(self.cb) + u'.' + str(int(self.cc)) + u"." + str(int(self.cv)) + u'"><span class="verse-num v-' + str(int(self.cv)) + u'">' + token.value + u'&nbsp;</span>')
 
     def renderWJS(self, token):     self.write(u'<span class="woc">')
     def renderWJE(self, token):     self.write(u'</span>')
@@ -283,16 +283,16 @@ class TransformForReader(object):
     def setupAndRun(self, patchedDir, outputDir):
         self.patchedDir = patchedDir
         self.outputDir = outputDir
-        self.booksUsfm = books.loadBooks(patchedDir)
+        self.booksUsfm = loadBooks(patchedDir)
         self.printer = ReaderPrinter(self.outputDir)
 
         tokens = []
-        print "    ** Parsing"
-        for bookName in books.silNames:
+        print("    ** Parsing")
+        for bookName in silNames:
             if self.booksUsfm.has_key(bookName):
-                tokens = tokens + parseUsfm.parseString(self.booksUsfm[bookName])
+                tokens = tokens + parseString(self.booksUsfm[bookName])
         self.tokenStream = TokenStream(tokens)
 
-        print "    ** Rendering"
+        print("    ** Rendering")
         self.printer.renderStream(self.tokenStream)
 

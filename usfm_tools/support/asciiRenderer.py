@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 
 #
 #   Simplest renderer. Ignores everything except ascii text.
 #
 
-class ASCIIRenderer(abstractRenderer.AbstractRenderer):
+class ASCIIRenderer(AbstractRenderer):
     
     def __init__(self, inputDir, outputFilename):
         # Unset
@@ -29,7 +29,7 @@ class ASCIIRenderer(abstractRenderer.AbstractRenderer):
         self.f.close()
         
     def writeLog(self, s):
-        print s
+        print(s)
         
     # Support
     

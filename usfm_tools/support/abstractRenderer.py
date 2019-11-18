@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 
-import books
-import parseUsfm
+from .books import loadBooks, silNames
+from .parseUsfm import parseString
 
 class AbstractRenderer(object):
 
@@ -14,7 +14,7 @@ class AbstractRenderer(object):
         pass
 
     def loadUSFM(self, usfmDir):
-        self.booksUsfm = books.loadBooks(usfmDir)
+        self.booksUsfm = loadBooks(usfmDir)
 
     def run(self):
         self.unknowns = []
@@ -25,13 +25,13 @@ class AbstractRenderer(object):
                 tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                 for t in tokens: t.renderOn(self)
         except:
-            for bookName in books.silNames:
-                if self.booksUsfm.has_key(bookName):
+            for bookName in silNames:
+                if bookName in self.booksUsfm:
                     self.writeLog('     (' + bookName + ')')
                     tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                     for t in tokens: t.renderOn(self)
         if len(self.unknowns):
-            print 'Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns)))
+            print('Skipped unknown tokens: {0}'.format(', '.join(set(self.unknowns))))
 
     def renderID(self, token):      pass
     def renderIDE(self, token):     pass

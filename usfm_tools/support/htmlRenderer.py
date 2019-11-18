@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
-import books
+from .books import bookKeyForIdValue
 
 #
 #   Renders as set of web pages
@@ -15,7 +15,7 @@ class DummyFile(object):
     def write(self, str):
         pass
 
-class HTMLRenderer(abstractRenderer.AbstractRenderer):
+class HTMLRenderer(AbstractRenderer):
 
     def __init__(self, inputDir, outputDir, oebFlag=False):
         # Unset
@@ -45,7 +45,7 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
         self.close()
 
     def writeLog(self, s):
-        print s
+        print(s)
 
     # File handling
 
@@ -65,13 +65,13 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
     def cleanHTML(self, t):
         c = t
         c = t.replace(u'<p><br /><br />', u'<p>')
-        c = c.replace(ur'~', u'&nbsp;')
+        c = c.replace(r'~', u'&nbsp;')
         if self.oebFlag:
-            c = c.replace(ur'%navmarker%', u'OEB')
-            c = c.replace(ur'%linkToWebsite%',u'<tr><td colspan = "2"><a href="http://openenglishbible.org">OpenEnglishBible.org</a></td></tr>')
+            c = c.replace(r'%navmarker%', u'OEB')
+            c = c.replace(r'%linkToWebsite%',u'<tr><td colspan = "2"><a href="http://openenglishbible.org">OpenEnglishBible.org</a></td></tr>')
         else:
-            c = c.replace(ur'%navmarker%', u'<div style="font-size:200%;color:green;">✝</div>')
-            c = c.replace(ur'%linkToWebsite%',u'')
+            c = c.replace(r'%navmarker%', u'<div style="font-size:200%;color:green;">✝</div>')
+            c = c.replace(r'%linkToWebsite%',u'')
         return c
 
     # Support
@@ -104,7 +104,7 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
     def renderID(self, token):
         self.write(footer)
         self.close()
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
         self.openFile(self.cb)
         self.write(header)
         self.indentFlag = False
@@ -238,7 +238,7 @@ class HTMLRenderer(abstractRenderer.AbstractRenderer):
 #  Structure
 #
 
-header = ur"""<!DOCTYPE html>
+header = r"""<!DOCTYPE html>
     <html lang="en">
     <head>
     <title>Open English Bible</title>
@@ -393,8 +393,8 @@ header = ur"""<!DOCTYPE html>
     <body>
         """
 
-footer = ur"""
+footer = r"""
         </p></body>
         """
 
-indexPage = header + ur"""<h1>Bible</h1>""" + footer
+indexPage = header + r"""<h1>Bible</h1>""" + footer

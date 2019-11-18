@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 import datetime
-import books
+from .books import bookKeyForIdValue
 
 #
 #   Renders using Lout (TeX alternative)
 #
 
-class LoutRenderer(abstractRenderer.AbstractRenderer):
+class LoutRenderer(AbstractRenderer):
 
     def __init__(self, inputDir, outputFilename):
         # Unset
@@ -36,7 +36,7 @@ class LoutRenderer(abstractRenderer.AbstractRenderer):
 
     def render(self):
         self.f = codecs.open(self.outputFilename, 'w', 'utf_8_sig')
-        self.f.write(ur"""@Include { oebbook }
+        self.f.write(r"""@Include { oebbook }
 @Book
     @Title {}
     @Author {}
@@ -65,7 +65,7 @@ class LoutRenderer(abstractRenderer.AbstractRenderer):
         self.f.close()
 
     def writeLog(self, s):
-        print s
+        print(s)
 
     def write(self, unicodeString):
         self.f.write(unicodeString + '\n')
@@ -198,7 +198,7 @@ class LoutRenderer(abstractRenderer.AbstractRenderer):
     #
     #
     def renderID(self, token):
-        self.cb = books.bookKeyForIdValue(token.value)
+        self.cb = bookKeyForIdValue(token.value)
         self.indentFlag = False
         self.closeChapter()
     def renderIDE(self, token):

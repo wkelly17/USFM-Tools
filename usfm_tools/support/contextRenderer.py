@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 
-import abstractRenderer
+from .abstractRenderer import AbstractRenderer
 import codecs
 import datetime
 
@@ -9,7 +9,7 @@ import datetime
 #   Renders to ConTeXt so we can make PDF. Main renderer for PDF of OEB
 #
 
-class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
+class ConTeXtRenderer(AbstractRenderer):
 
     def __init__(self, inputDir, outputFilename):
         # Unset
@@ -44,7 +44,7 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         self.f.close()
 
     def writeLog(self, s):
-        print s.encode('ascii', 'ignore')
+        print(s.encode('ascii', 'ignore'))
 
 
     #
@@ -95,10 +95,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         if self.printerState[u'li'] == False:
             self.printerState[u'li'] = True
             #return u'\startitemize \item '
-            return ur'\startexdent '
+            return r'\startexdent '
         else:
             #return u'\item '
-            return ur'\par '
+            return r'\par '
 
     def stopLI(self):
         if self.printerState[u'li'] == False:
@@ -110,7 +110,7 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         else:
             self.printerState[u'li'] = False
             #return u'\stopitemize'
-            return ur'\stopexdent '
+            return r'\stopexdent '
 
     def startD(self):
         if self.printerState[u'd'] == False:
@@ -129,10 +129,10 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
         if self.doNB:
             self.doNB = False
             self.justDidNB = True
-            s = s + ur'\noindentation '
+            s = s + r'\noindentation '
         elif self.justDidNB:
             self.justDidNB = False
-            s = s + ur'\indentation '
+            s = s + r'\indentation '
         return s
 
 
@@ -140,7 +140,7 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     #   Tokens
     #
 
-    def renderID(self, token):      self.f.write( self.stopNarrower() + ur"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
+    def renderID(self, token):      self.f.write( self.stopNarrower() + r"\marking[RAChapter]{ } \marking[RABook]{ } \marking[RASection]{ }" )
     def renderH(self, token):       self.f.write( u'\n\n\RAHeader{' + self.escapeText(token.value) + u'}\n')
     def renderTOC1(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC1{' + token.value + u'}\n')
     def renderTOC2(self, token):      self.f.write( self.stopLI() + self.stopNarrower() + u'\n\TOC2{' + token.value + u'}\n')
@@ -227,6 +227,6 @@ class ConTeXtRenderer(abstractRenderer.AbstractRenderer):
     def render_io1(self, token):    self.renderQ2(token)
     def render_io2(self, token):    self.renderQ2(token)
 
-    closeTeXt = ur"""
+    closeTeXt = r"""
     \stoptext
     """
