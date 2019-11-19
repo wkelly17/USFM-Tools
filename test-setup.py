@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="usfm_tools",
-    version="0.0.28",
+    version="0.0.31",
     author="unfoldingWord",
     author_email="info@unfoldingWord.org",
     description="A framework for transforming .usfm files into specified targets",
@@ -16,9 +16,9 @@ setup(
     classifiers=[],
     install_requires=[
         'bs4==0.0.1',
-        'coveralls==1.1',
-        'future==0.16.0',
-        'pyparsing==2.1.10'
+        'coveralls==1.8.2',
+        'future==0.18.2',
+        'pyparsing==2.4.5'
     ],
     test_suite='tests'
 )
