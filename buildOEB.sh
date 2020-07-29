@@ -142,15 +142,6 @@ all() {
 #
 ###############
 
-build-book () 
-{
-	make-tmp
-	cp $OEBDIR/us/$BOOKFILE tmp
-	python transform.py --target=lout --usfmDir=tmp/ --builtDir=built/ --name=OEB-$BOOKNAME-Current-US --oeb
-	clean-tmp
-}
-
-build-book-tex () 
 {
 	make-tmp
 	cp $OEBDIR/us/$BOOKFILE tmp

@@ -4,8 +4,17 @@ import sys
 import os
 import logging
 from subprocess import Popen, PIPE
-from usfm_tools.support import loutRenderer, contextRenderer, htmlRenderer, singlehtmlRenderer, csvRenderer, \
-    readerise, mdRenderer, asciiRenderer, usxRenderer, mediawikiPrinter
+from usfm_tools.support import (
+    contextRenderer,
+    htmlRenderer,
+    singlehtmlRenderer,
+    csvRenderer,
+    readerise,
+    mdRenderer,
+    asciiRenderer,
+    usxRenderer,
+    mediawikiPrinter,
+)
 
 
 class UsfmTransform(object):
@@ -44,36 +53,6 @@ class UsfmTransform(object):
         curl -o usfm2osis.pl http://crosswire.org/ftpmirror/pub/sword/utils/perl/usfm2osis.pl
         """
         UsfmTransform.runscript(c)
-
-    @staticmethod
-    def buildLout(usfmDir, builtDir, buildName):
-        UsfmTransform.__logger.info('Building Lout...')
-
-        # Prepare
-        UsfmTransform.__logger.info('Clean working dir')
-        UsfmTransform.runscript('rm "' + builtDir + '/working/lout/*"', '       ')
-
-        # Convert to Lout
-        UsfmTransform.__logger.info('Converting to Lout')
-        UsfmTransform.ensureOutputDir(builtDir + '/working/lout')
-        c = loutRenderer.LoutRenderer(usfmDir, builtDir + '/working/lout/' + buildName + '.lout')
-        c.render()
-
-        # Run Lout
-        UsfmTransform.__logger.info('Copying support files')
-        UsfmTransform.runscript('cp support/lout/oebbook working/lout', '       ')
-        UsfmTransform.__logger.info('Running Lout')
-        UsfmTransform.runscript('cd "' + builtDir + '/working/lout"; lout "./' + buildName + '.lout" > "' + buildName +
-                                '.ps"', '       ',
-                                repeatFilter='unresolved cross reference')
-        UsfmTransform.__logger.info('Running ps2pdf')
-        UsfmTransform.runscript(
-            'cd "' + builtDir + '/working/lout"; ps2pdf -dDEVICEWIDTHPOINTS=432 -dDEVICEHEIGHTPOINTS=648 "' +
-            buildName + '.ps" "' + buildName + '.pdf" ',
-            '       ')
-        UsfmTransform.__logger.info('Copying into builtDir')
-        UsfmTransform.runscript('cp "' + builtDir + '/working/lout/' + buildName + '.pdf" "' + builtDir + '/' +
-                                buildName + '.pdf" ', '       ')
 
     @staticmethod
     def buildConTeXt(usfmDir, builtDir, buildName):
@@ -217,8 +196,6 @@ class UsfmTransform(object):
             UsfmTransform.buildReader(usfm_dir, build_dir, build_name)
         elif targets == 'mediawiki':
             UsfmTransform.buildMediawiki(usfm_dir, build_dir, build_name)
-        elif targets == 'lout':
-            UsfmTransform.buildLout(usfm_dir, build_dir, build_name)
         elif targets == 'csv':
             UsfmTransform.buildCSV(usfm_dir, build_dir, build_name)
         elif targets == 'ascii':
