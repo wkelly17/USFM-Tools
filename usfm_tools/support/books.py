@@ -366,10 +366,12 @@ def bookName(usfm):
 def loadBooks(path):
     loaded_books = {}
     dirList = os.listdir(path)
-    __logger.info('LOADING ALL USFM FILES FROM ' + path)
+    __logger.info("LOADING ALL USFM FILES FROM " + path)
+    __logger.debug("dirList: {}".format(dirList))
     for fname in dirList:
 
         full_file_name = os.path.join(path, fname)
+        __logger.debug("full_file_name: {}".format(full_file_name))
         if not os.path.isfile(full_file_name):
             continue
 
