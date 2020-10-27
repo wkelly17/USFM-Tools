@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 #
 
-from .books import loadBooks, silNames
-from .parseUsfm import parseString
+import logging
+
+try:
+    from books import loadBooks, silNames
+    from parseUsfm import parseString
+except:
+    from .books import loadBooks, silNames
+    from .parseUsfm import parseString
+
+logger = logging.getLogger("usfm_tools")
+
 
 class AbstractRenderer(object):
 
     booksUsfm = None
 
-    chapterLabel = u'Chapter'
+    chapterLabel = u"Chapter"
 
     def writeLog(self, s):
         pass
