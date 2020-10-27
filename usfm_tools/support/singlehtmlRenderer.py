@@ -1,13 +1,20 @@
-from .abstractRenderer import AbstractRenderer
 import codecs
 import datetime
-from .books import bookKeyForIdValue
+import logging
 
-from .parseUsfm import UsfmToken
+try:
+    from .abstractRenderer import AbstractRenderer
+    from .books import bookKeyForIdValue
+    from .parseUsfm import UsfmToken
+except:
+    from .abstractRenderer import AbstractRenderer
+    from .books import bookKeyForIdValue
+    from .parseUsfm import UsfmToken
 
 #
 #   Simplest renderer. Ignores everything except ascii text.
 #
+logger = logging.getLogger("usfm_tools")
 
 
 class SingleHTMLRenderer(AbstractRenderer):
@@ -43,6 +50,18 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.write(self.stopP())
         self.writeFootnotes()
         self.writeClosing()
+        self.f.close()
+
+    def renderBody(self):
+        self.loadUSFM(self.inputDir)
+        self.f = codecs.open(self.outputFilename, "w", "utf_8_sig")
+        # self.writeHeader()
+        self.run()
+        self.write(self.stopIndent())
+        self.write(self.stopLI())
+        self.write(self.stopP())
+        self.writeFootnotes()
+        # self.writeClosing()
         self.f.close()
 
     def writeHeader(self):

@@ -86,7 +86,8 @@ class UsfmTransform(object):
         c = singlehtmlRenderer.SingleHTMLRenderer(
             usfmDir, builtDir + "/" + buildName + ".html"
         )
-        c.render()
+        # c.render()
+        c.renderBody()
 
     @staticmethod
     def buildCSV(usfmDir, builtDir, buildName):
