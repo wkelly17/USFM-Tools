@@ -371,11 +371,9 @@ def loadBooks(path):
     loaded_books = {}
     dirList = os.listdir(path)
     __logger.info("LOADING ALL USFM FILES FROM " + path)
-    __logger.debug("dirList: {}".format(dirList))
     for fname in dirList:
 
         full_file_name = os.path.join(path, fname)
-        __logger.debug("full_file_name: {}".format(full_file_name))
         if not os.path.isfile(full_file_name):
             continue
 
@@ -384,17 +382,24 @@ def loadBooks(path):
 
         # noinspection PyBroadException
         try:
-            f = open(full_file_name, 'U')  # U handles line endings
-            usfm = f.read().decode('utf-8-sig').lstrip()
-            if usfm[:4] == r'\id ' and usfm[4:7] in silNames:
+            f = open(full_file_name, "U")  # U handles line endings
+            __logger.info("opened file {}".format(full_file_name))
+            # usfm = f.read().decode("utf-8-sig").lstrip()
+            usfm = f.read().lstrip()
+            __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
+            if usfm[:4] == r"\id " and usfm[4:7] in silNames:
                 # print '     Loaded ' + fname + ' as ' + usfm[4:7]
                 loaded_books[bookID(usfm)] = usfm
+                __logger.info("loaded_books: {}".format(loaded_books))
                 f.close()
             else:
-                __logger.info('Ignored ' + fname)
+                __logger.info("Ignored " + fname)
         except:
-            __logger.warning("Couldn't open " + fname)
-    __logger.info('FINISHED LOADING\n')
+            # __logger.warning("Couldn't open " + fname)
+            __logger.warning(
+                "Problem opening, decoding, or reading {}".format(full_file_name)
+            )
+    __logger.info("FINISHED LOADING\n")
     return loaded_books
 
 
