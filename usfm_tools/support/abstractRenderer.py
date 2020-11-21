@@ -2,6 +2,8 @@
 #
 
 import logging
+import pathlib
+from typing import Dict, List
 
 try:
     from books import loadBooks, silNames
@@ -22,8 +24,10 @@ class AbstractRenderer(object):
     def writeLog(self, s):
         pass
 
-    def loadUSFM(self, usfmDir):
-        self.booksUsfm = loadBooks(usfmDir)
+    # def loadUSFM(self, usfmDir):
+    def loadUSFM(self, files: List[pathlib.Path]) -> None:
+        # self.booksUsfm = loadBooks(usfmDir)
+        self.booksUsfm = loadBooks(files)
 
     def run(self):
         self.unknowns = []

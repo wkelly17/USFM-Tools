@@ -4,6 +4,9 @@
 from __future__ import print_function, unicode_literals
 import os
 import logging
+import pathlib
+
+from typing import Dict, List
 
 __logger = logging.getLogger("usfm_tools")
 
@@ -367,17 +370,21 @@ def bookName(usfm):
 
 
 # noinspection PyPep8Naming
-def loadBooks(path):
+# def loadBooks(path):
+def loadBooks(files: List[pathlib.Path]) -> Dict:
     loaded_books = {}
-    dirList = os.listdir(path)
-    __logger.info("LOADING ALL USFM FILES FROM " + path)
-    for fname in dirList:
+    # dirList = os.listdir(path)
+    __logger.info("LOADING ALL USFM FILES: {}".format(files))
+    # for fname in dirList:
+    for fname in files:
 
-        full_file_name = os.path.join(path, fname)
+        # full_file_name = os.path.join(path, fname)
+        full_file_name = fname
         if not os.path.isfile(full_file_name):
             continue
 
-        if fname[-4:].lower() in [".pdf", ".sig"]:
+        # if fname[-4:].lower() in [".pdf", ".sig"]:
+        if fname.suffix.lower() in [".pdf", ".sig"]:
             continue
 
         # noinspection PyBroadException
@@ -386,11 +393,11 @@ def loadBooks(path):
             __logger.info("opened file {}".format(full_file_name))
             # usfm = f.read().decode("utf-8-sig").lstrip()
             usfm = f.read().lstrip()
-            __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
+            # __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
             if usfm[:4] == r"\id " and usfm[4:7] in silNames:
                 # print '     Loaded ' + fname + ' as ' + usfm[4:7]
                 loaded_books[bookID(usfm)] = usfm
-                __logger.info("loaded_books: {}".format(loaded_books))
+                # __logger.info("loaded_books: {}".format(loaded_books))
                 f.close()
             else:
                 __logger.info("Ignored " + fname)

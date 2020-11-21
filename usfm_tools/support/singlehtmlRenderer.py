@@ -1,6 +1,8 @@
 import codecs
 import datetime
 import logging
+import pathlib
+from typing import List
 
 try:
     from .abstractRenderer import AbstractRenderer
@@ -18,12 +20,13 @@ logger = logging.getLogger("usfm_tools")
 
 
 class SingleHTMLRenderer(AbstractRenderer):
-    def __init__(self, inputDir, outputFilename):
+    def __init__(self, fileList: List[pathlib.Path], outputFilename: str) -> None:
         # Unset
         self.f = None  # output file stream
         # IO
         self.outputFilename = outputFilename
-        self.inputDir = inputDir
+        # self.inputDir = inputDir
+        self.inputFiles: List[pathlib.Path] = fileList
         # Position
         self.cb = ""  # Current Book
         self.cc = "001"  # Current Chapter
@@ -53,7 +56,8 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.f.close()
 
     def renderBody(self):
-        self.loadUSFM(self.inputDir)
+        # self.loadUSFM(self.inputDir)
+        self.loadUSFM(self.inputFiles)
         self.f = codecs.open(self.outputFilename, "w", "utf_8_sig")
         # self.writeHeader()
         self.run()

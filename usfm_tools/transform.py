@@ -2,7 +2,9 @@ import getopt
 import sys
 import os
 import logging
+import pathlib
 from subprocess import Popen, PIPE
+from typing import List
 from usfm_tools.support import (
     contextRenderer,
     htmlRenderer,
@@ -85,6 +87,21 @@ class UsfmTransform(object):
         UsfmTransform.ensureOutputDir(builtDir)
         c = singlehtmlRenderer.SingleHTMLRenderer(
             usfmDir, builtDir + "/" + buildName + ".html"
+        )
+        # c.render()
+        c.renderBody()
+
+    @staticmethod
+    def buildSingleHtmlFromFiles(
+        fileList: List[pathlib.Path], builtDir: str, buildName: str
+    ) -> None:
+        """ Given a list of pathlib.Paths build the resulting HTML
+        file named buildName and place it in builtDir. """
+
+        UsfmTransform.__logger.info("Building Single Page HTML...")
+        UsfmTransform.ensureOutputDir(builtDir)
+        c = singlehtmlRenderer.SingleHTMLRenderer(
+            fileList, builtDir + "/" + buildName + ".html"
         )
         # c.render()
         c.renderBody()
