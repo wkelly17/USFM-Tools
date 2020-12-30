@@ -41,6 +41,7 @@ class AbstractRenderer(object):
                 # tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                 tokens = parseString(self.booksUsfm[bookName])
                 for t in tokens:
+                    logger.debug("token: {}".format(t))
                     t.renderOn(self)
         except:
             for bookName in silNames:
