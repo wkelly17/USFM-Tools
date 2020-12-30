@@ -263,7 +263,7 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.cv = token.value.zfill(3)
         self.write(self.stopLI())
         self.write(
-            ' <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'.format(
+            ' <span class="verse"><span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>{4}</span>'.format(
                 self.cb, self.cc, self.cv, token.value
             )
         )
