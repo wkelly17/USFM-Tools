@@ -263,7 +263,7 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.cv = token.value.zfill(3)
         self.write(self.stopLI())
         self.write(
-            ' <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'.format(
+            '<span class="verse"> <span id="{0}-ch-{1}-v-{2}" class="v-num"><sup><b>{3}</b></sup></span>'.format(
                 self.cb, self.cc, self.cv, token.value
             )
         )
@@ -275,7 +275,7 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.write("</span>")
 
     def renderTEXT(self, token):
-        self.write(" " + self.escape(token.value) + " ")
+        self.write(" {}</span>".format(self.escape(token.value)))
 
     def renderQ(self, token):
         self.writeIndent(1)
