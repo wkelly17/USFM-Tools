@@ -369,7 +369,6 @@ def bookName(usfm):
     return bookNames[index]
 
 
-# noinspection PyPep8Naming
 # def loadBooks(path):
 def loadBooks(files: List[pathlib.Path]) -> Dict:
     loaded_books = {}
@@ -387,25 +386,16 @@ def loadBooks(files: List[pathlib.Path]) -> Dict:
         if fname.suffix.lower() in [".pdf", ".sig"]:
             continue
 
-        # noinspection PyBroadException
-        try:
-            f = open(full_file_name, "U")  # U handles line endings
+        with open(full_file_name, "r") as f:
             __logger.info("opened file {}".format(full_file_name))
             # usfm = f.read().decode("utf-8-sig").lstrip()
             usfm = f.read().lstrip()
             # __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
             if usfm[:4] == r"\id " and usfm[4:7] in silNames:
-                # print '     Loaded ' + fname + ' as ' + usfm[4:7]
                 loaded_books[bookID(usfm)] = usfm
                 # __logger.info("loaded_books: {}".format(loaded_books))
-                f.close()
             else:
                 __logger.info("Ignored " + fname)
-        except:
-            # __logger.warning("Couldn't open " + fname)
-            __logger.warning(
-                "Problem opening, decoding, or reading {}".format(full_file_name)
-            )
     __logger.info("FINISHED LOADING\n")
     return loaded_books
 
