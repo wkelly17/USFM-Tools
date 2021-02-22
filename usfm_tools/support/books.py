@@ -355,7 +355,7 @@ def bookKeyForIdValue(book_id):
 
 # noinspection PyPep8Naming
 def bookID(usfm):
-    s = usfm.find("\id ") + 4
+    s = usfm.find(r"\id ") + 4
     e = usfm.find(" ", s)
     e2 = usfm.find("\n", s)
     e = e if e < e2 else e2
