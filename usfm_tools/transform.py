@@ -6,15 +6,15 @@ import pathlib
 from subprocess import Popen, PIPE
 from typing import List
 from usfm_tools.support import (
-    contextRenderer,
+    # contextRenderer,
     htmlRenderer,
     singlehtmlRenderer,
-    csvRenderer,
+    # csvRenderer,
     readerise,
-    mdRenderer,
-    asciiRenderer,
-    usxRenderer,
-    mediawikiPrinter,
+    # mdRenderer,
+    # asciiRenderer,
+    # usxRenderer,
+    # mediawikiPrinter,
 )
 
 
