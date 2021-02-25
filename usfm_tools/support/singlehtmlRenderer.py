@@ -2,12 +2,13 @@ import codecs
 import datetime
 import logging
 import pathlib
+import re
 from typing import List
 
 try:
-    from .abstractRenderer import AbstractRenderer
-    from .books import bookKeyForIdValue
-    from .parseUsfm import UsfmToken
+    from abstractRenderer import AbstractRenderer
+    from books import bookKeyForIdValue
+    from parseUsfm import UsfmToken
 except:
     from .abstractRenderer import AbstractRenderer
     from .books import bookKeyForIdValue
@@ -20,20 +21,38 @@ logger = logging.getLogger("usfm_tools")
 
 
 class SingleHTMLRenderer(AbstractRenderer):
-    def __init__(self, fileList: List[pathlib.Path], outputFilename: str) -> None:
+    def __init__(self, filePath: pathlib.Path, outputFilename: str) -> None:
         # Unset
         self.f = None  # output file stream
         # IO
         self.outputFilename = outputFilename
         # self.inputDir = inputDir
-        self.inputFiles: List[pathlib.Path] = fileList
+        self.inputFile: pathlib.Path = filePath
         # Position
         self.cb = ""  # Current Book
         self.cc = "001"  # Current Chapter
         self.cv = "001"  # Current Verse
         self.indentFlag = False
         self.bookName = ""
-        self.chapterLabel = "Chapter"
+        # We need to initialize the localized self.chapterLabel here, which is
+        # earlier than the parser gets to it. Why? Before adding this, the
+        # first chapter for a non-English language used to
+        # print the chapter label in English for the first
+        # chapter and subsequent chapters would print the
+        # localized chapter label. Now all chapter labels are
+        # properly localized.
+        with open(self.inputFile, "r") as fin:
+            content = fin.read()
+            # split is performant:
+            # See https://stackoverflow.com/questions/7501609/python-re-split-vs-split
+            try:
+                self.chapterLabel = content.split("\cl ")[1].split("\n")[0].split()[0]
+            except IndexError:  # \cl is apparently not provided by the current language
+                # Provide a default chapter label since the USFM
+                # didn't provide one, e.g., English language USFM
+                # doesn't provide \cl.
+                self.chapterLabel = "Chapter"
+            logger.debug("self.chapterLabel: {}".format(self.chapterLabel))
         self.listItemLevel = 0
         self.footnoteFlag = False
         self.fqaFlag = False
@@ -42,6 +61,31 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.footnote_num = 1
         self.footnote_text = ""
         self.paragraphOpen = False
+
+    # def __init__(self, fileList: List[pathlib.Path], outputFilename: str) -> None:
+    #     # Unset
+    #     self.f = None  # output file stream
+    #     # IO
+    #     self.outputFilename = outputFilename
+    #     # self.inputDir = inputDir
+    #     self.inputFiles: List[pathlib.Path] = fileList
+    #     # Position
+    #     self.cb = ""  # Current Book
+    #     self.cc = "001"  # Current Chapter
+    #     self.cv = "001"  # Current Verse
+    #     self.indentFlag = False
+    #     self.bookName = ""
+    #     # FIXME Needs to be localized for non-English languages.
+    #     # self.chapterLabel = "Chapter"
+    #     self.chapterLabel = ""
+    #     self.listItemLevel = 0
+    #     self.footnoteFlag = False
+    #     self.fqaFlag = False
+    #     self.footnotes = {}
+    #     self.footnote_id = ""
+    #     self.footnote_num = 1
+    #     self.footnote_text = ""
+    #     self.paragraphOpen = False
 
     def render(self):
         self.loadUSFM(self.inputDir)
@@ -57,7 +101,7 @@ class SingleHTMLRenderer(AbstractRenderer):
 
     def renderBody(self):
         # self.loadUSFM(self.inputDir)
-        self.loadUSFM(self.inputFiles)
+        self.loadUSFM(self.inputFile)
         self.f = codecs.open(self.outputFilename, "w", "utf_8_sig")
         # self.writeHeader()
         self.run()
@@ -67,6 +111,19 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.writeFootnotes()
         # self.writeClosing()
         self.f.close()
+
+    # def renderBody(self):
+    #     # self.loadUSFM(self.inputDir)
+    #     self.loadUSFM(self.inputFiles)
+    #     self.f = codecs.open(self.outputFilename, "w", "utf_8_sig")
+    #     # self.writeHeader()
+    #     self.run()
+    #     self.write(self.stopIndent())
+    #     self.write(self.stopLI())
+    #     self.write(self.stopP())
+    #     self.writeFootnotes()
+    #     # self.writeClosing()
+    #     self.f.close()
 
     def writeHeader(self):
         h = """
@@ -183,7 +240,9 @@ class SingleHTMLRenderer(AbstractRenderer):
             self.write("</div>\n\n")
         self.bookName = None
         self.cb = bookKeyForIdValue(token.value)
-        self.chapterLabel = "Chapter"
+        # FIXME This needs to be localized for non-English languages.
+        # We need to get the chaperLabel from parsing the file.
+        # self.chapterLabel = "Chapter"
         self.write('<div id="bible-book-' + self.cb + '" class="bible-book-text">\n')
 
     def renderH(self, token):
@@ -254,7 +313,18 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.cc = token.value.zfill(3)
         self.write(
             '\n\n<h2 id="{0}-ch-{1}" class="c-num">{2} {3}</h2>'.format(
-                self.cb, self.cc, self.chapterLabel, token.value
+                self.cb,
+                self.cc,
+                # At this point in execution self.chapterLabel either includes the word
+                # for chapter in the current language being parsed plus the chapter
+                # number, e.g., Capítulo 1, or else just the English default chapter
+                # label (if the language under consideration does not include the
+                # chapter label clause, \cl, in its USFM), 'Chapter'. If the former,
+                # then we want only the chapter label used here rather than the chapter
+                # label and the chapter number. In the latter case, split()[0] won't
+                # change anything and so it is safe to use for either case here.
+                self.chapterLabel.split()[0],
+                token.value,
             )
         )
 
@@ -392,6 +462,8 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.write("\n\n<h4>" + token.value + "</h4>")
 
     def renderCL(self, token):
+        # Produces: 'Capitulo 1' for example.
+        logger.debug("token.value: {}".format(token.value))
         self.chapterLabel = token.value
 
     def renderQR(self, token):

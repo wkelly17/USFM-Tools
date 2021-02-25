@@ -6,10 +6,10 @@ import pathlib
 from typing import Dict, List
 
 try:
-    from books import loadBooks, silNames
+    from books import loadBook, silNames
     from parseUsfm import parseString
 except:
-    from .books import loadBooks, silNames
+    from .books import loadBook, silNames
     from .parseUsfm import parseString
 
 logger = logging.getLogger("usfm_tools")
@@ -17,31 +17,37 @@ logger = logging.getLogger("usfm_tools")
 
 class AbstractRenderer(object):
 
-    booksUsfm = None
+    # booksUsfm = None
+    booksUsfm: Dict
 
-    chapterLabel = u"Chapter"
+    # FIXME This needs to be localized for non-English languages,
+    # however it is used.
+    # chapterLabel = "Chapter"
+    chapterLabel = ""
 
     def writeLog(self, s):
         pass
 
     # def loadUSFM(self, usfmDir):
-    def loadUSFM(self, files: List[pathlib.Path]) -> None:
+    def loadUSFM(self, filePath: pathlib.Path) -> None:
         # self.booksUsfm = loadBooks(usfmDir)
-        self.booksUsfm = loadBooks(files)
+        # self.booksUsfm = loadBooks(files)
+        self.booksUsfm = loadBook(filePath)
+
+    # def loadUSFM(self, files: List[pathlib.Path]) -> None:
+    #     # self.booksUsfm = loadBooks(usfmDir)
+    #     self.booksUsfm = loadBooks(files)
 
     def run(self):
         self.unknowns = []
         try:
             # self.renderBook = self.booksUsfm[list(self.booksUsfm.keys())[0]]
             # bookName = self.renderBook  # FIXME renderBook doesn't exist
-            # logger.info("bookName: {}".format(bookName))
-            # if bookName in self.booksUsfm:
             for bookName in self.booksUsfm:
                 self.writeLog("     (" + bookName + ")")
                 # tokens = parseUsfm.parseString(self.booksUsfm[bookName])
                 tokens = parseString(self.booksUsfm[bookName])
                 for t in tokens:
-                    logger.debug("token: {}".format(t))
                     t.renderOn(self)
         except:
             for bookName in silNames:

@@ -370,37 +370,68 @@ def bookName(usfm):
 
 
 # def loadBooks(path):
-def loadBooks(files: List[pathlib.Path]) -> Dict:
-    loaded_books = {}
+def loadBook(filePath: pathlib.Path) -> Dict:
+    loaded_book = {}
     # dirList = os.listdir(path)
-    __logger.info("LOADING ALL USFM FILES: {}".format(files))
+    __logger.info("LOADING USFM FILE: {}".format(filePath))
     # for fname in dirList:
-    for fname in files:
+    # for fname in files:
 
-        # full_file_name = os.path.join(path, fname)
-        full_file_name = fname
-        if not os.path.isfile(full_file_name):
-            continue
+    # full_file_name = os.path.join(path, fname)
+    # full_file_name = fname
+    # full_file_name = filePath
+    if not os.path.isfile(filePath):
+        return {}
 
-        # if fname[-4:].lower() in [".pdf", ".sig"]:
-        if fname.suffix.lower() in [".pdf", ".sig"]:
-            continue
+    # if fname[-4:].lower() in [".pdf", ".sig"]:
+    # NOTE This can't happen because of how this is called.
+    # if filePath.suffix.lower() in [".pdf", ".sig"]:
+    #     return
 
-        with open(full_file_name, "r") as f:
-            __logger.info("opened file {}".format(full_file_name))
-            # usfm = f.read().decode("utf-8-sig").lstrip()
-            usfm = f.read().lstrip()
-            # __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
-            if usfm[:4] == r"\id " and usfm[4:7] in silNames:
-                loaded_books[bookID(usfm)] = usfm
-                # __logger.info("loaded_books: {}".format(loaded_books))
-            else:
-                __logger.info("Ignored " + fname)
+    with open(filePath, "r") as f:
+        __logger.info("opened file {}".format(filePath))
+        # usfm = f.read().decode("utf-8-sig").lstrip()
+        usfm = f.read().lstrip()
+        # __logger.info("decoded file {}, usfm: {}".format(filePath, usfm))
+        if usfm[:4] == r"\id " and usfm[4:7] in silNames:
+            loaded_book[bookID(usfm)] = usfm
+            # __logger.info("loaded_books: {}".format(loaded_books))
+        else:
+            __logger.info("Ignored {}".format(filePath))
     __logger.info("FINISHED LOADING\n")
-    return loaded_books
+    return loaded_book
 
 
-# noinspection PyPep8Naming
+# def loadBooks(files: List[pathlib.Path]) -> Dict:
+#     loaded_books = {}
+#     # dirList = os.listdir(path)
+#     __logger.info("LOADING ALL USFM FILES: {}".format(files))
+#     # for fname in dirList:
+#     for fname in files:
+
+#         # full_file_name = os.path.join(path, fname)
+#         full_file_name = fname
+#         if not os.path.isfile(full_file_name):
+#             continue
+
+#         # if fname[-4:].lower() in [".pdf", ".sig"]:
+#         if fname.suffix.lower() in [".pdf", ".sig"]:
+#             continue
+
+#         with open(full_file_name, "r") as f:
+#             __logger.info("opened file {}".format(full_file_name))
+#             # usfm = f.read().decode("utf-8-sig").lstrip()
+#             usfm = f.read().lstrip()
+#             # __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
+#             if usfm[:4] == r"\id " and usfm[4:7] in silNames:
+#                 loaded_books[bookID(usfm)] = usfm
+#                 # __logger.info("loaded_books: {}".format(loaded_books))
+#             else:
+#                 __logger.info("Ignored " + fname)
+#     __logger.info("FINISHED LOADING\n")
+#     return loaded_books
+
+
 def orderFor(booksDict):
     order = silNames
     if "PSA" in booksDict and "GEN" not in booksDict and "MAT" in booksDict:

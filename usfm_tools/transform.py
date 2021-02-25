@@ -92,6 +92,22 @@ class UsfmTransform(object):
         c.renderBody()
 
     @staticmethod
+    def buildSingleHtmlFromFile(
+        filePath: pathlib.Path, builtDir: str, buildName: str
+    ) -> None:
+        """
+        Given a file path, build the resulting HTML
+        file named buildName and place it in builtDir.
+        """
+
+        UsfmTransform.__logger.info("Building Single Page HTML...")
+        UsfmTransform.ensureOutputDir(builtDir)
+        c = singlehtmlRenderer.SingleHTMLRenderer(
+            filePath, os.path.join(builtDir, "{}.html".format(buildName))
+        )
+        c.renderBody()
+
+    @staticmethod
     def buildSingleHtmlFromFiles(
         fileList: List[pathlib.Path], builtDir: str, buildName: str
     ) -> None:
