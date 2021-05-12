@@ -6,6 +6,7 @@ import os
 import logging
 import pathlib
 
+from usfm_tools.support import exceptions
 from typing import Dict, List
 
 __logger = logging.getLogger("usfm_tools")
@@ -398,6 +399,7 @@ def loadBook(filePath: pathlib.Path) -> Dict:
             # __logger.info("loaded_books: {}".format(loaded_books))
         else:
             __logger.info("Ignored {}".format(filePath))
+            raise exceptions.MalformedUsfmError
     __logger.info("FINISHED LOADING\n")
     return loaded_book
 

@@ -80,6 +80,7 @@ class UsfmTransform(object):
         )
         c.render()
 
+    # FIXME Slated for removal.
     @staticmethod
     def buildSingleHtml(usfmDir, builtDir, buildName):
         # Convert to HTML
@@ -107,6 +108,7 @@ class UsfmTransform(object):
         )
         c.renderBody()
 
+    # FIXME Slated for removal.
     @staticmethod
     def buildSingleHtmlFromFiles(
         fileList: List[pathlib.Path], builtDir: str, buildName: str
