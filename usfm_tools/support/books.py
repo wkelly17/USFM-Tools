@@ -396,11 +396,10 @@ def loadBook(filePath: pathlib.Path) -> Dict:
         # __logger.info("decoded file {}, usfm: {}".format(filePath, usfm))
         if usfm[:4] == r"\id " and usfm[4:7] in silNames:
             loaded_book[bookID(usfm)] = usfm
-            # __logger.info("loaded_books: {}".format(loaded_books))
+            __logger.info("FINISHED LOADING\n")
         else:
             __logger.info("Ignored {}".format(filePath))
             raise exceptions.MalformedUsfmError
-    __logger.info("FINISHED LOADING\n")
     return loaded_book
 
 
