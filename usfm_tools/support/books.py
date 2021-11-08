@@ -399,6 +399,7 @@ def loadBook(filePath: pathlib.Path) -> Dict:
             __logger.info("FINISHED LOADING\n")
         else:
             __logger.info("Ignored {}".format(filePath))
+            __logger.info("Ignored usfm: {}".format(usfm[0:40]))
             raise exceptions.MalformedUsfmError
     return loaded_book
 
