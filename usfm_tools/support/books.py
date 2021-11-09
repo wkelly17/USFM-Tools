@@ -390,7 +390,7 @@ def loadBook(filePath: pathlib.Path) -> Dict:
     #     return
 
     with open(filePath, "r") as f:
-        __logger.info("opened file {}".format(filePath))
+        __logger.info("Opened file: {}".format(filePath))
         # usfm = f.read().decode("utf-8-sig").lstrip()
         usfm = f.read().lstrip()
         # __logger.info("decoded file {}, usfm: {}".format(filePath, usfm))
@@ -398,8 +398,7 @@ def loadBook(filePath: pathlib.Path) -> Dict:
             loaded_book[bookID(usfm)] = usfm
             __logger.info("FINISHED LOADING\n")
         else:
-            __logger.info("Ignored {}".format(filePath))
-            __logger.info("Ignored usfm[0:40]: {}".format(usfm[0:40]))
+            __logger.info("Ignored: {}".format(filePath))
             raise exceptions.MalformedUsfmError
     return loaded_book
 
