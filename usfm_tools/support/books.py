@@ -394,44 +394,14 @@ def loadBook(filePath: pathlib.Path) -> Dict:
         # usfm = f.read().decode("utf-8-sig").lstrip()
         usfm = f.read().lstrip()
         # __logger.info("decoded file {}, usfm: {}".format(filePath, usfm))
-        if usfm[:4] == r"\id " and usfm[4:7] in silNames:
+        if usfm[:4] == r"\id ":  # and usfm[4:7] in silNames:
             loaded_book[bookID(usfm)] = usfm
             __logger.info("FINISHED LOADING\n")
         else:
             __logger.info("Ignored {}".format(filePath))
-            __logger.info("Ignored usfm: {}".format(usfm[0:40]))
+            __logger.info("Ignored usfm[0:40]: {}".format(usfm[0:40]))
             raise exceptions.MalformedUsfmError
     return loaded_book
-
-
-# def loadBooks(files: List[pathlib.Path]) -> Dict:
-#     loaded_books = {}
-#     # dirList = os.listdir(path)
-#     __logger.info("LOADING ALL USFM FILES: {}".format(files))
-#     # for fname in dirList:
-#     for fname in files:
-
-#         # full_file_name = os.path.join(path, fname)
-#         full_file_name = fname
-#         if not os.path.isfile(full_file_name):
-#             continue
-
-#         # if fname[-4:].lower() in [".pdf", ".sig"]:
-#         if fname.suffix.lower() in [".pdf", ".sig"]:
-#             continue
-
-#         with open(full_file_name, "r") as f:
-#             __logger.info("opened file {}".format(full_file_name))
-#             # usfm = f.read().decode("utf-8-sig").lstrip()
-#             usfm = f.read().lstrip()
-#             # __logger.info("decoded file {}, usfm: {}".format(full_file_name, usfm))
-#             if usfm[:4] == r"\id " and usfm[4:7] in silNames:
-#                 loaded_books[bookID(usfm)] = usfm
-#                 # __logger.info("loaded_books: {}".format(loaded_books))
-#             else:
-#                 __logger.info("Ignored " + fname)
-#     __logger.info("FINISHED LOADING\n")
-#     return loaded_books
 
 
 def orderFor(booksDict):
