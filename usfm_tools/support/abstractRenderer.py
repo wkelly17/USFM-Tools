@@ -12,7 +12,7 @@ except:
     from .books import loadBook, silNames
     from .parseUsfm import parseString
 
-__logger = logging.getLogger("usfm_tools")
+logger = logging.getLogger("usfm_tools")
 
 
 class AbstractRenderer(object):
@@ -49,12 +49,12 @@ class AbstractRenderer(object):
                 t0 = time.time()
                 tokens = parseString(self.booksUsfm[bookName])
                 t1 = time.time()
-                __logger.info("Time for parsing USFM, {}: {}".format(bookName, t1 - t0))
+                logger.info("Time for parsing USFM, {}: {}".format(bookName, t1 - t0))
                 t0 = time.time()
                 for t in tokens:
                     t.renderOn(self)
                 t1 = time.time()
-                __logger.info(
+                logger.info(
                     "Time for rendering parsed/reified USFM, {}, to output format (e.g., HTML): {}".format(
                         bookName, t1 - t0
                     )
@@ -64,9 +64,21 @@ class AbstractRenderer(object):
                 if bookName in self.booksUsfm:
                     self.writeLog("     (" + bookName + ")")
                     # tokens = parseUsfm.parseString(self.booksUsfm[bookName])
+                    t0 = time.time()
                     tokens = parseString(self.booksUsfm[bookName])
+                    t1 = time.time()
+                    logger.info(
+                        "Time for parsing USFM, {}: {}".format(bookName, t1 - t0)
+                    )
+                    t0 = time.time()
                     for t in tokens:
                         t.renderOn(self)
+                    t1 = time.time()
+                    logger.info(
+                        "Time for rendering parsed/reified USFM, {}, to output format (e.g., HTML): {}".format(
+                            bookName, t1 - t0
+                        )
+                    )
         if len(self.unknowns):
             print("Skipped unknown tokens: {0}".format(", ".join(set(self.unknowns))))
 
