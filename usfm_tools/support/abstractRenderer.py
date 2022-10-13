@@ -51,6 +51,7 @@ class AbstractRenderer(object):
                 tokens = parseString(self.booksUsfm[bookName])
                 t1 = time.time()
                 logger.info("Time for parsing USFM, {}: {}".format(bookName, t1 - t0))
+                print("Time for parsing USFM, {}: {}".format(bookName, t1 - t0))
                 t0 = time.time()
                 for t in tokens:
                     t.renderOn(self)
@@ -71,6 +72,7 @@ class AbstractRenderer(object):
                     logger.info(
                         "Time for parsing USFM, {}: {}".format(bookName, t1 - t0)
                     )
+                    print("Time for parsing USFM, {}: {}".format(bookName, t1 - t0))
                     t0 = time.time()
                     for t in tokens:
                         t.renderOn(self)
