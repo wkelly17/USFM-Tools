@@ -7,7 +7,6 @@ import logging
 import pathlib
 
 from usfm_tools.support import exceptions
-from typing import Dict, List
 
 __logger = logging.getLogger("usfm_tools")
 
@@ -371,7 +370,7 @@ def bookName(usfm):
 
 
 # def loadBooks(path):
-def loadBook(filePath: pathlib.Path) -> Dict:
+def loadBook(filePath: pathlib.Path) -> dict:
     loaded_book = {}
     # dirList = os.listdir(path)
     __logger.info("LOADING USFM FILE: {}".format(filePath))
