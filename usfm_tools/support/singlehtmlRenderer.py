@@ -1,9 +1,6 @@
 import codecs
-import datetime
 import logging
 import pathlib
-import re
-from typing import List
 
 try:
     from abstractRenderer import AbstractRenderer
@@ -17,6 +14,7 @@ except:
 #
 #   Simplest renderer. Ignores everything except ascii text.
 #
+
 logger = logging.getLogger("usfm_tools")
 
 

@@ -3,7 +3,7 @@
 
 import logging
 import pathlib
-from typing import Dict, List
+import time
 
 try:
     from books import loadBook, silNames
@@ -18,7 +18,7 @@ logger = logging.getLogger("usfm_tools")
 class AbstractRenderer(object):
 
     # booksUsfm = None
-    booksUsfm: Dict
+    booksUsfm: dict
 
     # FIXME This needs to be localized for non-English languages,
     # however it is used.
