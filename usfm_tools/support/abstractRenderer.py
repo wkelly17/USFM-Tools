@@ -32,6 +32,7 @@ class AbstractRenderer(object):
     def loadUSFM(self, filePath: pathlib.Path) -> None:
         # self.booksUsfm = loadBooks(usfmDir)
         # self.booksUsfm = loadBooks(files)
+        logger.info("About to loadBook")
         self.booksUsfm = loadBook(filePath)
 
     # def loadUSFM(self, files: List[pathlib.Path]) -> None:
