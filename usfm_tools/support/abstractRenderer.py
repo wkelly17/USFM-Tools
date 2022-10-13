@@ -46,9 +46,19 @@ class AbstractRenderer(object):
             for bookName in self.booksUsfm:
                 self.writeLog("     (" + bookName + ")")
                 # tokens = parseUsfm.parseString(self.booksUsfm[bookName])
+                t0 = time.time()
                 tokens = parseString(self.booksUsfm[bookName])
+                t1 = time.time()
+                logger.debug("Time for parsing USFM, %s: %s", bookName, t1 - t0)
+                t0 = time.time()
                 for t in tokens:
                     t.renderOn(self)
+                t1 = time.time()
+                logger.debug(
+                    "Time for rendering parsed/reified USFM, %s, to output format (e.g., HTML): %s",
+                    bookName,
+                    t1 - t0,
+                )
         except:
             for bookName in silNames:
                 if bookName in self.booksUsfm:
