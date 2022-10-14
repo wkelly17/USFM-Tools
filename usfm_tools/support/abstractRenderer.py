@@ -12,10 +12,10 @@ except:
     from .books import loadBook, silNames
     from .parseUsfm import parseString
 
-logger = logging.getLogger("usfm_tools")
-
 
 class AbstractRenderer(object):
+
+    logger = logging.getLogger("usfm_tools")
 
     # booksUsfm = None
     booksUsfm: dict
