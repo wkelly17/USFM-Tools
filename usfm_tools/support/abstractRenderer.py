@@ -13,9 +13,10 @@ except:
     from .parseUsfm import parseString
 
 
-class AbstractRenderer(object):
+logger = logging.getLogger("usfm_tools")
 
-    logger = logging.getLogger("usfm_tools")
+
+class AbstractRenderer(object):
 
     # booksUsfm = None
     booksUsfm: dict
