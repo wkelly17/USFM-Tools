@@ -1,4 +1,4 @@
-from setuptools import setup
+from distutils.core import setup
 
 setup(
     name="usfm_tools",
@@ -10,12 +10,12 @@ setup(
     keywords="unfoldingWord usfm tools",
     url="https://github.com/linearcombination/USFM-Tools",
     packages=["usfm_tools", "usfm_tools/support"],
+    package_data={"usfm_tools": ["py.typed"], "usfm_tools/support": ["py.typed"]},
     long_description="This project comprises a framework for transforming .usfm files into specified targets. It is "
     "primarily used for the Open English Bible, and may need adjustment if used for other purposes. ",
     classifiers=[],
     install_requires=[
         "bs4",
-        "coveralls",
         "future",
         "pyparsing",
     ],
