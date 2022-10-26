@@ -6,9 +6,10 @@ import os
 import logging
 import pathlib
 
+from usfm_tools import support
 from usfm_tools.support import exceptions
 
-__logger = logging.getLogger("usfm_tools")
+logger = logging.getLogger("usfm_tools")
 
 bookKeys = {
     "GEN": "001",
@@ -320,41 +321,13 @@ bookNames = [
 books = bookNames
 
 
-# noinspection PyPep8Naming
-def readerName(num):
-    return readerNames[int(num) - 1]
-
-
-# noinspection PyPep8Naming
-def fullName(num):
-    return bookNames[int(num) - 1]
-
-
-# noinspection PyPep8Naming,PyUnusedLocal
-def nextChapter(bookNumber, chapterNumber):
-    return 1, 1
-
-
-# noinspection PyPep8Naming
-def previousChapter(bookNumber, chapterNumber):
-    if chapterNumber > 1:
-        return bookNumber, chapterNumber - 1
-    else:
-        if bookNumber > 1:
-            return bookNumber - 1, 50  # bookSize[bookNumber -1])
-        else:
-            return 1, 1
-
-
-# noinspection PyPep8Naming
-def bookKeyForIdValue(book_id):
+def bookKeyForIdValue(book_id: str) -> str:
     e = book_id.find(" ")
     i = book_id if e == -1 else book_id[:e]
     return bookKeys[i]
 
 
-# noinspection PyPep8Naming
-def bookID(usfm):
+def bookID(usfm: str) -> str:
     s = usfm.find(r"\id ") + 4
     e = usfm.find(" ", s)
     e2 = usfm.find("\n", s)
@@ -362,53 +335,25 @@ def bookID(usfm):
     return usfm[s:e].strip()
 
 
-# noinspection PyPep8Naming
-def bookName(usfm):
+def bookName(usfm: str) -> str:
     book_id = bookID(usfm)
     index = silNames.index(book_id)
     return bookNames[index]
 
 
-# def loadBooks(path):
-def loadBook(filePath: pathlib.Path) -> dict:
+def loadBook(filePath: pathlib.Path) -> dict[str, str]:
     loaded_book = {}
-    # dirList = os.listdir(path)
-    __logger.info("LOADING USFM FILE: {}".format(filePath))
-    # for fname in dirList:
-    # for fname in files:
-
-    # full_file_name = os.path.join(path, fname)
-    # full_file_name = fname
-    # full_file_name = filePath
+    logger.info("Loading USFM file: {}".format(filePath))
     if not os.path.isfile(filePath):
         return {}
 
-    # if fname[-4:].lower() in [".pdf", ".sig"]:
-    # NOTE This can't happen because of how this is called.
-    # if filePath.suffix.lower() in [".pdf", ".sig"]:
-    #     return
-
     with open(filePath, "r") as f:
-        __logger.info("Opened file: {}".format(filePath))
-        # usfm = f.read().decode("utf-8-sig").lstrip()
+        logger.info("Opened file: {}".format(filePath))
         usfm = f.read().lstrip()
-        # __logger.info("decoded file {}, usfm: {}".format(filePath, usfm))
-        if usfm[:4] == r"\id ":  # and usfm[4:7] in silNames:
+        if usfm[:4] == r"\id ":
             loaded_book[bookID(usfm)] = usfm
-            __logger.info("FINISHED LOADING\n")
+            logger.info("Finished loading\n")
         else:
-            __logger.info("Ignored: {}".format(filePath))
+            logger.info("Ignored: {}".format(filePath))
             raise exceptions.MalformedUsfmError
     return loaded_book
-
-
-def orderFor(booksDict):
-    order = silNames
-    if "PSA" in booksDict and "GEN" not in booksDict and "MAT" in booksDict:
-        # This is a big hack. When doing Psalms + NT, put Psalms last
-        order = silNamesNTPsalms
-    a = []
-    for book_name in order:
-        if book_name in booksDict:
-            a.append(booksDict[book_name])
-    return a

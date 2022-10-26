@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-#
-
-from __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals, annotations
 import sys
-from pyparsing import (
+from pyparsing import (  # type: ignore
     Word,
     OneOrMore,
     nums,
@@ -15,31 +12,37 @@ from pyparsing import (
     Optional,
     CharsNotIn,
     MatchFirst,
+    ParseResults,
 )
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from usfm_tools.support.abstractRenderer import AbstractRenderer
 import logging
+from typing import Any
 
-__logger = logging.getLogger("usfm_tools")
+logger = logging.getLogger("usfm_tools")
 
 
-def usfmToken(key):
+def usfmToken(key: str) -> Group:
     return Group(Suppress(backslash) + Literal(key) + Suppress(White()))
 
 
-def usfmBackslashToken(key):
+def usfmBackslashToken(key: str) -> Group:
     return Group(Literal(key))
 
 
-def usfmEndToken(key):
+def usfmEndToken(key: str) -> Group:
     return Group(Suppress(backslash) + Literal(key + "*"))
 
 
-def usfmTokenValue(key, value):
+def usfmTokenValue(key: str, value: CharsNotIn) -> Group:
     return Group(
         Suppress(backslash) + Literal(key) + Suppress(White()) + Optional(value)
     )
 
 
-def usfmTokenNumber(key):
+def usfmTokenNumber(key: str) -> Group:
     return Group(
         Suppress(backslash)
         + Literal(key)
@@ -364,18 +367,18 @@ usfm = OneOrMore(element)
 
 
 # input string
-def parseString(unicodeString):
+def parseString(unicodeString: str) -> list[Any]:
     try:
         cleaned = clean(unicodeString)
         tokens = usfm.parseString(cleaned, parseAll=True)
     except Exception as e:
-        __logger.error(e)
-        __logger.error(repr(unicodeString[:50]))
+        logger.error(e)
+        logger.error(repr(unicodeString[:50]))
         sys.exit()
     return [createToken(t) for t in tokens]
 
 
-def clean(unicodeString):
+def clean(unicodeString: str) -> str:
     # We need to clean the input a bit. For a start, until
     # we work out what to do, non breaking spaces will be ignored
     # ie 0xa0
@@ -395,7 +398,7 @@ def clean(unicodeString):
     return ret_value
 
 
-def createToken(t):
+def createToken(t: ParseResults) -> UsfmToken:
     options = {
         "id": IDToken,
         "ide": IDEToken,
@@ -545,1464 +548,1511 @@ def createToken(t):
     raise Exception(t[0])
 
 
-# noinspection PyMethodMayBeStatic
 class UsfmToken(object):
-    def __init__(self, value=""):
+    def __init__(self, value: str = "") -> None:
         self.value = value
 
-    def getValue(self):
+    def getValue(self) -> str:
         return self.value
 
-    def isUnknown(self):
+    def isUnknown(self) -> bool:
         return False
 
-    def isID(self):
+    def isID(self) -> bool:
         return False
 
-    def isIDE(self):
+    def isIDE(self) -> bool:
         return False
 
-    def isSTS(self):
+    def isSTS(self) -> bool:
         return False
 
-    def isH(self):
+    def isH(self) -> bool:
         return False
 
-    def isTOC1(self):
+    def isTOC1(self) -> bool:
         return False
 
-    def isTOC2(self):
+    def isTOC2(self) -> bool:
         return False
 
-    def isTOC3(self):
+    def isTOC3(self) -> bool:
         return False
 
-    def isMT(self):
+    def isMT(self) -> bool:
         return False
 
-    def isMT2(self):
+    def isMT2(self) -> bool:
         return False
 
-    def isMT3(self):
+    def isMT3(self) -> bool:
         return False
 
-    def isMS(self):
+    def isMS(self) -> bool:
         return False
 
-    def isMS2(self):
+    def isMS2(self) -> bool:
         return False
 
-    def isMR(self):
+    def isMR(self) -> bool:
         return False
 
-    def isR(self):
+    def isR(self) -> bool:
         return False
 
-    def isP(self):
+    def isP(self) -> bool:
         return False
 
-    def isPI(self):
+    def isPI(self) -> bool:
         return False
 
-    def isPI2(self):
+    def isPI2(self) -> bool:
         return False
 
-    def isS(self):
+    def isS(self) -> bool:
         return False
 
-    def isS2(self):
+    def isS2(self) -> bool:
         return False
 
-    def isS3(self):
+    def isS3(self) -> bool:
         return False
 
-    def isS4(self):
+    def isS4(self) -> bool:
         return False
 
-    def isS5(self):
+    def isS5(self) -> bool:
         return False
 
-    def isMI(self):
+    def isMI(self) -> bool:
         return False
 
-    def isC(self):
+    def isC(self) -> bool:
         return False
 
-    def isCAS(self):
+    def isCAS(self) -> bool:
         return False
 
-    def isCAE(self):
+    def isCAE(self) -> bool:
         return False
 
-    def isCL(self):
+    def isCL(self) -> bool:
         return False
 
-    def isV(self):
+    def isV(self) -> bool:
         return False
 
-    def isWJS(self):
+    def isWJS(self) -> bool:
         return False
 
-    def isWJE(self):
+    def isWJE(self) -> bool:
         return False
 
-    def isTEXT(self):
+    def isTEXT(self) -> bool:
         return False
 
-    def isQ(self):
+    def isQ(self) -> bool:
         return False
 
-    def isQ1(self):
+    def isQ1(self) -> bool:
         return False
 
-    def isQ2(self):
+    def isQ2(self) -> bool:
         return False
 
-    def isQ3(self):
+    def isQ3(self) -> bool:
         return False
 
-    def isQ4(self):
+    def isQ4(self) -> bool:
         return False
 
-    def isQA(self):
+    def isQA(self) -> bool:
         return False
 
-    def isQAC(self):
+    def isQAC(self) -> bool:
         return False
 
-    def isQACE(self):
+    def isQACE(self) -> bool:
         return False
 
-    def isQC(self):
+    def isQC(self) -> bool:
         return False
 
-    def isQM(self):
+    def isQM(self) -> bool:
         return False
 
-    def isQM1(self):
+    def isQM1(self) -> bool:
         return False
 
-    def isQM2(self):
+    def isQM2(self) -> bool:
         return False
 
-    def isQM3(self):
+    def isQM3(self) -> bool:
         return False
 
-    def isQR(self):
+    def isQR(self) -> bool:
         return False
 
-    def isQSS(self):
+    def isQSS(self) -> bool:
         return False
 
-    def isQSE(self):
+    def isQSE(self) -> bool:
         return False
 
-    def isQTS(self):
+    def isQTS(self) -> bool:
         return False
 
-    def isQTE(self):
+    def isQTE(self) -> bool:
         return False
 
-    def isNB(self):
+    def isNB(self) -> bool:
         return False
 
-    def isFS(self):
+    def isFS(self) -> bool:
         return False
 
-    def isFR(self):
+    def isFR(self) -> bool:
         return False
 
-    def isFRE(self):
+    def isFRE(self) -> bool:
         return False
 
-    def isFK(self):
+    def isFK(self) -> bool:
         return False
 
-    def isFT(self):
+    def isFT(self) -> bool:
         return False
 
-    def isFQ(self):
+    def isFQ(self) -> bool:
         return False
 
-    def isFQA(self):
+    def isFQA(self) -> bool:
         return False
 
-    def isFQAE(self):
+    def isFQAE(self) -> bool:
         return False
 
-    def isFQB(self):
+    def isFQB(self) -> bool:
         return False
 
-    def isFE(self):
+    def isFE(self) -> bool:
         return False
 
-    def isFP(self):
+    def isFP(self) -> bool:
         return False
 
-    def isXS(self):
+    def isXS(self) -> bool:
         return False
 
-    def isXDCS(self):
+    def isXDCS(self) -> bool:
         return False
 
-    def isXDCE(self):
+    def isXDCE(self) -> bool:
         return False
 
-    def isXO(self):
+    def isXO(self) -> bool:
         return False
 
-    def isXT(self):
+    def isXT(self) -> bool:
         return False
 
-    def isXE(self):
+    def isXE(self) -> bool:
         return False
 
-    def isIS(self):
+    def isIS(self) -> bool:
         return False
 
-    def isIE(self):
+    def isIE(self) -> bool:
         return False
 
-    def isSCS(self):
+    def isSCS(self) -> bool:
         return False
 
-    def isSCE(self):
+    def isSCE(self) -> bool:
         return False
 
-    def isLI(self):
+    def isLI(self) -> bool:
         return False
 
-    def isLI1(self):
+    def isLI1(self) -> bool:
         return False
 
-    def isLI2(self):
+    def isLI2(self) -> bool:
         return False
 
-    def isLI3(self):
+    def isLI3(self) -> bool:
         return False
 
-    def isLI4(self):
+    def isLI4(self) -> bool:
         return False
 
-    def isD(self):
+    def isD(self) -> bool:
         return False
 
-    def isSP(self):
+    def isSP(self) -> bool:
         return False
 
-    def isADDS(self):
+    def isADDS(self) -> bool:
         return False
 
-    def isADDE(self):
+    def isADDE(self) -> bool:
         return False
 
-    def isNDS(self):
+    def isNDS(self) -> bool:
         return False
 
-    def isNDE(self):
+    def isNDE(self) -> bool:
         return False
 
-    def isTLS(self):
+    def isTLS(self) -> bool:
         return False
 
-    def isTLE(self):
+    def isTLE(self) -> bool:
         return False
 
-    def isBDS(self):
+    def isBDS(self) -> bool:
         return False
 
-    def isBDE(self):
+    def isBDE(self) -> bool:
         return False
 
-    def isBDITS(self):
+    def isBDITS(self) -> bool:
         return False
 
-    def isBDITE(self):
+    def isBDITE(self) -> bool:
         return False
 
-    def isPBR(self):
+    def isPBR(self) -> bool:
         return False
 
-    def isM(self):
+    def isM(self) -> bool:
         return False
 
-    def isREM(self):
+    def isREM(self) -> bool:
         return False
 
-    def isTR(self):
+    def isTR(self) -> bool:
         return False
 
-    def isTH1(self):
+    def isTH1(self) -> bool:
         return False
 
-    def isTH2(self):
+    def isTH2(self) -> bool:
         return False
 
-    def isTH3(self):
+    def isTH3(self) -> bool:
         return False
 
-    def isTH4(self):
+    def isTH4(self) -> bool:
         return False
 
-    def isTH5(self):
+    def isTH5(self) -> bool:
         return False
 
-    def isTH6(self):
+    def isTH6(self) -> bool:
         return False
 
-    def isTHR1(self):
+    def isTHR1(self) -> bool:
         return False
 
-    def isTHR2(self):
+    def isTHR2(self) -> bool:
         return False
 
-    def isTHR3(self):
+    def isTHR3(self) -> bool:
         return False
 
-    def isTHR4(self):
+    def isTHR4(self) -> bool:
         return False
 
-    def isTHR5(self):
+    def isTHR5(self) -> bool:
         return False
 
-    def isTHR6(self):
+    def isTHR6(self) -> bool:
         return False
 
-    def isTC1(self):
+    def isTC1(self) -> bool:
         return False
 
-    def isTC2(self):
+    def isTC2(self) -> bool:
         return False
 
-    def isTC3(self):
+    def isTC3(self) -> bool:
         return False
 
-    def isTC4(self):
+    def isTC4(self) -> bool:
         return False
 
-    def isTC5(self):
+    def isTC5(self) -> bool:
         return False
 
-    def isTC6(self):
+    def isTC6(self) -> bool:
         return False
 
-    def isTCR1(self):
+    def isTCR1(self) -> bool:
         return False
 
-    def isTCR2(self):
+    def isTCR2(self) -> bool:
         return False
 
-    def isTCR3(self):
+    def isTCR3(self) -> bool:
         return False
 
-    def isTCR4(self):
+    def isTCR4(self) -> bool:
         return False
 
-    def isTCR5(self):
+    def isTCR5(self) -> bool:
         return False
 
-    def isTCR6(self):
+    def isTCR6(self) -> bool:
         return False
 
-    def is_toc1(self):
+    def is_toc1(self) -> bool:
         return False
 
-    def is_toc2(self):
+    def is_toc2(self) -> bool:
         return False
 
-    def is_toc3(self):
+    def is_toc3(self) -> bool:
         return False
 
-    def is_is1(self):
+    def is_is1(self) -> bool:
         return False
 
-    def is_imt1(self):
+    def is_imt1(self) -> bool:
         return False
 
-    def is_imt2(self):
+    def is_imt2(self) -> bool:
         return False
 
-    def is_imt3(self):
+    def is_imt3(self) -> bool:
         return False
 
-    def is_ip(self):
+    def is_ip(self) -> bool:
         return False
 
-    def is_iot(self):
+    def is_iot(self) -> bool:
         return False
 
-    def is_io1(self):
+    def is_io1(self) -> bool:
         return False
 
-    def is_io2(self):
+    def is_io2(self) -> bool:
         return False
 
-    def is_ior_s(self):
+    def is_ior_s(self) -> bool:
         return False
 
-    def is_ior_e(self):
+    def is_ior_e(self) -> bool:
         return False
 
-    def is_bk_s(self):
+    def is_bk_s(self) -> bool:
         return False
 
-    def is_bk_e(self):
+    def is_bk_e(self) -> bool:
         return False
 
 
 class UnknownToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderUnknown(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderUnknown(self)
 
-    def isUnknown(self):
+    def isUnknown(self) -> bool:
         return True
 
 
 class EscapedToken(UsfmToken):
-    def renderOn(self, printer):
+    def renderOn(self, printer: AbstractRenderer) -> None:
         self.value = "\\"
-        return printer.renderTEXT(self)
+        printer.renderTEXT(TEXTToken(self.value))
 
-    def isUnknown(self):
+    def isUnknown(self) -> bool:
         return True
 
 
 class IDToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderID(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderID(self)
 
-    def isID(self):
+    def isID(self) -> bool:
         return True
 
 
 class IDEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderIDE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderIDE(self)
 
-    def isIDE(self):
+    def isIDE(self) -> bool:
         return True
 
 
 class STSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderSTS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderSTS(self)
 
-    def isSTS(self):
+    def isSTS(self) -> bool:
         return True
 
 
 class HToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderH(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderH(self)
 
-    def isH(self):
+    def isH(self) -> bool:
         return True
 
 
 class TOC1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTOC1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTOC1(self)
 
-    def isTOC1(self):
+    def isTOC1(self) -> bool:
         return True
 
 
 class TOC2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTOC2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTOC2(self)
 
-    def isTOC2(self):
+    def isTOC2(self) -> bool:
         return True
 
 
 class TOC3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTOC3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTOC3(self)
 
-    def isTOC3(self):
+    def isTOC3(self) -> bool:
         return True
 
 
 class MTToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMT(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMT(self)
 
-    def isMT(self):
+    def isMT(self) -> bool:
         return True
 
 
 class MT2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMT2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMT2(self)
 
-    def isMT2(self):
+    def isMT2(self) -> bool:
         return True
 
 
 class MT3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMT3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMT3(self)
 
-    def isMT3(self):
+    def isMT3(self) -> bool:
         return True
 
 
 class MSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMS(self)
 
-    def isMS(self):
+    def isMS(self) -> bool:
         return True
 
 
 class MS2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMS2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMS2(self)
 
-    def isMS2(self):
+    def isMS2(self) -> bool:
         return True
 
 
 class MRToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMR(self)
 
-    def isMR(self):
+    def isMR(self) -> bool:
         return True
 
 
 class MIToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderMI(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderMI(self)
 
-    def isMI(self):
+    def isMI(self) -> bool:
         return True
 
 
 class RToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderR(self)
 
-    def isR(self):
+    def isR(self) -> bool:
         return True
 
 
 class PToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderP(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderP(self)
 
-    def isP(self):
+    def isP(self) -> bool:
         return True
 
 
-# noinspection PyMethodMayBeStatic
 class BToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderB(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderB(self)
 
-    def isB(self):
+    def isB(self) -> bool:
         return True
 
 
 class CToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderC(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderC(self)
 
-    def isC(self):
+    def isC(self) -> bool:
         return True
 
 
 class CASToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderCAS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderCAS(self)
+        pass
 
-    def isCAS(self):
+    def isCAS(self) -> bool:
         return True
 
 
 class CAEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderCAE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderCAE(self)
+        pass
 
-    def isCAE(self):
+    def isCAE(self) -> bool:
         return True
 
 
 class CLToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderCL(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderCL(self)
+        pass
 
-    def isCL(self):
+    def isCL(self) -> bool:
         return True
 
 
 class VToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderV(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderV(self)
 
-    def isV(self):
+    def isV(self) -> bool:
         return True
 
 
 class TEXTToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTEXT(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTEXT(self)
 
-    def isTEXT(self):
+    def isTEXT(self) -> bool:
         return True
 
 
 class WJSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderWJS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderWJS(self)
 
-    def isWJS(self):
+    def isWJS(self) -> bool:
         return True
 
 
 class WJEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderWJE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderWJE(self)
 
-    def isWJE(self):
+    def isWJE(self) -> bool:
         return True
 
 
 class SToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderS(self)
 
-    def isS(self):
+    def isS(self) -> bool:
         return True
 
 
 class S2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderS2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderS2(self)
 
-    def isS2(self):
+    def isS2(self) -> bool:
         return True
 
 
 class S3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderS3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderS3(self)
 
-    def isS3(self):
+    def isS3(self) -> bool:
         return True
 
 
 class S4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderS4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderS4(self)
+        pass
 
-    def isS4(self):
+    def isS4(self) -> bool:
         return True
 
 
 class S5Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderS5(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderS5(self)
+        pass
 
-    def isS5(self):
+    def isS5(self) -> bool:
         return True
 
 
 class QToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQ(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQ(self)
 
-    def isQ(self):
+    def isQ(self) -> bool:
         return True
 
 
 class Q1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQ1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQ1(self)
 
-    def isQ1(self):
+    def isQ1(self) -> bool:
         return True
 
 
 class Q2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQ2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQ2(self)
 
-    def isQ2(self):
+    def isQ2(self) -> bool:
         return True
 
 
 class Q3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQ3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQ3(self)
 
-    def isQ3(self):
+    def isQ3(self) -> bool:
         return True
 
 
 class Q4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQ4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQ4(self)
+        pass
 
-    def isQ4(self):
+    def isQ4(self) -> bool:
         return True
 
 
 class QAToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQA(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQA(self)
+        pass
 
-    def isQA(self):
+    def isQA(self) -> bool:
         return True
 
 
 class QACToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQAC(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQAC(self)
+        pass
 
-    def isQAC(self):
+    def isQAC(self) -> bool:
         return True
 
 
 class QACEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQACE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQACE(self)
+        pass
 
-    def isQACE(self):
+    def isQACE(self) -> bool:
         return True
 
 
 class QCToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQC(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQC(self)
+        pass
 
-    def isQC(self):
+    def isQC(self) -> bool:
         return True
 
 
 class QMToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQM(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQM(self)
+        pass
 
-    def isQM(self):
+    def isQM(self) -> bool:
         return True
 
 
 class QM1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQM1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQM1(self)
+        pass
 
-    def isQM1(self):
+    def isQM1(self) -> bool:
         return True
 
 
 class QM2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQM2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQM2(self)
+        pass
 
-    def isQM2(self):
+    def isQM2(self) -> bool:
         return True
 
 
 class QM3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQM3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQM3(self)
+        pass
 
-    def isQM3(self):
+    def isQM3(self) -> bool:
         return True
 
 
 class QRToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQR(self)
+        pass
 
-    def isQR(self):
+    def isQR(self) -> bool:
         return True
 
 
 class QSSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQSS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQSS(self)
+        pass
 
-    def isQSS(self):
+    def isQSS(self) -> bool:
         return True
 
 
 class QSEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQSE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderQSE(self)
+        pass
 
-    def isQSE(self):
+    def isQSE(self) -> bool:
         return True
 
 
 class QTSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQTS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQTS(self)
 
-    def isQTS(self):
+    def isQTS(self) -> bool:
         return True
 
 
 class QTEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderQTE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderQTE(self)
 
-    def isQTE(self):
+    def isQTE(self) -> bool:
         return True
 
 
 class NBToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderNB(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderNB(self)
 
-    def isNB(self):
+    def isNB(self) -> bool:
         return True
 
 
 class FSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFS(self)
 
-    def isFS(self):
+    def isFS(self) -> bool:
         return True
 
 
 class FRToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFR(self)
 
-    def isFR(self):
+    def isFR(self) -> bool:
         return True
 
 
 class FREToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFRE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFRE(self)
 
-    def isFRE(self):
+    def isFRE(self) -> bool:
         return True
 
 
 class FKToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFK(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFK(self)
 
-    def isFK(self):
+    def isFK(self) -> bool:
         return True
 
 
 class FTToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFT(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFT(self)
 
-    def isFT(self):
+    def isFT(self) -> bool:
         return True
 
 
 class FQToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFQ(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFQ(self)
 
-    def isFQ(self):
+    def isFQ(self) -> bool:
         return True
 
 
 class FQAToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFQA(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderFQA(self)
+        pass
 
-    def isFQA(self):
+    def isFQA(self) -> bool:
         return True
 
 
 class FQAEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFQAE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderFQAE(self)
+        pass
 
-    def isFQAE(self):
+    def isFQAE(self) -> bool:
         return True
 
 
 class FQBToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFQAE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderFQAE(self)
+        pass
 
-    def isFQB(self):
+    def isFQB(self) -> bool:
         return True
 
 
 class FEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFE(self)
 
-    def isFE(self):
+    def isFE(self) -> bool:
         return True
 
 
 class FPToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderFP(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderFP(self)
 
-    def isFP(self):
+    def isFP(self) -> bool:
         return True
 
 
 class ISToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderIS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderIS(self)
 
-    def isIS(self):
+    def isIS(self) -> bool:
         return True
 
 
 class IEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderIE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderIE(self)
 
-    def isIE(self):
+    def isIE(self) -> bool:
         return True
 
 
 class BDSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderBDS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderBDS(self)
 
-    def isBDS(self):
+    def isBDS(self) -> bool:
         return True
 
 
 class BDEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderBDE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderBDE(self)
 
-    def isBDE(self):
+    def isBDE(self) -> bool:
         return True
 
 
 class BDITSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderBDITS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderBDITS(self)
 
-    def isBDITS(self):
+    def isBDITS(self) -> bool:
         return True
 
 
 class BDITEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderBDITE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderBDITE(self)
 
-    def isBDITE(self):
+    def isBDITE(self) -> bool:
         return True
 
 
 class LIToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderLI(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderLI(self)
 
-    def isLI(self):
+    def isLI(self) -> bool:
         return True
 
 
 class LI1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderLI1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderLI1(self)
+        pass
 
-    def isLI1(self):
+    def isLI1(self) -> bool:
         return True
 
 
 class LI2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderLI2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderLI2(self)
+        pass
 
-    def isLI1(self):
+    def isLI1(self) -> bool:
         return True
 
 
 class LI3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderLI3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderLI3(self)
+        pass
 
-    def isLI1(self):
+    def isLI1(self) -> bool:
         return True
 
 
 class LI4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderLI4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderLI4(self)
+        pass
 
-    def isLI1(self):
+    def isLI1(self) -> bool:
         return True
 
 
 class DToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderD(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderD(self)
 
-    def isD(self):
+    def isD(self) -> bool:
         return True
 
 
 class SPToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderSP(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderSP(self)
 
-    def isSP(self):
+    def isSP(self) -> bool:
         return True
 
 
 class ADDSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderADDS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderADDS(self)
 
-    def isADDS(self):
+    def isADDS(self) -> bool:
         return True
 
 
 class ADDEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderADDE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderADDE(self)
 
-    def isADDE(self):
+    def isADDE(self) -> bool:
         return True
 
 
 class NDSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderNDS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderNDS(self)
 
-    def isNDS(self):
+    def isNDS(self) -> bool:
         return True
 
 
 class NDEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderNDE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderNDE(self)
 
-    def isNDE(self):
+    def isNDE(self) -> bool:
         return True
 
 
 class PBRToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderPBR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderPBR(self)
 
-    def isPBR(self):
+    def isPBR(self) -> bool:
         return True
 
 
 # Cross References
 class XSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXS(self)
 
-    def isXS(self):
+    def isXS(self) -> bool:
         return True
 
 
 class XDCSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXDCS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXDCS(self)
 
-    def isXDCS(self):
+    def isXDCS(self) -> bool:
         return True
 
 
 class XDCEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXDCE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXDCE(self)
 
-    def isXDCE(self):
+    def isXDCE(self) -> bool:
         return True
 
 
 class XOToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXO(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXO(self)
 
-    def isXO(self):
+    def isXO(self) -> bool:
         return True
 
 
 class XTToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXT(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXT(self)
 
-    def isXT(self):
+    def isXT(self) -> bool:
         return True
 
 
 class XEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderXE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderXE(self)
 
-    def isXE(self):
+    def isXE(self) -> bool:
         return True
 
 
 class MToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderM(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderM(self)
 
-    def isM(self):
+    def isM(self) -> bool:
         return True
 
 
 # Transliterated Words
 class TLSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTLS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTLS(self)
 
-    def isTLS(self):
+    def isTLS(self) -> bool:
         return True
 
 
 class TLEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTLE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderTLE(self)
 
-    def isTLE(self):
+    def isTLE(self) -> bool:
         return True
 
 
 # Indenting paragraphs
 class PIToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderPI(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderPI(self)
 
-    def isPI(self):
+    def isPI(self) -> bool:
         return True
 
 
 class PI2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderPI2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderPI2(self)
 
-    def isPI2(self):
+    def isPI2(self) -> bool:
         return True
 
 
 # Small caps
 class SCSToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderSCS(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderSCS(self)
 
-    def isSCS(self):
+    def isSCS(self) -> bool:
         return True
 
 
 class SCEToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderSCE(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderSCE(self)
 
-    def isSCE(self):
+    def isSCE(self) -> bool:
         return True
 
 
 # REMarks
 class REMToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderREM(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.renderREM(self)
 
-    def isREM(self):
+    def isREM(self) -> bool:
         return True
 
 
 # Tables
 class TRToken(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTR(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTR(self)
+        pass
 
-    def isTR(self):
+    def isTR(self) -> bool:
         return True
 
 
 class TH1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH1(self)
+        pass
 
-    def isTH1(self):
+    def isTH1(self) -> bool:
         return True
 
 
 class TH2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH2(self)
+        pass
 
-    def isTH2(self):
+    def isTH2(self) -> bool:
         return True
 
 
 class TH3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH3(self)
+        pass
 
-    def isTH3(self):
+    def isTH3(self) -> bool:
         return True
 
 
 class TH4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH4(self)
+        pass
 
-    def isTH4(self):
+    def isTH4(self) -> bool:
         return True
 
 
 class TH5Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH5(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH5(self)
+        pass
 
-    def isTH5(self):
+    def isTH5(self) -> bool:
         return True
 
 
 class TH6Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTH6(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTH6(self)
+        pass
 
-    def isTH6(self):
+    def isTH6(self) -> bool:
         return True
 
 
 class THR1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR1(self)
+        pass
 
-    def isTHR1(self):
+    def isTHR1(self) -> bool:
         return True
 
 
 class THR2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR2(self)
+        pass
 
-    def isTHR2(self):
+    def isTHR2(self) -> bool:
         return True
 
 
 class THR3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR3(self)
+        pass
 
-    def isTHR3(self):
+    def isTHR3(self) -> bool:
         return True
 
 
 class THR4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR4(self)
+        pass
 
-    def isTHR4(self):
+    def isTHR4(self) -> bool:
         return True
 
 
 class THR5Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR5(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR5(self)
+        pass
 
-    def isTHR5(self):
+    def isTHR5(self) -> bool:
         return True
 
 
 class THR6Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTHR6(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTHR6(self)
+        pass
 
-    def isTHR6(self):
+    def isTHR6(self) -> bool:
         return True
 
 
 class TC1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC1(self)
+        pass
 
-    def isTC1(self):
+    def isTC1(self) -> bool:
         return True
 
 
 class TC2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC2(self)
+        pass
 
-    def isTC2(self):
+    def isTC2(self) -> bool:
         return True
 
 
 class TC3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC3(self)
+        pass
 
-    def isTC3(self):
+    def isTC3(self) -> bool:
         return True
 
 
 class TC4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC4(self)
+        pass
 
-    def isTC4(self):
+    def isTC4(self) -> bool:
         return True
 
 
 class TC5Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC5(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC5(self)
+        pass
 
-    def isTC5(self):
+    def isTC5(self) -> bool:
         return True
 
 
 class TC6Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTC6(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTC6(self)
+        pass
 
-    def isTC6(self):
+    def isTC6(self) -> bool:
         return True
 
 
 class TCR1Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR1(self)
+        pass
 
-    def isTCR1(self):
+    def isTCR1(self) -> bool:
         return True
 
 
 class TCR2Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR2(self)
+        pass
 
-    def isTCR2(self):
+    def isTCR2(self) -> bool:
         return True
 
 
 class TCR3Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR3(self)
+        pass
 
-    def isTCR3(self):
+    def isTCR3(self) -> bool:
         return True
 
 
 class TCR4Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR4(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR4(self)
+        pass
 
-    def isTCR4(self):
+    def isTCR4(self) -> bool:
         return True
 
 
 class TCR5Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR5(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR5(self)
+        pass
 
-    def isTCR5(self):
+    def isTCR5(self) -> bool:
         return True
 
 
 class TCR6Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.renderTCR6(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        # printer.renderTCR6(self)
+        pass
 
-    def isTCR6(self):
+    def isTCR6(self) -> bool:
         return True
 
 
 # Introductions
 class IS1_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_is1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_is1(self)
 
-    def is_is1(self):
+    def is_is1(self) -> bool:
         return True
 
 
 class IMT1_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_imt1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_imt1(self)
 
-    def is_imt1(self):
+    def is_imt1(self) -> bool:
         return True
 
 
 class IMT2_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_imt2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_imt2(self)
 
-    def is_imt2(self):
+    def is_imt2(self) -> bool:
         return True
 
 
 class IMT3_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_imt3(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_imt3(self)
 
-    def is_imt3(self):
+    def is_imt3(self) -> bool:
         return True
 
 
 class IP_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_ip(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_ip(self)
 
-    def is_ip(self):
+    def is_ip(self) -> bool:
         return True
 
 
 class IOT_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_iot(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_iot(self)
 
-    def is_iot(self):
+    def is_iot(self) -> bool:
         return True
 
 
 class IO1_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_io1(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_io1(self)
 
-    def is_io1(self):
+    def is_io1(self) -> bool:
         return True
 
 
 class IO2_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_io2(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_io2(self)
 
-    def is_io2(self):
+    def is_io2(self) -> bool:
         return True
 
 
 class IOR_S_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_ior_s(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_ior_s(self)
 
-    def is_ior_s(self):
+    def is_ior_s(self) -> bool:
         return True
 
 
 class IOR_E_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_ior_e(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_ior_e(self)
 
-    def is_ior_e(self):
+    def is_ior_e(self) -> bool:
         return True
 
 
 # Quoted book title
 class BK_S_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_bk_s(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_bk_s(self)
 
-    def is_bk_s(self):
+    def is_bk_s(self) -> bool:
         return True
 
 
 class BK_E_Token(UsfmToken):
-    def renderOn(self, printer):
-        return printer.render_bk_e(self)
+    def renderOn(self, printer: AbstractRenderer) -> None:
+        printer.render_bk_e(self)
 
-    def is_bk_e(self):
+    def is_bk_e(self) -> bool:
         return True
