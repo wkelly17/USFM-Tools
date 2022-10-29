@@ -1,4 +1,26 @@
-from distutils.core import setup
+from setuptools import setup, Extension
+from Cython.Build import cythonize
+
+
+ext_modules = cythonize(
+    [
+        Extension("usfm_tools.transform", ["usfm_tools/transform.py"]),
+        Extension(
+            "usfm_tools.support.abstractRenderer",
+            ["usfm_tools/support/abstractRenderer.py"],
+        ),
+        Extension(
+            "usfm_tools.support.singlehtmlRenderer",
+            ["usfm_tools/support/singlehtmlRenderer.py"],
+        ),
+        Extension("usfm_tools.support.parseUsfm", ["usfm_tools/support/parseUsfm.py"]),
+        Extension("usfm_tools.support.books", ["usfm_tools/support/books.py"]),
+        Extension(
+            "usfm_tools.support.exceptions", ["usfm_tools/support/exceptions.py"]
+        ),
+    ],
+    language_level="3",
+)
 
 setup(
     name="usfm_tools",
