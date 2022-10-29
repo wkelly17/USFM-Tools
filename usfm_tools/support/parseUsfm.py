@@ -1,4 +1,3 @@
-from __future__ import print_function, unicode_literals, annotations
 import sys
 from pyparsing import (  # type: ignore
     Word,
