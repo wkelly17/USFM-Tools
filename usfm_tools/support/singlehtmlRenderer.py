@@ -65,7 +65,7 @@ from usfm_tools.support.parseUsfm import (
     QACToken,
     QACEToken,
 )
-
+from typing import Dict
 
 logger = logging.getLogger("usfm_tools")
 
@@ -101,7 +101,7 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.listItemLevel = 0
         self.footnoteFlag = False
         self.fqaFlag = False
-        self.footnotes: dict[str, dict[str, str]] = {}
+        self.footnotes: Dict[str, Dict[str, str]] = {}
         self.footnote_id = ""
         self.footnote_num = 1
         self.footnote_text = ""

@@ -1,6 +1,7 @@
 import os
 import logging
 import pathlib
+from typing import Dict
 
 from usfm_tools import support
 from usfm_tools.support import exceptions
@@ -337,7 +338,7 @@ def bookName(usfm: str) -> str:
     return bookNames[index]
 
 
-def loadBook(filePath: pathlib.Path) -> dict[str, str]:
+def loadBook(filePath: pathlib.Path) -> Dict[str, str]:
     loaded_book = {}
     logger.info("Loading USFM file: {}".format(filePath))
     if not os.path.isfile(filePath):

@@ -13,7 +13,7 @@ from pyparsing import (  # type: ignore
     MatchFirst,
     ParseResults,
 )
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from usfm_tools.support.abstractRenderer import AbstractRenderer
@@ -366,7 +366,7 @@ usfm = OneOrMore(element)
 
 
 # input string
-def parseString(unicodeString: str) -> list[Any]:
+def parseString(unicodeString: str) -> List[Any]:
     try:
         cleaned = clean(unicodeString)
         tokens = usfm.parseString(cleaned, parseAll=True)
