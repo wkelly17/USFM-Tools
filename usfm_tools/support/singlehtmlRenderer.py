@@ -2,9 +2,10 @@ import codecs
 import logging
 import pathlib
 
-from usfm_tools.support.abstractRenderer import AbstractRenderer
+from usfm_tools.support.books import loadBook, silNames
 from usfm_tools.support.books import bookKeyForIdValue
 from usfm_tools.support.parseUsfm import (
+    parseString,
     UsfmToken,
     HToken,
     TOC2Token,
@@ -64,13 +65,57 @@ from usfm_tools.support.parseUsfm import (
     QAToken,
     QACToken,
     QACEToken,
+    BDITEToken,
+    BDITSToken,
+    BDEToken,
+    BDSToken,
+    BK_E_Token,
+    BK_S_Token,
+    IOR_E_Token,
+    IOR_S_Token,
+    IO1_Token,
+    IO2_Token,
+    IOT_Token,
+    IP_Token,
+    IS1_Token,
+    ADDEToken,
+    ADDSToken,
+    TLEToken,
+    TLSToken,
+    XDCEToken,
+    XDCSToken,
+    XTToken,
+    XOToken,
+    XEToken,
+    XSToken,
+    PI2Token,
+    REMToken,
+    DToken,
+    FQToken,
+    FKToken,
+    FREToken,
+    FRToken,
+    RToken,
+    QTEToken,
+    QTSToken,
+    SPToken,
+    MIToken,
+    MRToken,
+    TOC3Token,
+    TOC1Token,
+    STSToken,
+    IDEToken,
 )
 from typing import Dict
 
 logger = logging.getLogger("usfm_tools")
 
 
-class SingleHTMLRenderer(AbstractRenderer):
+class SingleHTMLRenderer(object):
+    booksUsfm: dict[str, str]
+
+    chapterLabel = ""
+
     def __init__(self, filePath: pathlib.Path, outputFilename: str) -> None:
         self.f: codecs.StreamReaderWriter  # output file stream
         self.outputFilename = outputFilename
@@ -106,6 +151,27 @@ class SingleHTMLRenderer(AbstractRenderer):
         self.footnote_num = 1
         self.footnote_text = ""
         self.paragraphOpen = False
+
+    def loadUSFM(self, filePath: pathlib.Path) -> None:
+        self.booksUsfm = loadBook(filePath)
+
+    def run(self) -> None:
+        self.unknowns: list[str] = []
+        try:
+            for bookName in self.booksUsfm:
+                logger.debug("     ({})", bookName)
+                tokens = parseString(self.booksUsfm[bookName])
+                for t in tokens:
+                    t.renderOn(self)
+        except:
+            for bookName in silNames:
+                if bookName in self.booksUsfm:
+                    logger.debug("     ({})", bookName)
+                    tokens = parseString(self.booksUsfm[bookName])
+                    for t in tokens:
+                        t.renderOn(self)
+        if len(self.unknowns):
+            print("Skipped unknown tokens: {0}".format(", ".join(set(self.unknowns))))
 
     def renderBody(self) -> None:
         self.loadUSFM(self.inputFile)
@@ -222,6 +288,132 @@ class SingleHTMLRenderer(AbstractRenderer):
             return "\n</p>\n"
         else:
             return ""
+
+    def renderIDE(self, token: IDEToken) -> None:
+        pass
+
+    def renderSTS(self, token: STSToken) -> None:
+        pass
+
+    def renderTOC1(self, token: TOC1Token) -> None:
+        pass
+
+    def renderTOC3(self, token: TOC3Token) -> None:
+        pass
+
+    def renderMS(self, token: MSToken) -> None:
+        pass
+
+    def renderMR(self, token: MRToken) -> None:
+        pass
+
+    def renderMI(self, token: MIToken) -> None:
+        pass
+
+    def renderSP(self, token: SPToken) -> None:
+        pass
+
+    def renderS(self, token: SToken) -> None:
+        pass
+
+    def renderQTS(self, token: QTSToken) -> None:
+        pass
+
+    def renderQTE(self, token: QTEToken) -> None:
+        pass
+
+    def renderR(self, token: RToken) -> None:
+        pass
+
+    def renderFR(self, token: FRToken) -> None:
+        pass
+
+    def renderFRE(self, token: FREToken) -> None:
+        pass
+
+    def renderFK(self, token: FKToken) -> None:
+        pass
+
+    def renderFQ(self, token: FQToken) -> None:
+        pass
+
+    def renderD(self, token: DToken) -> None:
+        pass
+
+    def renderREM(self, token: REMToken) -> None:
+        pass
+
+    def renderPI2(self, token: PI2Token) -> None:
+        pass
+
+    def renderXS(self, token: XSToken) -> None:
+        pass
+
+    def renderXE(self, token: XEToken) -> None:
+        pass
+
+    def renderXO(self, token: XOToken) -> None:
+        pass
+
+    def renderXT(self, token: XTToken) -> None:
+        pass
+
+    def renderXDCS(self, token: XDCSToken) -> None:
+        pass
+
+    def renderXDCE(self, token: XDCEToken) -> None:
+        pass
+
+    def renderTLS(self, token: TLSToken) -> None:
+        pass
+
+    def renderTLE(self, token: TLEToken) -> None:
+        pass
+
+    def renderADDS(self, token: ADDSToken) -> None:
+        pass
+
+    def renderADDE(self, token: ADDEToken) -> None:
+        pass
+
+    def render_is1(self, token: IS1_Token) -> None:
+        pass
+
+    def render_ip(self, token: IP_Token) -> None:
+        pass
+
+    def render_iot(self, token: IOT_Token) -> None:
+        pass
+
+    def render_io1(self, token: IO1_Token) -> None:
+        pass
+
+    def render_io2(self, token: IO2_Token) -> None:
+        pass
+
+    def render_ior_s(self, token: IOR_S_Token) -> None:
+        pass
+
+    def render_ior_e(self, token: IOR_E_Token) -> None:
+        pass
+
+    def render_bk_s(self, token: BK_S_Token) -> None:
+        pass
+
+    def render_bk_e(self, token: BK_E_Token) -> None:
+        pass
+
+    def renderBDS(self, token: BDSToken) -> None:
+        pass
+
+    def renderBDE(self, token: BDEToken) -> None:
+        pass
+
+    def renderBDITS(self, token: BDITSToken) -> None:
+        pass
+
+    def renderBDITE(self, token: BDITEToken) -> None:
+        pass
 
     def renderID(self, token: IDToken) -> None:
         self.write(self.stopIndent())
@@ -502,3 +694,7 @@ class SingleHTMLRenderer(AbstractRenderer):
 
     def renderQACE(self, token: QACEToken) -> None:
         self.write("</i>")
+
+    # Add unknown tokens to list
+    def renderUnknown(self, token: UsfmToken) -> None:
+        self.unknowns.append(token.value)

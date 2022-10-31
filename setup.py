@@ -6,10 +6,6 @@ ext_modules = cythonize(
     [
         Extension("usfm_tools.transform", ["usfm_tools/transform.py"]),
         Extension(
-            "usfm_tools.support.abstractRenderer",
-            ["usfm_tools/support/abstractRenderer.py"],
-        ),
-        Extension(
             "usfm_tools.support.singlehtmlRenderer",
             ["usfm_tools/support/singlehtmlRenderer.py"],
         ),
