@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Any, List
+from typing import TYPE_CHECKING, Any, List
 
 from pyparsing import (  # type: ignore
     CharsNotIn,
@@ -16,7 +16,9 @@ from pyparsing import (  # type: ignore
     Word,
     nums,
 )
-from usfm_tools.support.singlehtmlRenderer import SingleHTMLRenderer
+
+if TYPE_CHECKING:
+    from .singlehtmlRenderer import SingleHTMLRenderer
 
 logger = logging.getLogger("usfm_tools")
 
@@ -800,7 +802,7 @@ class UsfmToken(object):
 
 
 class UnknownToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderUnknown(self)
 
     def isUnknown(self) -> bool:
@@ -808,7 +810,7 @@ class UnknownToken(UsfmToken):
 
 
 class EscapedToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         self.value = "\\"
         printer.renderTEXT(TEXTToken(self.value))
 
@@ -817,7 +819,7 @@ class EscapedToken(UsfmToken):
 
 
 class IDToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderID(self)
 
     def isID(self) -> bool:
@@ -825,7 +827,7 @@ class IDToken(UsfmToken):
 
 
 class IDEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderIDE(self)
 
     def isIDE(self) -> bool:
@@ -833,7 +835,7 @@ class IDEToken(UsfmToken):
 
 
 class STSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderSTS(self)
 
     def isSTS(self) -> bool:
@@ -841,7 +843,7 @@ class STSToken(UsfmToken):
 
 
 class HToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderH(self)
 
     def isH(self) -> bool:
@@ -849,7 +851,7 @@ class HToken(UsfmToken):
 
 
 class TOC1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTOC1(self)
 
     def isTOC1(self) -> bool:
@@ -857,7 +859,7 @@ class TOC1Token(UsfmToken):
 
 
 class TOC2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTOC2(self)
 
     def isTOC2(self) -> bool:
@@ -865,7 +867,7 @@ class TOC2Token(UsfmToken):
 
 
 class TOC3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTOC3(self)
 
     def isTOC3(self) -> bool:
@@ -873,7 +875,7 @@ class TOC3Token(UsfmToken):
 
 
 class MTToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMT(self)
 
     def isMT(self) -> bool:
@@ -881,7 +883,7 @@ class MTToken(UsfmToken):
 
 
 class MT2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMT2(self)
 
     def isMT2(self) -> bool:
@@ -889,7 +891,7 @@ class MT2Token(UsfmToken):
 
 
 class MT3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMT3(self)
 
     def isMT3(self) -> bool:
@@ -897,7 +899,7 @@ class MT3Token(UsfmToken):
 
 
 class MSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMS(self)
 
     def isMS(self) -> bool:
@@ -905,7 +907,7 @@ class MSToken(UsfmToken):
 
 
 class MS2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMS2(self)
 
     def isMS2(self) -> bool:
@@ -913,7 +915,7 @@ class MS2Token(UsfmToken):
 
 
 class MRToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMR(self)
 
     def isMR(self) -> bool:
@@ -921,7 +923,7 @@ class MRToken(UsfmToken):
 
 
 class MIToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderMI(self)
 
     def isMI(self) -> bool:
@@ -929,7 +931,7 @@ class MIToken(UsfmToken):
 
 
 class RToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderR(self)
 
     def isR(self) -> bool:
@@ -937,7 +939,7 @@ class RToken(UsfmToken):
 
 
 class PToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderP(self)
 
     def isP(self) -> bool:
@@ -945,7 +947,7 @@ class PToken(UsfmToken):
 
 
 class BToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderB(self)
 
     def isB(self) -> bool:
@@ -953,7 +955,7 @@ class BToken(UsfmToken):
 
 
 class CToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderC(self)
 
     def isC(self) -> bool:
@@ -961,7 +963,7 @@ class CToken(UsfmToken):
 
 
 class CASToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderCAS(self)
         pass
 
@@ -970,7 +972,7 @@ class CASToken(UsfmToken):
 
 
 class CAEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderCAE(self)
         pass
 
@@ -979,7 +981,7 @@ class CAEToken(UsfmToken):
 
 
 class CLToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderCL(self)
         pass
 
@@ -988,7 +990,7 @@ class CLToken(UsfmToken):
 
 
 class VToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderV(self)
 
     def isV(self) -> bool:
@@ -996,7 +998,7 @@ class VToken(UsfmToken):
 
 
 class TEXTToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTEXT(self)
 
     def isTEXT(self) -> bool:
@@ -1004,7 +1006,7 @@ class TEXTToken(UsfmToken):
 
 
 class WJSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderWJS(self)
 
     def isWJS(self) -> bool:
@@ -1012,7 +1014,7 @@ class WJSToken(UsfmToken):
 
 
 class WJEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderWJE(self)
 
     def isWJE(self) -> bool:
@@ -1020,7 +1022,7 @@ class WJEToken(UsfmToken):
 
 
 class SToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderS(self)
 
     def isS(self) -> bool:
@@ -1028,7 +1030,7 @@ class SToken(UsfmToken):
 
 
 class S2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderS2(self)
 
     def isS2(self) -> bool:
@@ -1036,7 +1038,7 @@ class S2Token(UsfmToken):
 
 
 class S3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderS3(self)
 
     def isS3(self) -> bool:
@@ -1044,7 +1046,7 @@ class S3Token(UsfmToken):
 
 
 class S4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderS4(self)
         pass
 
@@ -1053,7 +1055,7 @@ class S4Token(UsfmToken):
 
 
 class S5Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderS5(self)
         pass
 
@@ -1062,7 +1064,7 @@ class S5Token(UsfmToken):
 
 
 class QToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQ(self)
 
     def isQ(self) -> bool:
@@ -1070,7 +1072,7 @@ class QToken(UsfmToken):
 
 
 class Q1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQ1(self)
 
     def isQ1(self) -> bool:
@@ -1078,7 +1080,7 @@ class Q1Token(UsfmToken):
 
 
 class Q2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQ2(self)
 
     def isQ2(self) -> bool:
@@ -1086,7 +1088,7 @@ class Q2Token(UsfmToken):
 
 
 class Q3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQ3(self)
 
     def isQ3(self) -> bool:
@@ -1094,7 +1096,7 @@ class Q3Token(UsfmToken):
 
 
 class Q4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQ4(self)
         pass
 
@@ -1103,7 +1105,7 @@ class Q4Token(UsfmToken):
 
 
 class QAToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQA(self)
         pass
 
@@ -1112,7 +1114,7 @@ class QAToken(UsfmToken):
 
 
 class QACToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQAC(self)
         pass
 
@@ -1121,7 +1123,7 @@ class QACToken(UsfmToken):
 
 
 class QACEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQACE(self)
         pass
 
@@ -1130,7 +1132,7 @@ class QACEToken(UsfmToken):
 
 
 class QCToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQC(self)
         pass
 
@@ -1139,7 +1141,7 @@ class QCToken(UsfmToken):
 
 
 class QMToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQM(self)
         pass
 
@@ -1148,7 +1150,7 @@ class QMToken(UsfmToken):
 
 
 class QM1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQM1(self)
         pass
 
@@ -1157,7 +1159,7 @@ class QM1Token(UsfmToken):
 
 
 class QM2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQM2(self)
         pass
 
@@ -1166,7 +1168,7 @@ class QM2Token(UsfmToken):
 
 
 class QM3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQM3(self)
         pass
 
@@ -1175,7 +1177,7 @@ class QM3Token(UsfmToken):
 
 
 class QRToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQR(self)
         pass
 
@@ -1184,7 +1186,7 @@ class QRToken(UsfmToken):
 
 
 class QSSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQSS(self)
         pass
 
@@ -1193,7 +1195,7 @@ class QSSToken(UsfmToken):
 
 
 class QSEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderQSE(self)
         pass
 
@@ -1202,7 +1204,7 @@ class QSEToken(UsfmToken):
 
 
 class QTSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQTS(self)
 
     def isQTS(self) -> bool:
@@ -1210,7 +1212,7 @@ class QTSToken(UsfmToken):
 
 
 class QTEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderQTE(self)
 
     def isQTE(self) -> bool:
@@ -1218,7 +1220,7 @@ class QTEToken(UsfmToken):
 
 
 class NBToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderNB(self)
 
     def isNB(self) -> bool:
@@ -1226,7 +1228,7 @@ class NBToken(UsfmToken):
 
 
 class FSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFS(self)
 
     def isFS(self) -> bool:
@@ -1234,7 +1236,7 @@ class FSToken(UsfmToken):
 
 
 class FRToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFR(self)
 
     def isFR(self) -> bool:
@@ -1242,7 +1244,7 @@ class FRToken(UsfmToken):
 
 
 class FREToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFRE(self)
 
     def isFRE(self) -> bool:
@@ -1250,7 +1252,7 @@ class FREToken(UsfmToken):
 
 
 class FKToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFK(self)
 
     def isFK(self) -> bool:
@@ -1258,7 +1260,7 @@ class FKToken(UsfmToken):
 
 
 class FTToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFT(self)
 
     def isFT(self) -> bool:
@@ -1266,7 +1268,7 @@ class FTToken(UsfmToken):
 
 
 class FQToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFQ(self)
 
     def isFQ(self) -> bool:
@@ -1274,7 +1276,7 @@ class FQToken(UsfmToken):
 
 
 class FQAToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderFQA(self)
         pass
 
@@ -1283,7 +1285,7 @@ class FQAToken(UsfmToken):
 
 
 class FQAEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderFQAE(self)
         pass
 
@@ -1292,7 +1294,7 @@ class FQAEToken(UsfmToken):
 
 
 class FQBToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderFQAE(self)
         pass
 
@@ -1301,7 +1303,7 @@ class FQBToken(UsfmToken):
 
 
 class FEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFE(self)
 
     def isFE(self) -> bool:
@@ -1309,7 +1311,7 @@ class FEToken(UsfmToken):
 
 
 class FPToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderFP(self)
 
     def isFP(self) -> bool:
@@ -1317,7 +1319,7 @@ class FPToken(UsfmToken):
 
 
 class ISToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderIS(self)
 
     def isIS(self) -> bool:
@@ -1325,7 +1327,7 @@ class ISToken(UsfmToken):
 
 
 class IEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderIE(self)
 
     def isIE(self) -> bool:
@@ -1333,7 +1335,7 @@ class IEToken(UsfmToken):
 
 
 class BDSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderBDS(self)
 
     def isBDS(self) -> bool:
@@ -1341,7 +1343,7 @@ class BDSToken(UsfmToken):
 
 
 class BDEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderBDE(self)
 
     def isBDE(self) -> bool:
@@ -1349,7 +1351,7 @@ class BDEToken(UsfmToken):
 
 
 class BDITSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderBDITS(self)
 
     def isBDITS(self) -> bool:
@@ -1357,7 +1359,7 @@ class BDITSToken(UsfmToken):
 
 
 class BDITEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderBDITE(self)
 
     def isBDITE(self) -> bool:
@@ -1365,7 +1367,7 @@ class BDITEToken(UsfmToken):
 
 
 class LIToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderLI(self)
 
     def isLI(self) -> bool:
@@ -1373,7 +1375,7 @@ class LIToken(UsfmToken):
 
 
 class LI1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderLI1(self)
         pass
 
@@ -1382,7 +1384,7 @@ class LI1Token(UsfmToken):
 
 
 class LI2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderLI2(self)
         pass
 
@@ -1391,7 +1393,7 @@ class LI2Token(UsfmToken):
 
 
 class LI3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderLI3(self)
         pass
 
@@ -1400,7 +1402,7 @@ class LI3Token(UsfmToken):
 
 
 class LI4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderLI4(self)
         pass
 
@@ -1409,7 +1411,7 @@ class LI4Token(UsfmToken):
 
 
 class DToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderD(self)
 
     def isD(self) -> bool:
@@ -1417,7 +1419,7 @@ class DToken(UsfmToken):
 
 
 class SPToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderSP(self)
 
     def isSP(self) -> bool:
@@ -1425,7 +1427,7 @@ class SPToken(UsfmToken):
 
 
 class ADDSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderADDS(self)
 
     def isADDS(self) -> bool:
@@ -1433,7 +1435,7 @@ class ADDSToken(UsfmToken):
 
 
 class ADDEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderADDE(self)
 
     def isADDE(self) -> bool:
@@ -1441,7 +1443,7 @@ class ADDEToken(UsfmToken):
 
 
 class NDSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderNDS(self)
 
     def isNDS(self) -> bool:
@@ -1449,7 +1451,7 @@ class NDSToken(UsfmToken):
 
 
 class NDEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderNDE(self)
 
     def isNDE(self) -> bool:
@@ -1457,7 +1459,7 @@ class NDEToken(UsfmToken):
 
 
 class PBRToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderPBR(self)
 
     def isPBR(self) -> bool:
@@ -1466,7 +1468,7 @@ class PBRToken(UsfmToken):
 
 # Cross References
 class XSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXS(self)
 
     def isXS(self) -> bool:
@@ -1474,7 +1476,7 @@ class XSToken(UsfmToken):
 
 
 class XDCSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXDCS(self)
 
     def isXDCS(self) -> bool:
@@ -1482,7 +1484,7 @@ class XDCSToken(UsfmToken):
 
 
 class XDCEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXDCE(self)
 
     def isXDCE(self) -> bool:
@@ -1490,7 +1492,7 @@ class XDCEToken(UsfmToken):
 
 
 class XOToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXO(self)
 
     def isXO(self) -> bool:
@@ -1498,7 +1500,7 @@ class XOToken(UsfmToken):
 
 
 class XTToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXT(self)
 
     def isXT(self) -> bool:
@@ -1506,7 +1508,7 @@ class XTToken(UsfmToken):
 
 
 class XEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderXE(self)
 
     def isXE(self) -> bool:
@@ -1514,7 +1516,7 @@ class XEToken(UsfmToken):
 
 
 class MToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderM(self)
 
     def isM(self) -> bool:
@@ -1523,7 +1525,7 @@ class MToken(UsfmToken):
 
 # Transliterated Words
 class TLSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTLS(self)
 
     def isTLS(self) -> bool:
@@ -1531,7 +1533,7 @@ class TLSToken(UsfmToken):
 
 
 class TLEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderTLE(self)
 
     def isTLE(self) -> bool:
@@ -1540,7 +1542,7 @@ class TLEToken(UsfmToken):
 
 # Indenting paragraphs
 class PIToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderPI(self)
 
     def isPI(self) -> bool:
@@ -1548,7 +1550,7 @@ class PIToken(UsfmToken):
 
 
 class PI2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderPI2(self)
 
     def isPI2(self) -> bool:
@@ -1557,7 +1559,7 @@ class PI2Token(UsfmToken):
 
 # Small caps
 class SCSToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderSCS(self)
 
     def isSCS(self) -> bool:
@@ -1565,7 +1567,7 @@ class SCSToken(UsfmToken):
 
 
 class SCEToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderSCE(self)
 
     def isSCE(self) -> bool:
@@ -1574,7 +1576,7 @@ class SCEToken(UsfmToken):
 
 # REMarks
 class REMToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.renderREM(self)
 
     def isREM(self) -> bool:
@@ -1583,7 +1585,7 @@ class REMToken(UsfmToken):
 
 # Tables
 class TRToken(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTR(self)
         pass
 
@@ -1592,7 +1594,7 @@ class TRToken(UsfmToken):
 
 
 class TH1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH1(self)
         pass
 
@@ -1601,7 +1603,7 @@ class TH1Token(UsfmToken):
 
 
 class TH2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH2(self)
         pass
 
@@ -1610,7 +1612,7 @@ class TH2Token(UsfmToken):
 
 
 class TH3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH3(self)
         pass
 
@@ -1619,7 +1621,7 @@ class TH3Token(UsfmToken):
 
 
 class TH4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH4(self)
         pass
 
@@ -1628,7 +1630,7 @@ class TH4Token(UsfmToken):
 
 
 class TH5Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH5(self)
         pass
 
@@ -1637,7 +1639,7 @@ class TH5Token(UsfmToken):
 
 
 class TH6Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTH6(self)
         pass
 
@@ -1646,7 +1648,7 @@ class TH6Token(UsfmToken):
 
 
 class THR1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR1(self)
         pass
 
@@ -1655,7 +1657,7 @@ class THR1Token(UsfmToken):
 
 
 class THR2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR2(self)
         pass
 
@@ -1664,7 +1666,7 @@ class THR2Token(UsfmToken):
 
 
 class THR3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR3(self)
         pass
 
@@ -1673,7 +1675,7 @@ class THR3Token(UsfmToken):
 
 
 class THR4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR4(self)
         pass
 
@@ -1682,7 +1684,7 @@ class THR4Token(UsfmToken):
 
 
 class THR5Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR5(self)
         pass
 
@@ -1691,7 +1693,7 @@ class THR5Token(UsfmToken):
 
 
 class THR6Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTHR6(self)
         pass
 
@@ -1700,7 +1702,7 @@ class THR6Token(UsfmToken):
 
 
 class TC1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC1(self)
         pass
 
@@ -1709,7 +1711,7 @@ class TC1Token(UsfmToken):
 
 
 class TC2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC2(self)
         pass
 
@@ -1718,7 +1720,7 @@ class TC2Token(UsfmToken):
 
 
 class TC3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC3(self)
         pass
 
@@ -1727,7 +1729,7 @@ class TC3Token(UsfmToken):
 
 
 class TC4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC4(self)
         pass
 
@@ -1736,7 +1738,7 @@ class TC4Token(UsfmToken):
 
 
 class TC5Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC5(self)
         pass
 
@@ -1745,7 +1747,7 @@ class TC5Token(UsfmToken):
 
 
 class TC6Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTC6(self)
         pass
 
@@ -1754,7 +1756,7 @@ class TC6Token(UsfmToken):
 
 
 class TCR1Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR1(self)
         pass
 
@@ -1763,7 +1765,7 @@ class TCR1Token(UsfmToken):
 
 
 class TCR2Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR2(self)
         pass
 
@@ -1772,7 +1774,7 @@ class TCR2Token(UsfmToken):
 
 
 class TCR3Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR3(self)
         pass
 
@@ -1781,7 +1783,7 @@ class TCR3Token(UsfmToken):
 
 
 class TCR4Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR4(self)
         pass
 
@@ -1790,7 +1792,7 @@ class TCR4Token(UsfmToken):
 
 
 class TCR5Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR5(self)
         pass
 
@@ -1799,7 +1801,7 @@ class TCR5Token(UsfmToken):
 
 
 class TCR6Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         # printer.renderTCR6(self)
         pass
 
@@ -1809,7 +1811,7 @@ class TCR6Token(UsfmToken):
 
 # Introductions
 class IS1_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_is1(self)
 
     def is_is1(self) -> bool:
@@ -1817,7 +1819,7 @@ class IS1_Token(UsfmToken):
 
 
 class IMT1_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_imt1(self)
 
     def is_imt1(self) -> bool:
@@ -1825,7 +1827,7 @@ class IMT1_Token(UsfmToken):
 
 
 class IMT2_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_imt2(self)
 
     def is_imt2(self) -> bool:
@@ -1833,7 +1835,7 @@ class IMT2_Token(UsfmToken):
 
 
 class IMT3_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_imt3(self)
 
     def is_imt3(self) -> bool:
@@ -1841,7 +1843,7 @@ class IMT3_Token(UsfmToken):
 
 
 class IP_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_ip(self)
 
     def is_ip(self) -> bool:
@@ -1849,7 +1851,7 @@ class IP_Token(UsfmToken):
 
 
 class IOT_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_iot(self)
 
     def is_iot(self) -> bool:
@@ -1857,7 +1859,7 @@ class IOT_Token(UsfmToken):
 
 
 class IO1_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_io1(self)
 
     def is_io1(self) -> bool:
@@ -1865,7 +1867,7 @@ class IO1_Token(UsfmToken):
 
 
 class IO2_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_io2(self)
 
     def is_io2(self) -> bool:
@@ -1873,7 +1875,7 @@ class IO2_Token(UsfmToken):
 
 
 class IOR_S_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_ior_s(self)
 
     def is_ior_s(self) -> bool:
@@ -1881,7 +1883,7 @@ class IOR_S_Token(UsfmToken):
 
 
 class IOR_E_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_ior_e(self)
 
     def is_ior_e(self) -> bool:
@@ -1890,7 +1892,7 @@ class IOR_E_Token(UsfmToken):
 
 # Quoted book title
 class BK_S_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_bk_s(self)
 
     def is_bk_s(self) -> bool:
@@ -1898,7 +1900,7 @@ class BK_S_Token(UsfmToken):
 
 
 class BK_E_Token(UsfmToken):
-    def renderOn(self, printer: SingleHTMLRenderer) -> None:
+    def renderOn(self, printer: "SingleHTMLRenderer") -> None:
         printer.render_bk_e(self)
 
     def is_bk_e(self) -> bool:
