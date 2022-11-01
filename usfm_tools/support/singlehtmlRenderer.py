@@ -102,7 +102,7 @@ from usfm_tools.support.parseUsfm import (  # EMSToken,; EMEToken,; EToken,; PBT
     parseString,
 )
 
-logger = logging.getLogger("usfm_tools")
+# logger = logging.getLogger("usfm_tools")
 
 
 class SingleHTMLRenderer(object):
@@ -153,14 +153,12 @@ class SingleHTMLRenderer(object):
         self.unknowns: list[str] = []
         try:
             for bookName in self.booksUsfm:
-                logger.debug("     ({})", bookName)
                 tokens = parseString(self.booksUsfm[bookName])
                 for t in tokens:
                     t.renderOn(self)
         except:
             for bookName in silNames:
                 if bookName in self.booksUsfm:
-                    logger.debug("     ({})", bookName)
                     tokens = parseString(self.booksUsfm[bookName])
                     for t in tokens:
                         t.renderOn(self)
@@ -621,7 +619,7 @@ class SingleHTMLRenderer(object):
 
     def renderCL(self, token: CLToken) -> None:
         # Produces: 'Capitulo 1' for example.
-        logger.debug("token.value: {}".format(token.value))
+        # logger.debug("token.value: {}".format(token.value))
         self.chapterLabel = token.value
 
     def renderQR(self, token: QRToken) -> None:
