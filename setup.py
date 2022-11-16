@@ -34,6 +34,7 @@ setup(
     "This fork of USFM-Tools includes basic support for conversion to USX.",
     classifiers=[],
     install_requires=[
+        "cython",
         "beautifulsoup4",
         "coveralls",
         "future",
