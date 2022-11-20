@@ -1,3 +1,4 @@
+from setuptools.command.build_ext import build_ext
 from setuptools import setup, Extension
 from Cython.Build import cythonize
 
@@ -40,4 +41,7 @@ setup(
         "future",
         "pyparsing",
     ],
+    ext_modules=ext_modules,
+    cmdclass={"cmdclass": build_ext},
+    script_args=["build_ext", "--inplace"],
 )
