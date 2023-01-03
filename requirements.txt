@@ -2,3 +2,4 @@ beautifulsoup4
 coveralls
 future
 pyparsing
+cython
